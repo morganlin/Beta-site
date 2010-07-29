@@ -1,0 +1,27 @@
+local_dir	:= src/I2C
+lib_dir		:= $(local_dir)
+lib_name	:= #??.a
+header_dir	:= #$(local_dir)/include
+
+local_lib	:= #$(lib_dir)/$(lib_name)
+
+# compile source
+local_src	:= i2c.c i2c-ctrl.c i2c-menu.c \
+				TVP5145.c \
+				CH700X.c\
+				cat6613.c cat6023.c \
+				mt9v125.c \
+				tps62353.c tps62353-ctrl.c tps62353-menu.c \
+				Si4703-ctrl.c Si4703-menu.c \
+				f75363_fan.c f75363_fan-ctrl.c f75363_fan-menu.c \
+				cma3000_d0x.c cma3000_d0x-ctrl.c cma3000_d0x-menu.c \
+				F75111.c F75111-ctrl.c \
+				ov5642.c
+
+ifeq "y" "$(CONFIG_LCD)"
+local_src +=  CH7026.c 
+endif
+
+lib_src		:= 
+
+include build/common.mk

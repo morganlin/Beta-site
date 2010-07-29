@@ -1,0 +1,123 @@
+#
+# Automatically generated make config: don't edit
+#
+
+#
+# Socle Platforms
+#
+# CONFIG_LDK3V21 is not set
+# CONFIG_LDK5 is not set
+# CONFIG_SEDK is not set
+# CONFIG_CDK is not set
+# CONFIG_PDK is not set
+# CONFIG_PC7210 is not set
+# CONFIG_PC9002 is not set
+# CONFIG_PC9220 is not set
+CONFIG_PC9223=y
+# CONFIG_SCDK is not set
+# CONFIG_MSMV is not set
+# CONFIG_MDK3D is not set
+# CONFIG_MDKFHD is not set
+# CONFIG_INR_PC7230 is not set
+
+#
+# Socle CPUs
+#
+# CONFIG_MIPS is not set
+# CONFIG_ARM7 is not set
+# CONFIG_ARM7_HI is not set
+CONFIG_ARM9=y
+# CONFIG_ARM9_HI is not set
+# CONFIG_ARM11 is not set
+# CONFIG_VFP is not set
+
+#
+# Socle CPU Endians
+#
+# CONFIG_BIG_ENDIAN is not set
+CONFIG_LITTLE_ENDIAN=y
+
+#
+# Socle Interrupt
+#
+CONFIG_INTC=y
+# CONFIG_VIC is not set
+
+#
+# Socle IPs Test Items
+#
+CONFIG_MEMORY=y
+# CONFIG_MDDR is not set
+# CONFIG_ITCM is not set
+# CONFIG_DTCM is not set
+# CONFIG_SRAM is not set
+# CONFIG_DP_SRAM is not set
+CONFIG_GPIO=y
+# CONFIG_MP_GPIO is not set
+# CONFIG_CACHE is not set
+CONFIG_INTERRUPT=y
+CONFIG_UART=y
+CONFIG_TIMER=y
+CONFIG_WDT=y
+CONFIG_RTC=y
+CONFIG_SPI=y
+# CONFIG_UDC is not set
+# CONFIG_PCI is not set
+# CONFIG_PCI_EXPRESS is not set
+CONFIG_MAC=y
+# CONFIG_HDMA is not set
+CONFIG_PANTHER7_HDMA=y
+# CONFIG_DMAC is not set
+# CONFIG_MPEG4 is not set
+CONFIG_I2S=y
+CONFIG_MS6335=y
+# CONFIG_UDA1342TS is not set
+CONFIG_I2C=y
+# CONFIG_SI4703 is not set
+# CONFIG_F75111 is not set
+# CONFIG_SDMMC is not set
+CONFIG_SDHC_HOST=y
+CONFIG_SDHC=y
+# CONFIG_SDHC_SLAVE is not set
+# CONFIG_A2ADMA is not set
+# CONFIG_NOR is not set
+CONFIG_NOR_MXIC=y
+# CONFIG_NAND is not set
+CONFIG_NAND_NFC=y
+# CONFIG_EHCI is not set
+# CONFIG_OHCI is not set
+# CONFIG_IDE is not set
+# CONFIG_MAILBOX is not set
+# CONFIG_SCU is not set
+CONFIG_LCD=y
+CONFIG_PANEL35=y
+# CONFIG_PANEL48 is not set
+# CONFIG_PANEL70 is not set
+CONFIG_PWM=y
+# CONFIG_BUZZER is not set
+CONFIG_ADC=y
+CONFIG_VIOP=y
+# CONFIG_HDVIP is not set
+# CONFIG_LCM is not set
+# CONFIG_7230_PS is not set
+CONFIG_OTG=y
+# CONFIG_GPU is not set
+# CONFIG_MFC is not set
+# CONFIG_GMAC is not set
+# CONFIG_AC97 is not set
+
+#
+# Socle Debugers
+#
+CONFIG_SEMIHOST=y
+# CONFIG_GDB is not set
+
+#
+# Socle UART Display
+#
+CONFIG_UART_DISP=y
+
+#
+# Socle ROM Code
+#
+# CONFIG_ROM is not set

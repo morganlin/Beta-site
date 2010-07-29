@@ -1,0 +1,588 @@
+mainmenu "SOCLE Diagnostic Program Configuration"
+
+comment "Socle Platforms"
+choice
+	prompt "Platform Type"
+	default CONFIG_LDK3V21
+
+config CONFIG_LDK3V21
+	bool "LDK3V21"
+	help
+		LDK3V21
+
+config CONFIG_LDK5
+	bool "LDK5"
+	help
+		LDK5
+
+config CONFIG_SEDK
+	bool "SEDK"
+	help
+		SEDK
+
+config CONFIG_CDK
+	bool "CDK"
+	help
+		CDK
+
+config CONFIG_PDK
+	bool "Panther7"
+	help
+		PDK
+
+config CONFIG_PC7210
+	bool "PDK-PC7210/PDK-PC7230"
+	help
+		PDK-PC7210/PDK-PC7230
+
+config CONFIG_PC9002
+	bool "PDK-PC9002"
+	help
+		PDK-PC9002
+		
+config CONFIG_PC9220
+	bool "PDK-PC9220"
+	help
+		PDK-PC9220
+
+config CONFIG_PC9223
+        bool "PDK-PC9223"
+        help
+                PDK-PC9223
+		
+config CONFIG_SCDK
+	bool "SCDK"
+	help
+		SCDK
+
+config CONFIG_MSMV
+        bool "MSMV"
+        help
+                MSMV
+
+config CONFIG_MDK3D
+        bool "MDK3D"
+        help
+                MDK3D
+
+config CONFIG_MDKFHD
+        bool "MDKFHD"
+        help
+                MDKFHD
+endchoice
+
+#	INR-PC7230
+config CONFIG_INR_PC7230
+	bool "INR-PC7230"
+	depends on CONFIG_PC7210
+	help
+		Socle Internet Radio
+
+
+comment "Socle CPUs"
+
+choice
+	prompt "CPU Type"
+	default CONFIG_ARM9
+
+config CONFIG_MIPS
+	bool "MIPS"
+	help
+		MIPS
+
+config CONFIG_ARM7
+	bool "ARM7"
+	help
+		ARM726ejs
+
+config CONFIG_ARM7_HI
+	bool "ARM7_HI"
+	help
+		ARM726ejs High Vector
+
+config CONFIG_ARM9
+	bool "ARM9"
+	help
+		ARM926ejs
+
+config CONFIG_ARM9_HI
+	bool "ARM9_HI"
+	help
+		ARM926ejs High Vector
+
+config CONFIG_ARM11
+	bool "ARM11"
+	help
+		ARM1176jz
+
+endchoice
+
+config CONFIG_VFP
+	bool "VFP"
+	help
+		VFP Coprocessor
+
+comment "Socle CPU Endians"
+
+choice
+	prompt "CPU Endian Type"
+	default CONFIG_LITTLE_ENDIAN
+
+config CONFIG_BIG_ENDIAN
+	bool "Big Endian"
+	help
+		Big Endian
+
+config CONFIG_LITTLE_ENDIAN
+	bool "Little Endian"
+	help
+		Little Endian
+
+endchoice
+
+
+comment "Socle Interrupt"
+
+choice
+	prompt "Interrupt Controller"
+	default CONFIG_INTC
+
+config CONFIG_INTC
+	bool "Normal Interrupt Controller"
+	help
+		Normal Interrupt Controller
+
+config CONFIG_VIC
+	bool "Vector Interrupt Controller"
+	help
+		Vector Interrupt Controller
+		
+endchoice
+
+comment "Socle IPs Test Items"
+
+#	MEMORY
+config CONFIG_MEMORY
+	bool "Memory Test"
+	help
+		Socle Memory Test
+
+config CONFIG_MDDR
+	bool "MDDR Test"
+	depends on CONFIG_MEMORY
+	help
+		MDDR Test
+
+config CONFIG_ITCM
+	bool "ITCM Test"
+	depends on CONFIG_MEMORY
+	help
+		ITCM Memory Test
+
+config CONFIG_DTCM
+	bool "DTCM Test"
+	depends on CONFIG_MEMORY
+	help
+		DTCM Memory Test
+
+config CONFIG_SRAM
+	bool "SRAM Test"
+	depends on CONFIG_MEMORY
+	help
+		SRAM Test
+
+config CONFIG_DP_SRAM
+	bool "DP-SRAM Test"
+	depends on CONFIG_MEMORY
+	help
+		DP-SRAM Test
+
+#	GPIO
+config CONFIG_GPIO
+	bool "GPIO Test"
+	help
+		Socle General Purpose Input Output Test
+
+#	MP GPIO
+config CONFIG_MP_GPIO
+	bool "MP GPIO Test"
+	help
+		Socle MP General Purpose Input Output Test
+		
+#	CACHE
+config CONFIG_CACHE
+	bool "CACHE Test"
+	help
+		Socle CACHE Test
+
+#	INTERRUPT
+config CONFIG_INTERRUPT
+	bool "Interrupt Test"
+	help
+		Socle Interrupt Test
+
+#	UART
+config CONFIG_UART
+	bool "UART Test"
+	help
+		Socle UART Test
+
+#	TIMER
+config CONFIG_TIMER
+	bool "Timer Test"
+	help
+		Socle Timer Test
+
+#	WDT
+config CONFIG_WDT
+	bool "WDT Test"
+	help
+		Socle Watch Dog Timer Test
+
+#	RTC
+config CONFIG_RTC
+	bool "RTC Test"
+	help
+		Socle Real Time Clock Test
+
+#	SPI
+config CONFIG_SPI
+	bool "SPI Test"
+	help
+		Socle Serial Peripheral Interface Test
+
+#	UDC
+config CONFIG_UDC
+	bool "UDC Test"
+	help
+		Socle Universal Serial Bus Test
+
+#	PCI
+config CONFIG_PCI
+	bool "PCI Test"
+	help
+		Socle Peripheral Component Interconnect Test (Host Bridge)
+
+#	PCI_EXPRESS
+config CONFIG_PCI_EXPRESS
+	bool "PCI EXPRESS Test"
+	help
+		Socle PCI Express Test
+
+#	MAC
+config CONFIG_MAC
+	bool "MAC Test"
+	help
+		Socle Medium Access Control Test
+
+#	PSEUDO_EXTBOARD
+#config CONFIG_PSEUDO_EXTBOARD
+#	bool "Extend Board Pseudo Device Test"
+#	help
+#		Socle Extend Board Pseudo Device Test
+
+#	HDMA_EXTBOARD
+#config CONFIG_HDMA_EXTBOARD
+#	bool "Extend Board HDMA Test"
+#	help
+#		Socle Extend Board HDMA Test
+		
+#	MULTI_MEM
+#config CONFIG_MULTI_MEM
+#	bool "MULTI_MEM Test"
+#	help
+#		Socle MULTI_MEM Test
+
+#	HDMA
+config CONFIG_HDMA
+	bool "HDMA Test"
+	help
+		 Socle HDMA Test
+
+#	PANTHER7-HDMA
+config CONFIG_PANTHER7_HDMA
+	bool "HDMA Test for PANTHER7"
+	help
+		Socle PANTHER7 HDMA Test
+
+#       DMAC
+config CONFIG_DMAC
+        bool "DMAC Test"
+        help
+                Socle DMAC Test
+
+#	MPEG4
+config CONFIG_MPEG4
+	bool "MPEG4 Test"
+	help
+		Socle MPEG4 Test
+
+#	I2S
+config CONFIG_I2S
+	bool "I2S Test"
+	help
+		Socle Inter-Integrated Sound Bus Test
+
+choice
+	prompt "Audio Codec Type"
+	default CONFIG_UDA1342TS
+	depends on CONFIG_I2S
+
+config CONFIG_MS6335
+	bool "MOSA"
+	depends on CONFIG_I2S
+	help
+		Audio Codec MOSA
+
+config CONFIG_UDA1342TS
+	bool "UDA1342TS"
+	depends on CONFIG_I2S
+	help
+		Audio Codec UDA1342TS
+endchoice
+
+#	I2C
+config CONFIG_I2C
+	bool "I2C Test"
+	help
+		Socle Inter-Integrated Circuit Bus Test
+
+config CONFIG_SI4703
+	bool "Si4703"
+	depends on CONFIG_I2C
+	help
+		SILICON LABS / Broadcast FM Radio Tuner
+
+config CONFIG_F75111
+	bool "f75111"
+	depends on CONFIG_I2C
+	help
+		FINTEK GPIO Controller for keypad used
+
+#	SDMMC
+config CONFIG_SDMMC
+	bool "SDMMC Test"
+	help
+		Socle Secure Digital Test
+
+#	SDHC Host
+config CONFIG_SDHC_HOST
+	bool "SDHC Host Test"
+	help
+		Socle Secure Digital High Capacity Host Test
+
+choice
+	prompt "SDHC IP Type"
+#	default CONFIG_SDMMC
+	depends on CONFIG_SDHC_HOST
+
+#config CONFIG_SDMMC
+#	bool "SDMMC Test"
+#	help
+#		Socle Secure Digital Test
+
+config CONFIG_SDHC
+	bool "SDHC Test"
+	help
+		Socle Secure Digital High Capacity Host Test
+
+endchoice
+
+#	SDHC Slave
+config CONFIG_SDHC_SLAVE
+	bool "SDHC Slave Test"
+	help
+		Socle Secure Digital High Capacity Slave Test
+
+#	A2ADMA
+config CONFIG_A2ADMA
+	bool "A2A DMA Test"
+	help
+		Socle AHB-to-AHB DMA Test
+
+#	NOR
+config CONFIG_NOR
+	bool "NOR-FLASH Test"
+	help
+		Socle NOR-FLASH Test
+
+#	NOR-MXIC
+config CONFIG_NOR_MXIC
+	bool "NOR-FLASH-MXIC Test"
+	help
+		Socle NOR-FLASH-MXIC Test
+		
+#	NAND
+config CONFIG_NAND
+	bool "NAND-FLASH Test"
+	help
+		Socle NAND-FLASH Test
+
+#	NFC
+config CONFIG_NAND_NFC
+	bool "NAND-FLASH NFC Test "
+	help
+		Socle NAND-FLASH NFC Test
+
+endchoice
+
+
+#	EHCI
+config CONFIG_EHCI
+	bool "EHCI Test"
+	help
+		Socle EHCI Test
+
+#	OHCI
+config CONFIG_OHCI
+	bool "OHCI Test"
+	help
+		Socle OHCI Test
+
+#	IDE
+config CONFIG_IDE
+	bool "IDE Test"
+	help
+		Socle IDE Test
+
+#	MailBox
+config CONFIG_MAILBOX
+	bool "MailBox Test"
+	help
+		Socle MailBox Test
+
+#	SCU
+config CONFIG_SCU
+	bool "SCU Test"
+	help
+		Socle System Control Unit Test
+
+#	LCD
+config CONFIG_LCD
+	bool "LCD"
+	help
+		Socle LCDC Test
+		
+config CONFIG_PANEL35
+	bool "Panel 3.5"
+	depends on CONFIG_LCD
+	help
+		PANEL 3.5 inch used
+
+config CONFIG_PANEL48
+	bool "Panel 4.8"
+	depends on CONFIG_LCD
+	help
+		PANEL 4.8 inch used
+
+config CONFIG_PANEL70
+	bool "Panel 7"
+	depends on CONFIG_LCD
+	help
+		PANEL 7 inch used
+
+#	PWM
+config CONFIG_PWM
+	bool "PWMT Test"
+	help
+		Socle PWMT Test
+#	BUZZER Test
+config CONFIG_BUZZER
+	bool " Buzzer Test"
+	depends on CONFIG_PWM
+	help
+		Socle Buzzer Test
+
+#       ADC
+config CONFIG_ADC
+        bool "ADC Test"
+        help
+                Socle ADC Test
+
+#	VIOP
+config CONFIG_VIOP
+	bool "VIOP Test"
+	help
+		Socle VIOP Test
+
+#	HDVIP
+config CONFIG_HDVIP
+	bool "HDVIP Test"
+	help
+		Socle HDVIP Test
+
+#	LCM
+config CONFIG_LCM
+	bool "LCM Test"
+	help
+		Socle LCD Module Test
+
+#	7230 POWER SAVING
+config CONFIG_7230_PS
+	bool "7230 Power Saving Test"
+	help
+		Socle 7230 Power Saving Test
+
+
+#	OTG TEST
+config CONFIG_OTG
+	bool "OTG Test"
+	help
+		Socle OTG Test
+
+#	GPU TEST
+config CONFIG_GPU
+	bool "GPU Test"
+	help
+		Socle GPU Test
+
+#       MFC TEST
+config CONFIG_MFC
+        bool "MFC Test"
+        help
+                Socle MFC Test
+
+#       GMAC TEST
+config CONFIG_GMAC
+        bool "GMAC Test"
+        help
+                Socle GMAC Test
+
+#       AC97 TEST
+config CONFIG_AC97
+        bool "AC97 Test"
+        help
+                Socle AC97 Test
+
+comment "Socle Debugers"
+
+choice
+	prompt "Debuger Type"
+	default CONFIG_SEMIHOST
+
+config CONFIG_SEMIHOST
+	bool "SemiHost"
+	help
+		SemiHost Debuger
+
+config CONFIG_GDB
+	bool "GDB"
+	select CONFIG_UART_DISP
+	help
+		GNU Debuger
+
+endchoice
+
+
+comment "Socle UART Display"
+
+config CONFIG_UART_DISP
+	bool "With UART"
+	help
+		With UART Display
+
+comment "Socle ROM Code"
+config CONFIG_ROM
+	bool "Build as ROM Code"
+	help
+		Build as ROM Code
