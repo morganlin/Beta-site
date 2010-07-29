@@ -1,13 +1,14 @@
-#ifndef __SOCLE_DIAG_CONFIG_H
-#define __SOCLE_DIAG_CONFIG_H
+#ifndef __SQ_DIAG_CONFIG_H
+#define __SQ_DIAG_CONFIG_H
 /*
  * Automatically generated header file: don't edit
  */
 
 
 /*
- * Socle Platforms
+ *  Socle Platforms
  */
+
 #undef CONFIG_LDK3V21
 #define ENABLE_LDK3V21 0
 #define USE_LDK3V21(...)
@@ -79,9 +80,11 @@
 #define SKIP_INR_PC7230(...)  __VA_ARGS__
 
 
+
 /*
- * Socle CPUs
+ *  Socle CPUs
  */
+
 #undef CONFIG_MIPS
 #define ENABLE_MIPS 0
 #define USE_MIPS(...)
@@ -118,9 +121,11 @@
 #define SKIP_VFP(...)  __VA_ARGS__
 
 
+
 /*
- * Socle CPU Endians
+ *  Socle CPU Endians
  */
+
 #undef CONFIG_BIG_ENDIAN
 #define ENABLE_BIG_ENDIAN 0
 #define USE_BIG_ENDIAN(...)
@@ -132,9 +137,11 @@
 #define SKIP_LITTLE_ENDIAN(...)
 
 
+
 /*
- * Socle Interrupt
+ *  Socle Interrupt
  */
+
 #define CONFIG_INTC 1
 #define ENABLE_INTC 1
 #define USE_INTC(...)  __VA_ARGS__
@@ -146,9 +153,11 @@
 #define SKIP_VIC(...)  __VA_ARGS__
 
 
+
 /*
- * Socle IPs Test Items
+ *  Socle IPs Test Items
  */
+
 #define CONFIG_MEMORY 1
 #define ENABLE_MEMORY 1
 #define USE_MEMORY(...)  __VA_ARGS__
@@ -445,9 +454,11 @@
 #define SKIP_AC97(...)  __VA_ARGS__
 
 
+
 /*
- * Socle Debugers
+ *  Socle Debugers
  */
+
 #define CONFIG_SEMIHOST 1
 #define ENABLE_SEMIHOST 1
 #define USE_SEMIHOST(...)  __VA_ARGS__
@@ -459,21 +470,25 @@
 #define SKIP_GDB(...)  __VA_ARGS__
 
 
+
 /*
- * Socle UART Display
+ *  Socle UART Display
  */
+
 #define CONFIG_UART_DISP 1
 #define ENABLE_UART_DISP 1
 #define USE_UART_DISP(...)  __VA_ARGS__
 #define SKIP_UART_DISP(...)
 
 
+
 /*
- * Socle ROM Code
+ *  Socle ROM Code
  */
+
 #undef CONFIG_ROM
 #define ENABLE_ROM 0
 #define USE_ROM(...)
 #define SKIP_ROM(...)  __VA_ARGS__
 
-#endif /* __SOCLE_DIAG_CONFIG_H */
+#endif /* __SQ_DIAG_CONFIG_H */

@@ -17,6 +17,11 @@ objs_grp	= $(shell find $(obj_dir) -name '*.o')
 include_dir	:= ./src ./include ./include/lib ./include/platform/arch
 EXTRA_CFLAGS	:= 
 text_base	:= 0x00000000
+cfg_name_lists	:= sq8000 
+targetcfg	:= $(findstring $(MAKECMDGOALS),$(cfg_name_lists))
+diagch		:= diag_config.h
+toppath		:=$(shell pwd)
+destpath	:=$(toppath)/include
 
 SED		= sed
 MV		= mv -f
@@ -52,8 +57,11 @@ RANLIB		= $(CROSS)ranlib
 LDFLAGS		= -L$(dir $(shell $(CC) -print-libgcc-file-name)) -lgcc
 # ---------------------------------------------------------------------------
 
-
+ifeq ($(MAKECMDGOALS),$(findstring $(MAKECMDGOALS),$(cfg_name_lists)))
+sinclude .config
+else
 include .config
+endif
 sinclude .config.cmd
 include build/platform.in
 include build/CPU.in
@@ -166,7 +174,7 @@ endif
 # That's our default target when none is given on the command line
 all: build-ln $(platform_arch)_$(cpu)_v$(REVISION).out 
 
-.PHONY: menuconfig help clean release distclean
+.PHONY: help clean release distclean
 
 ld_file		= build/ELF.lds
 
@@ -179,21 +187,37 @@ help:
 	@echo "  distclean		- delete .obj files created by build"
 	@echo ""
 	@echo "Configuration:"
-	@echo "  menuconfig		- interactive curses-based configurator"
+	@echo "  sq8000		        - interactive curses-based configurator"
 	@echo ""
 # ---------------------------------------------------------------------------
 
 # Configuration
 # ---------------------------------------------------------------------------
-scripts/config/mconf: scripts/config/Makefile
-	@$(MAKE) -s -C scripts/config ncurses conf mconf
-	-@if [ ! -f .config ] ; then \
-		touch .config; \
-	fi
+#scripts/config/mconf: scripts/config/Makefile
+#	@$(MAKE) -s -C scripts/config ncurses conf mconf
+#	-@if [ ! -f .config ] ; then \
+#		touch .config; \
+#	fi
 
-menuconfig: scripts/config/mconf
-	@$< build/config.in
-	@$(MAKE) -s build-ln
+#menuconfig: scripts/config/mconf
+#	@$< build/config.in
+#	@$(MAKE) -s build-ln
+
+$(targetcfg):
+	@if [ -e ".config" ] ;then\
+		$(MV) .config .config.old;\
+		cp $@.config .config;\
+		scripts/config/genh $(toppath) $(destpath);\
+	else\
+		cp $@.config .config;\
+		scripts/config/genh $(toppath) $(destpath);\
+	fi;
+	@if [ $? ] ;then\
+		exit 1;\
+		echo "Initialize Configuration fail";\
+	fi;
+	@echo "Initialize Configuration success"
+
 # ---------------------------------------------------------------------------
 
 # Clean
@@ -247,7 +271,7 @@ build-ln:
 	@ln -fsn $(cpu) CPU/arch
 	@ln -fsn $(platform_arch) platform/arch
 
-ifneq "$(MAKECMDGOALS)" "menuconfig"
+ifneq ($(MAKECMDGOALS),$(findstring $(MAKECMDGOALS),$(cfg_name_lists)))
 ifneq "$(MAKECMDGOALS)" "help"
 ifneq "$(MAKECMDGOALS)" "clean"
 ifneq "$(MAKECMDGOALS)" "distclean"
