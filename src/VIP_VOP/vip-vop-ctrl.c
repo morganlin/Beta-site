@@ -84,6 +84,7 @@ socle_vip_to_lcd_test(int autotest)
 	return ret;
 }
 
+
 extern int
 socle_vop_color_display_test(int autotest)
 {
@@ -120,13 +121,13 @@ socle_viop_qvga_test(int autotest)
 		case VIP_TO_VOP:
 			ret=socle_vip_to_vop_run();
 			break;
-		case VIP_TO_LCD:
+                case VIP_TO_LCD:
 			ret=test_item_ctrl(&socle_vip_42x_container, autotest);
 			break;
 		case VOP_COLOR_DISPLAY:
 			ret=socle_vop_color_display_run();
 			break;
-	}
+        }
 	return ret;
 }
 
@@ -427,5 +428,3 @@ socle_vop_color_display_run(void)
 	}
 	return ret;
 }
-
-

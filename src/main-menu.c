@@ -401,6 +401,8 @@ struct test_item main_test_items [] = {
 	},
 #endif
 
+/* added by morganlin */
+#ifndef GDR_LCD
 #ifdef CONFIG_LCD
 	{
 		"LCD Testing",
@@ -408,6 +410,7 @@ struct test_item main_test_items [] = {
 		1,
 		1
 	},
+#endif
 #endif
 
 #ifdef CONFIG_PWM

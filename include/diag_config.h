@@ -273,10 +273,10 @@
 #define USE_MPEG4(...)
 #define SKIP_MPEG4(...)  __VA_ARGS__
 
-#define CONFIG_I2S 1
-#define ENABLE_I2S 1
-#define USE_I2S(...)  __VA_ARGS__
-#define SKIP_I2S(...)
+#undef CONFIG_I2S
+#define ENABLE_I2S 0
+#define USE_I2S(...)
+#define SKIP_I2S(...)  __VA_ARGS__
 
 #define CONFIG_MS6335 1
 #define ENABLE_MS6335 1
@@ -343,10 +343,10 @@
 #define USE_NAND(...)
 #define SKIP_NAND(...)  __VA_ARGS__
 
-#define CONFIG_NAND_NFC 1
-#define ENABLE_NAND_NFC 1
-#define USE_NAND_NFC(...)  __VA_ARGS__
-#define SKIP_NAND_NFC(...)
+#undef CONFIG_NAND_NFC
+#define ENABLE_NAND_NFC 0
+#define USE_NAND_NFC(...)
+#define SKIP_NAND_NFC(...)  __VA_ARGS__
 
 #undef CONFIG_EHCI
 #define ENABLE_EHCI 0
@@ -378,10 +378,10 @@
 #define USE_LCD(...)  __VA_ARGS__
 #define SKIP_LCD(...)
 
-#define CONFIG_PANEL35 1
-#define ENABLE_PANEL35 1
-#define USE_PANEL35(...)  __VA_ARGS__
-#define SKIP_PANEL35(...)
+#undef CONFIG_PANEL35
+#define ENABLE_PANEL35 0
+#define USE_PANEL35(...)
+#define SKIP_PANEL35(...)  __VA_ARGS__
 
 #undef CONFIG_PANEL48
 #define ENABLE_PANEL48 0
@@ -403,10 +403,10 @@
 #define USE_BUZZER(...)
 #define SKIP_BUZZER(...)  __VA_ARGS__
 
-#define CONFIG_ADC 1
-#define ENABLE_ADC 1
-#define USE_ADC(...)  __VA_ARGS__
-#define SKIP_ADC(...)
+#undef CONFIG_ADC
+#define ENABLE_ADC 0
+#define USE_ADC(...)
+#define SKIP_ADC(...)  __VA_ARGS__
 
 #define CONFIG_VIOP 1
 #define ENABLE_VIOP 1
