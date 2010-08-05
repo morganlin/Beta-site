@@ -29,6 +29,8 @@ extern int test_item_ctrl(struct test_item_container *container, int autotest);
 
 #define GDR_LCD
 
+#define GDR_MAC
+
 #endif /* endif GDR_DIAG */
 
 #endif /* endif __GDR */

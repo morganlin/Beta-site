@@ -21,11 +21,18 @@ socle_wait_for_int(volatile int *flag, int sec)
 #endif
 
 	WAIT_DBG("flag = %d, sec = %d, threshold = 0x%08x\n", *flag, sec, threshold);
-
+        /* added by morganlin */
+       // printf("flag = %d, sec = %d, threshold = 0x%08x\n", *flag, sec, threshold);
+        
 	while (1 != *flag) {
-		if (t >= threshold)
-			return -1;
-		t++;
+                /* added by morganlin */
+                //printf("t = %d , threshold = %d *flag= %d\n",t,threshold,*flag);
+		if (t >= threshold) {
+                        /* added by morganlin */
+		       // printf("t >= threshold , then return -1\n");
+                        return -1;
+                }
+                t++;
 	}
 	*flag = 0;
 

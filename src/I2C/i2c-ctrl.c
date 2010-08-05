@@ -398,9 +398,10 @@ socle_i2c_rm24c16_eeprom_test(int autotest)
 	for (page_count=0; page_count<RM24C16_EEPROM_PAGE_NUMBER; page_count++) {
 
 		socle_i2c_client.addr = RM24C16_EEPROM_ADDR | page_count;
-printf("write : page number = 0x%x\n", page_count);		
+                printf("write : page number = 0x%x\n", page_count);		
 		write_cnt = RM24C16_EEPROM_PAGE_SIZE / RM24C16_EEPROM_WRITE_BYTE;
-		//for (i = 0; i < write_cnt; i++) {
+
+                //for (i = 0; i < write_cnt; i++) {
 		for (k = 0; k < write_cnt; k++) {
 			
 			buf[0] = addr;
@@ -411,8 +412,9 @@ printf("write : page number = 0x%x\n", page_count);
 			
 			ret = i2c_master_send(&socle_i2c_client, (char *)buf, RM24C16_EEPROM_WRITE_BYTE+1);
 			if (ret != RM24C16_EEPROM_WRITE_BYTE+1) {
-				printf("Writing to AT24C02B eeprom is fail, address is 0x%02x\n", addr);
-				return -1;
+				//printf("Writing to AT24C02B eeprom is fail, address is 0x%02x\n", addr);
+				printf("Writing to RM24C16 eeprom is fail, address is 0x%02x\n", addr);
+                                return -1;
 			}
 			addr += 16;
 			write_idx += 16;
@@ -433,7 +435,7 @@ printf("write : page number = 0x%x\n", page_count);
 		//MSDELAY(20);
 		MSDELAY(100);
 	}
-printf("\n");
+        printf("\n");
 	for (page_count=0; page_count<RM24C16_EEPROM_PAGE_NUMBER; page_count++) {
 		
 		/*
@@ -442,7 +444,7 @@ printf("\n");
 		//ret = i2c_master_recv(&socle_i2c_client, (char *)socle_i2c_cmpr_buf, AT24C02B_EEPROM_SIZE);
 
 		socle_i2c_client.addr = RM24C16_EEPROM_ADDR | page_count;
-printf("read : page number = 0x%x\n", page_count);			
+                printf("read : page number = 0x%x\n", page_count);			
 		ret = i2c_master_recv(&socle_i2c_client, (char *)socle_i2c_cmpr_buf, write_cnt * RM24C16_EEPROM_PAGE_SIZE);
 #if 0
 		rx_ptr = (char *)socle_i2c_cmpr_buf;

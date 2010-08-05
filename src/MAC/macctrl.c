@@ -170,57 +170,47 @@ TBUFF_VSIZE		tBuffSize[NUM_TDS];
 
 #define		DEFAULT_REMOTE_PACKET	10
 
-int				Test_Ethernet_Frame;
-int				Test_Speed_100M;
-int				Test_Full_Duplex;
-int				Test_DMA_Burst;
-int				Test_Tx_TR;
-int				Test_Bus_Arbitration;
-FILTER_TYPE		Test_FilterMode;
-int 			Test_FilterSize;
-int 			Test_ChainDes;
-int				Test_SkipDes;
-int				Test_SingleBuff1;
-int				Test_SingleBuff2;
-int				Test_Auto_Polling_Tx;
-int 			Test_LoopBack;
-int 			Test_ForceEnable;
-char			Test_FilterAddr[16][6];
-int				Test_PollRx_En;
-int				Test_PollTx_En;
-int				Test_DisPadding;
-int				Test_DisCRC;
-int				Test_IgnoreError;
-int				Test_Tx_Underflow;
-int				Test_No_Phy;
+int     Test_Ethernet_Frame;
+int	Test_Speed_100M;
+int	Test_Full_Duplex;
+int	Test_DMA_Burst;
+int	Test_Tx_TR;
+int	Test_Bus_Arbitration;
+FILTER_TYPE	Test_FilterMode;
+int	Test_FilterSize;
+int	Test_ChainDes;
+int	Test_SkipDes;
+int	Test_SingleBuff1;
+int	Test_SingleBuff2;
+int	Test_Auto_Polling_Tx;
+int	Test_LoopBack;
+int	Test_ForceEnable;
+char	Test_FilterAddr[16][6];
+int	Test_PollRx_En;
+int	Test_PollTx_En;
+int	Test_DisPadding;
+int	Test_DisCRC;
+int	Test_IgnoreError;
+int	Test_Tx_Underflow;
+int	Test_No_Phy;
 
-char			Test_Tx_DataPool[2048];
-RCVDATAPOOL		Test_Rx_DataPool[32];
+char	Test_Tx_DataPool[2048];
+RCVDATAPOOL     Test_Rx_DataPool[32];
 
-int				Test_Error_TraceLen[3];
+int	Test_Error_TraceLen[3];
 
-int				MAC_Auto_Test_ItemNum;
-int				MAC_Auto_Test_CurrentNum;
+int	MAC_Auto_Test_ItemNum;
+int	MAC_Auto_Test_CurrentNum;
 
-const char		MAC_Auto_Test_Item[] =
+
+const char	MAC_Auto_Test_Item[] =
 { '1', '2', '3'
 , '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-, 'g'
-, 'h'
-, 'i'
-, 'j'
-, 'k', 'l'
-, 'm'
-, 'n'
-//, '@', '=', 'o'	//for 7230
-, '!', '=', 'o'
-, 'p'
-, 't'
-, 'u'
-//, '\\'
+, 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'
+, '!', '=', 'o', 'p'
+, 't', 'u'
+
 , '@', '#', '=', '4'
-//, '@', '$', '=', '4'
-//, '!', '$', '=', '4'
 , '!', '#', '=', '4'
 , '%', '&', '=', '4'
 , '%', '*', '=', '4'
@@ -268,13 +258,14 @@ const char		MAC_Auto_Test_Item[] =
 , '!', '='//, 'y'
 , 'x' };
 
+
 void	MAC_RealEtherTesting(int auto_reply);
 void	Display_RealEtherMenu(void);
 ULONG 	Random_Gen(void);
 void 	MacTestRandomTx(int *PacketLen);
 void 	ShowDataPacket(char * Pool, int len);
 void	MacTestReplyPacket(void);
-int		Paser_ParaSetting(char cmd);
+int	Paser_ParaSetting(char cmd);
 
 //void	MAC_SROMTesting(int autotest);
 void	Display_SROMMenu(void);
@@ -379,6 +370,7 @@ int mac_normal_test(int autotest)
 	int		auto_ret=0;
 	int		clock;
 	char 	cmd_buf[20] = {DEFAULT_MAC_TESTING_ITEM};
+        char    cmd_description_buf[50]; /* added by morganlin */
 
 #if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
 	socle_scu_dev_enable(SOCLE_DEVCON_MAC);
@@ -461,7 +453,8 @@ MacMain_break:
 		result = 0;
 		Test_LoopBack = 1;
 		MSDELAY(100);
-		if (autotest){
+		
+                if (autotest){
 			autotest = 0;
 			cmd_buf[0] = 'z';
 		} 
@@ -478,7 +471,9 @@ MacMain_break:
 		}
 
 		printf("Execute MAC Test Command (%c)...",cmd_buf[0]);
-
+                /* added by morganlin */
+                memset(cmd_description_buf,0x00,sizeof(cmd_description_buf));
+                
 		if( Paser_ParaSetting(cmd_buf[0]) ){
 			goto MacMain_break;
 		}
@@ -488,36 +483,39 @@ MacMain_break:
 
 //-----------------------------------------------------------------------------
 				case '1' :
-					printf(" Scan MII PHY Chip\n");
-					Testing_DevicePt->MII_PhyAD=MAC_MAX_PHY;	//Unconnect PHY
+					printf("Scan MII PHY Chip\n");
+					sprintf(cmd_description_buf,"Scan MII PHY Chip");/* added by morganlin */
+                                        Testing_DevicePt->MII_PhyAD=MAC_MAX_PHY;	//Unconnect PHY
 					result=sMacMiiScan(Testing_DevicePt);
 					//result=TRUE;
 					sMacMiiPhyShow(Testing_DevicePt);
 					if(result!=TRUE){
-					printf("MAC_MII_NOTFIND\n");
-					result=-1;
+					        printf("MAC_MII_NOTFIND\n");
+					        result=-1;
 					}
-    			else{
-    				result=0;
-    			}
-				break;
+    	                                else{
+    		                                result=0;
+    	                                }
+	                		break;
 				case '2' :
 					printf("MII PHY Initial\n");
-					MacTestDevCrtlInit();
+					sprintf(cmd_description_buf,"MII PHY Initial");/* added by morganlin */
+                                        MacTestDevCrtlInit();
 					result=sMacMiiInit(Testing_DevicePt);
 					//result=TRUE;
 					sMacMiiPhyShow(Testing_DevicePt);
-    			if(result!=TRUE){
-				printf("MAC_MII_INITFAIL\n");
-				result=-1;
-    			}
-    			else{
-    				result=0;
-    			}
-				break;
+    			                if(result!=TRUE){
+				                printf("MAC_MII_INITFAIL\n");
+				                result=-1;
+    			                }
+    			                else{
+    				                result=0;
+    			                }
+				        break;
 				case '3' :
-					printf(" Initial MAC\n");
-					MacTestDevCrtlInit();
+					printf("Initial MAC\n");
+                                        sprintf(cmd_description_buf,"Initial MAC");/* added by morganlin */
+                                        MacTestDevCrtlInit();
 					MacTestFilterInit();
 
 					result=sMacInit(Testing_DevicePt);
@@ -538,12 +536,13 @@ MacMain_break:
     					else{
     						result=0;
     					}
-    			sMacCsrShow(Testing_DevicePt);
-				break;
+    			                sMacCsrShow(Testing_DevicePt);
+				        break;
 
 				case '4' :
-					printf(" Normal Loopback Test (rc2)\n");
-					if(Test_No_Phy == 1){
+					printf("Normal Loopback Test (rc2)\n");
+					sprintf(cmd_description_buf,"Normal Loopback Test (rc2)");/* added by morganlin */
+                                        if(Test_No_Phy == 1){
                                                 Testing_DevicePt->MII_PhyAD=1;
                                                 printf("NO Phy Test\n");
                                         }
@@ -629,10 +628,11 @@ MacMain_break:
 					result=TestCheckRxPattern(Test_Hash_MAC_Addr[8],Test_Perfect_MAC_Addr[0],TEST_MAX_MTU,9);
 					if(result!=0)	break;
 
-				break;
+				        break;
 				case '5' :
-					printf(" Long Frame (rc3)\n");
-					Test_FilterMode=ALL_BAD;
+					printf("Long Frame (rc3)\n");
+					sprintf(cmd_description_buf,"Long Frame (rc3)");/* added by morganlin */
+                                        Test_FilterMode=ALL_BAD;
 
 					MacTestDevCrtlInit();
 					MacTestFilterInit();
@@ -656,10 +656,11 @@ MacMain_break:
 					}
 
 					Test_FilterMode=DEFAULT_FILTER;
-				break;
+				        break;
 				case '6' :
-					printf(" Run Frame (rc4)\n");
-					Test_DisPadding=1;
+					printf("Run Frame (rc4)\n");
+					sprintf(cmd_description_buf,"Run Frame (rc4)");/* added by morganlin */
+                                        Test_DisPadding=1;
 					Test_FilterMode=ALL_BAD;
 
 					MacTestDevCrtlInit();
@@ -685,9 +686,10 @@ MacMain_break:
 
 					Test_DisPadding=0;
 					Test_FilterMode=DEFAULT_FILTER;
-				break;
+				        break;
 				case '7' :
 					printf(" Frame with CRC Error (rc6)\n");
+                                        sprintf(cmd_description_buf,"Frame with CRC Error (rc6)");/* added by morganlin */
 					Test_DisCRC=1;
 					Test_FilterMode=ALL_BAD;
 
@@ -714,10 +716,11 @@ MacMain_break:
 
 					Test_DisCRC=0;
 					Test_FilterMode=DEFAULT_FILTER;
-				break;
+				        break;
 				case '8' :
-					printf(" Receiving in suspended (rc8)\n");
-				{
+					printf("Receiving in suspended (rc8)\n");
+                                        sprintf(cmd_description_buf,"Receiving in suspended (rc8)");/* added by morganlin */
+				        {
 					SMAC_RDE *		desPt;
 
 					MacTestDevCrtlInit();
@@ -763,11 +766,12 @@ MacMain_break:
 					if(result!=0)	break;
 					result=TestCheckRxPattern(Test_Perfect_MAC_Addr[0],Test_Perfect_MAC_Addr[0],TEST_MIN_MTU,2);
 					if(result!=0)	break;
-				}
-				break;
+				        }
+				        break;
 				case '9' :
-					printf(" Filtering Fail (All (no Filter)) (raf2)\n");
-					Test_FilterMode=PERFECT_FAIL;
+					printf("Filtering Fail (All (no Filter)) (raf2)\n");
+					sprintf(cmd_description_buf,"Filtering Fail (All (no Filter)) (raf2)");/* added by morganlin */
+                                        Test_FilterMode=PERFECT_FAIL;
 
 					MacTestDevCrtlInit();
 					MacTestFilterInit();
@@ -809,10 +813,11 @@ MacMain_break:
 
 case_9_break:
 					Test_FilterMode=DEFAULT_FILTER;
-				break;
+				        break;
 				case 'A' :	case 'a' :
-					printf(" Inverse Perfect Filtering (raf3)\n");
-					Test_FilterMode=INVERSE_PERFECT;
+					printf("Inverse Perfect Filtering (raf3)\n");
+					sprintf(cmd_description_buf,"Inverse Perfect Filtering (raf3)");/* added by morganlin */
+                                        Test_FilterMode=INVERSE_PERFECT;
 
 					MacTestDevCrtlInit();
 					MacTestFilterInit();
@@ -851,9 +856,10 @@ case_9_break:
 
 case_a_break:
 					Test_FilterMode=DEFAULT_FILTER;
-				break;
+				        break;
 				case 'B' :	case 'b' :
-					printf(" Hash Filtering (raf4)\n");
+					printf("Hash Filtering (raf4)\n");
+                                        sprintf(cmd_description_buf,"Hash Filtering (raf4)");/* added by morganlin */
 					Test_FilterMode=HASH;
 					Test_FilterSize=DEFAULT_HASH_SIZE+DEFAULT_PERFECT_SIZE;
 
@@ -931,11 +937,12 @@ case_a_break:
 case_b_break:
 					Test_FilterSize=DEFAULT_FILTER_SIZE;
 					Test_FilterMode=DEFAULT_FILTER;
-				break;
+				        break;
 
 				case 'C' :	case 'c' :
-					printf(" Hash Only Filtering (raf5)\n");
-					Test_FilterMode=HASH_ONLY;
+					printf("Hash Only Filtering (raf5)\n");
+					sprintf(cmd_description_buf,"Hash Only Filtering (raf5)");/* added by morganlin */
+                                        Test_FilterMode=HASH_ONLY;
 					Test_FilterSize=DEFAULT_HASH_SIZE+1;	//Include My address
 
 					MacTestDevCrtlInit();
@@ -1012,10 +1019,11 @@ case_b_break:
 case_c_break:
 					Test_FilterSize=DEFAULT_FILTER_SIZE;
 					Test_FilterMode=DEFAULT_FILTER;
-				break;
+				        break;
 				case 'D' :	case 'd' :
-					printf(" Receive Bad packet (raf6)\n");
-					Test_FilterMode=ALL_BAD;
+					printf("Receive Bad packet (raf6)\n");
+					sprintf(cmd_description_buf,"Receive Bad packet (raf6)");/* added by morganlin */
+                                        Test_FilterMode=ALL_BAD;
 					Test_IgnoreError=1;
 					Test_DisPadding=1;
 
@@ -1074,11 +1082,12 @@ case_d_break:
 					Test_FilterMode=DEFAULT_FILTER;
 					Test_IgnoreError=DEFAULT_IGNOREERROR;
 					Test_DisPadding=0;
-				break;
+				        break;
 
 				case 'E' :	case 'e' :
-					printf(" Promiscuous Filtering (raf7)\n");
-					Test_FilterMode=PROMISCUOUS;
+					printf("Promiscuous Filtering (raf7)\n");
+					sprintf(cmd_description_buf,"Promiscuous Filtering (raf7)");/* added by morganlin */
+                                        Test_FilterMode=PROMISCUOUS;
 
 					MacTestDevCrtlInit();
 					MacTestFilterInit();
@@ -1141,10 +1150,11 @@ case_d_break:
 					}
 case_e_break:
 					Test_FilterMode=DEFAULT_FILTER;
-				break;
+				        break;
 				case 'F' :	case 'f' :
-					printf(" Pass All Multicast (raf8)\n");
-					Test_FilterMode=ALL_MULTI;
+					printf("Pass All Multicast (raf8)\n");
+					sprintf(cmd_description_buf,"Pass All Multicast (raf8)");/* added by morganlin */
+                                        Test_FilterMode=ALL_MULTI;
 
 					MacTestDevCrtlInit();
 					MacTestFilterInit();
@@ -1203,10 +1213,11 @@ case_e_break:
 					}
 case_f_break:
 					Test_FilterMode=DEFAULT_FILTER;
-				break;
+				        break;
 				case 'G': case 'g' :
-					printf(" Rx Overflow (rfifo2)\n");
-				{
+					printf("Rx Overflow (rfifo2)\n");
+                                        sprintf(cmd_description_buf,"Rx Overflow (rfifo2)");/* added by morganlin */
+				        {
 					SMAC_RDE *		desPt;
 					int				i,j;
 
@@ -1281,13 +1292,14 @@ case_f_break:
 							printf(" Error get overflow = %x Should be = %x\n", Testing_DevicePt->errStats.rxOverflow, j);
 							goto case_g_break;
 						}
-					}
-				}
+                                        }
+                                        }
 case_g_break:
-				break;
+				        break;
 				case 'H' : case 'h' :
-					printf(" Single Buffer2 (rlsm2/tlsm2)\n");
-					Test_SingleBuff1=0;
+					printf("Single Buffer2 (rlsm2/tlsm2)\n");
+					sprintf(cmd_description_buf,"Single Buffer2 (rlsm2/tlsm2)");/* added by morganlin */
+                                        Test_SingleBuff1=0;
 					Test_SingleBuff2=1;
 	
 					MacTestDevCrtlInit();
@@ -1347,10 +1359,11 @@ case_g_break:
 case_h_break:
 					Test_SingleBuff1=DEFAULT_SINGLEBUFF1;
 					Test_SingleBuff2=DEFAULT_SINGLEBUFF2;
-				break;
+				        break;
 				case 'I' : case 'i' :
-					printf(" Chain Mode (rlsm9/tlsm9)\n");
-					Test_ChainDes=1;
+					printf("Chain Mode (rlsm9/tlsm9)\n");
+					sprintf(cmd_description_buf,"Chain Mode (rlsm9/tlsm9)");/* added by morganlin */
+                                        Test_ChainDes=1;
 	
 					MacTestDevCrtlInit();
 					MacTestFilterInit();
@@ -1408,9 +1421,10 @@ case_h_break:
 
 case_i_break:
 					Test_ChainDes=0;
-				break;
+				        break;
 				case 'J' : case 'j' :
-					printf(" Empty Descriptors for Rx(rlsm10)\n");
+					printf("Empty Descriptors for Rx(rlsm10)\n");
+                                        sprintf(cmd_description_buf,"Empty Descriptors for Rx(rlsm10)");/* added by morganlin */
 				{
 					SMAC_RDE *		desPt;
 	
@@ -1459,7 +1473,8 @@ case_i_break:
 case_j_break:
 				break;
 				case 'K' : case 'k' :
-					printf(" Descriptors Unavailable (rlsm12)\n");
+					printf("Descriptors Unavailable (rlsm12)\n");
+                                        sprintf(cmd_description_buf,"Descriptors Unavailable (rlsm12)");/* added by morganlin */
 				{
 					SMAC_RDE *		desPt;
 	
@@ -1497,7 +1512,8 @@ case_j_break:
 				}
 				break;
 				case 'L' : case 'l' :
-					printf(" Descriptors Skip Ring Mode (rlsm11/tlsm11)\n");
+					printf("Descriptors Skip Ring Mode (rlsm11/tlsm11)\n");
+                                        sprintf(cmd_description_buf,"Descriptors Skip Ring Mode (rlsm11/tlsm11)");/* added by morganlin */
 					Test_SkipDes=1;
 	
 					MacTestDevCrtlInit();
@@ -1557,10 +1573,11 @@ case_j_break:
 
 case_l_break:
 					Test_SkipDes=0;
-				break;
+				        break;
 				case 'M' : case 'm' :
-					printf(" Dual Buffer (rlsm3/tlsm3)\n");
-					Test_SingleBuff2=0;
+					printf("Dual Buffer (rlsm3/tlsm3)\n");
+					sprintf(cmd_description_buf,"Dual Buffer (rlsm3/tlsm3)");/* added by morganlin */
+                                        Test_SingleBuff2=0;
 					Test_SingleBuff1=0;
 	
 					MacTestDevCrtlInit();
@@ -1620,9 +1637,10 @@ case_l_break:
 case_m_break:
 					Test_SingleBuff2=DEFAULT_SINGLEBUFF2;
 					Test_SingleBuff1=DEFAULT_SINGLEBUFF1;
-				break;
+				        break;
 				case 'N' : case 'n' :
-					printf(" Interrupt Mitigation All NRP & NTP (rim/tim)\n");
+					printf("Interrupt Mitigation All NRP & NTP (rim/tim)\n");
+                                        sprintf(cmd_description_buf,"Interrupt Mitigation All NRP & NTP (rim/tim)");/* added by morganlin */
 				{
 					int	nrtp;
 					int	i;
@@ -1694,11 +1712,12 @@ case_n_break:
 					Testing_DevicePt->tx_merge_counter=0;
 					Testing_DevicePt->tx_merge_number=0;
 					Test_Auto_Polling_Tx=save_TAP;
-				}
-				break;
+				        }
+				        break;
 				case 'O' : case'o' :
-					printf(" Continue Tx 60~1500 Packet ... \n");
-				{
+					printf("Continue Tx 60~1500 Packet ... \n");
+                                        sprintf(cmd_description_buf,"Continue Tx 60~1500 Packet ...");/* added by morganlin */
+				        {
 					int		i;
 	
 					MacTestDevCrtlInit();
@@ -1725,20 +1744,21 @@ case_n_break:
 						result=TestCheckRxPattern(Test_Perfect_MAC_Addr[0],Test_Perfect_MAC_Addr[0],i,(i&0x7f));
 						if(result!=0)	{goto case_o_break;}
 					}
-				}
+				        }
 case_o_break:
-				sMacDevShow(Testing_DevicePt);
-				break;
+				        sMacDevShow(Testing_DevicePt);
+				        break;
 				case 'P' : case'p' :
-				{
+				        {
 					int	save_TR;
 	
 					save_TR=Test_Tx_TR;
 	
 					//Underflow could not use store and forward
 					Test_Tx_TR=1;
-					printf(" Tx Underflow Test (tfifo9)\n");
-					Test_Tx_Underflow=1;
+					printf("Tx Underflow Test (tfifo9)\n");
+					sprintf(cmd_description_buf,"Tx Underflow Test (tfifo9)");/* added by morganlin */
+                                        Test_Tx_Underflow=1;
 	
 					MacTestDevCrtlInit();
 					MacTestFilterInit();
@@ -1760,11 +1780,12 @@ case_o_break:
 case_p_break:
 					Test_Tx_TR=save_TR;
 					Test_Tx_Underflow=0;
-				}
-				break;
+				        }
+				        break;
 				case 'R' : case 'r' :
-					printf(" Interrupt Mitigation TT & RT (rim/tim)\n");
-				{
+					printf("Interrupt Mitigation TT & RT (rim/tim)\n");
+                                        sprintf(cmd_description_buf,"Interrupt Mitigation TT & RT (rim/tim)");/* added by morganlin */
+				        {
 					int	nrtp;
 					int trt;
 					int cs;
@@ -1798,12 +1819,13 @@ case_p_break:
 							}
 						}
 					}
-				}
-				break;
+				        }
+				        break;
 				case 't' :
 				case 'T' :
 					printf("Miss Frames & FIFO Test\n");
-				{
+                                        sprintf(cmd_description_buf,"Miss Frames & FIFO Test");/* added by morganlin */
+				        {
 					SMAC_RDE *		desPt;
 					int 			i,j;
 					int				pending_rx;
@@ -1876,14 +1898,15 @@ case_p_break:
 							goto case_t_break;
 						}
 					}
-				}
+				        }
 case_t_break:
-				break;
+				        break;
 	
 				case 'u' :
 				case 'U' :
-					printf(" Rx Overflow Robust Test\n");
-				{
+					printf("Rx Overflow Robust Test\n");
+                                        sprintf(cmd_description_buf,"Rx Overflow Robust Test");/* added by morganlin */
+				        {
 					SMAC_RDE *		desPt;
 					int				i,j;
 	
@@ -1950,19 +1973,19 @@ case_t_break:
 						*/
 						//MSDELAY(1000);
 					}
-				}
+				        }
 case_u_break:
-				break;
+				        break;
 	
 				case 'v' :
 				case 'V' :
-				{
+				        {
 					int i;
 					int preDummy;
-	
+	                                sprintf(cmd_description_buf,"Tx/Rx Special size packet Test");/* added by morganlin */
 					do{
-						printf(" Test the Packet Size = %x\n", RealEtherPacketLen);
-						for(preDummy=0;preDummy<NUM_RDS;preDummy++){
+						printf("Test the Packet Size = %x\n", RealEtherPacketLen);						
+                                                for(preDummy=0;preDummy<NUM_RDS;preDummy++){
 							printf(" Test at Pre-dummy = %x\n", preDummy);
 	
 							while(Testing_DevicePt->rxIndex!=preDummy){
@@ -2015,8 +2038,9 @@ case_v_break:
 				
 				case 'y' :	//leonid+
 				case 'Y' :
-					printf(" Normal external loopback Test \n");
-					Test_LoopBack=0;
+					printf("Normal external loopback Test \n");
+					sprintf(cmd_description_buf,"Normal external loopback Test");/* added by morganlin */
+                                        Test_LoopBack=0;
 					Test_Ethernet_Frame=1;
 					MacTestDevCrtlInit();
 					MacTestFilterInit();
@@ -2104,7 +2128,8 @@ case_v_break:
 //-----------------------------------------------------------------------------
 				case 'w' :
 				case 'W' :
-					printf(" Dead Lock Test...........\n");
+					printf("Dead Lock Test...........\n");
+                                        sprintf(cmd_description_buf,"Dead Lock Test...........");/* added by morganlin */
 					{
 						int deadlock = 1;
 						volatile int *pt;
@@ -2148,10 +2173,14 @@ case_v_break:
 				break;
 			}
 		}
+
 		if(result != 0){
 //			printf("!!!! Testing Error ... Error Code = %x", result);
-			printf("!!!! Testing Error");
-			auto_ret = -1;
+			/* comment by morganlin */
+			//printf("!!!! Testing Error");
+                        /* added by morganlin */
+			printf("%s...[Fail]\n",cmd_description_buf);
+                        auto_ret = -1;
 #if 0
 			if(result == MAC_MII_NOTFIND	) printf("MAC_MII_NOTFIND   ");
 			if(result == MAC_MII_INITFAIL	) printf("MAC_MII_INITFAIL  ");
@@ -2167,9 +2196,13 @@ case_v_break:
 #endif
 		}
 		else{
-			printf("Pass !!! Test Finish");
+			/* added by morganlin */
+                        printf("%s...[Pass]\n",cmd_description_buf);
+                        /* comment by morganlin */
+                        //printf("Pass !!! Test Finish");
 		}
-		printf(".......MAC Item (%c)\n", cmd_buf[0]);
+		/* comment by morganlin */
+		//printf(".......MAC Item (%c)\n", cmd_buf[0]);
 
 	}
 

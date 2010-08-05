@@ -646,9 +646,10 @@ rtc_sub_alarm_test(u32_t f_time, u32_t f_date)
 
 	hit = 0;
 
+        printf("RTC_INT = %d\n",RTC_INT);
 	// enable interrupt
 	request_irq(RTC_INT, rtc_isr_alarm_hit, (void *)&hit);
-
+                        
 	rtc_set_date(&dt);
 	rtc_set_time(&tm);
 

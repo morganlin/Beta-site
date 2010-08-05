@@ -465,11 +465,11 @@ int sMacMiiScan
 	    	phy_id1 = sMacMiiPhyRead(pDrvCtrl, phyAddr, MII_PHY_ID1);
 			printf("phy_id1 = 0x%08x\n", phy_id1);
 	   		if (phy_id1 == PHY_ID1){ /* Found PHY */
-	   			#ifdef SMAC_DEBUG
+#ifdef SMAC_DEBUG
 	    		printf("!!!! Scan get MII PHY at AD (0x%x)\n", phyAddr);
 	    		//printf("!!!!                     ID0=0x%08x", phy_id0);
 	    		//printf(" ID1=0x%08x\n", phy_id1);
-				#endif
+#endif
 	    		break;
     		}
 		}
