@@ -35,9 +35,11 @@ nor_mxic_test (int autotest)
 		iowrite32(0x1, 0x18058320);	// for 2nd nor 16bit
 #endif
 	}
-	else
+	else {                
 		printf("\n Flash run in byte mode \n");
-	flashsize=FLASH_SIZE;
+        }
+        
+        flashsize=FLASH_SIZE;
 	secsize=FLASH_SECTOR_SIZE;
 	flash_total_sec_num = FLASH_TOTAL_SEC_NUM;
 	ret=test_item_ctrl(&nor_mxic_main_container,autotest);
@@ -68,6 +70,117 @@ nor_mxic_test_1 (int autotest)
 	ret=test_item_ctrl(&nor_mxic_test_container,autotest);
 	return ret;
 }
+
+/* added by morganlin */
+#ifdef GDR_NOR
+extern int 
+nor_mxic_sector_rw(int autotest)
+{        
+        int all=0;
+        int start;
+        int end;
+        int byteshift = 0,bytecounter=0;
+        unsigned int    sector_size;
+        unsigned long   start_base_addr;
+        unsigned int data;
+        
+                
+        if(autotest) {
+                start = flash_total_sec_num-1;
+                end = 0;
+                for(;start >= end;start--) {
+                       
+                        if( start < 8 ) {
+                                sector_size = secsize/8;
+                                start_base_addr = flash_start_addr + (sector_size * start);
+                        }
+                        else {
+                                sector_size = secsize;
+                                start_base_addr = flash_start_addr + (sector_size * ( start - 7 ));
+                        }
+                        
+                        if( mode == 0 ) {
+                                byteshift = 1;        
+                        }
+                        else if( mode == 1 ) {
+                                byteshift = 2;  
+                        }
+                        
+                         printf("checking sector %d at addr 0x%x\n",start,start_base_addr);
+                                                                                                
+                        for( bytecounter = 0;bytecounter < sector_size;bytecounter += byteshift ) {
+                                if(mode == 0) {
+                                        data = readb(start_base_addr+ bytecounter);
+                                        data&=0xff;
+                                }
+                                else if(mode == 1){
+                                        data = ioread16(start_base_addr+ bytecounter);
+                                        data&=0xffff;                                     
+                                }        
+                                        
+                                if( (data != 0xff) && (data != 0xffff) ) {
+                                        printf("mode = %d at addr 0x%x , data = 0x%x\n",mode,(start_base_addr+ bytecounter),data);
+                                        break;
+                                }                                                 
+                        }
+                        
+                        if( ( data == 0xff || data == 0xffff ) && bytecounter >= sector_size ) {
+                                break;                                
+                        }        
+                                                
+                }       
+                
+                if( start < end ) {
+                        printf("all sectors been used\n");
+                        return 0;
+                }
+                
+                printf("Sector %d r/w testing......\n", start);
+                                
+                if(mxic_sector_write(start) == FLASH_NOERROR){
+                        printf("Pass!!\n");     
+                }
+                else{
+                        printf("Fail!!\n");                                     
+                        return -1;
+                }                                
+                
+        }else{
+block_break :
+                printf("0. set sector range\n");
+                printf("1. test all sector\n");
+                printf("sector>");
+                scanf("%d", &all);
+                if(all == 0){
+                        do{
+                                printf("set start sector (0~%d): ", (flash_total_sec_num-1));
+                                scanf("%d\n", &start);
+                                printf("set end sector (%d~%d): ", start, (flash_total_sec_num-1));
+                                scanf("%d\n", &end);                                                            
+                        }while((end > flash_total_sec_num) || (start < 0) || (start > end));
+                }else if(all == 1){     
+                        start = 0;
+                        end = flash_total_sec_num-1;
+                }else{
+                        printf("input error!!\n");
+                        goto  block_break;
+                }
+                
+                for(; start <= end ; start++){  
+                        printf("Sector %d r/w testing......\n", start);                 
+                        if(mxic_sector_write(start) == FLASH_NOERROR){
+                                printf("Pass!!\n");     
+                        }
+                        else{
+                                printf("Fail!!\n");                                     
+                                return -1;
+                        }
+                }                
+        }
+
+        return 0;
+}        
+#else
 
 extern int 
 nor_mxic_sector_rw(int autotest)
@@ -101,6 +214,7 @@ block_break :
 			goto  block_break;
 		}
 	}	
+
 	for(; start <= end ; start++){	
 		printf("Sector %d r/w testing......\n", start);			
 		if(mxic_sector_write(start) == FLASH_NOERROR){
@@ -114,6 +228,8 @@ block_break :
 	
 	return 0;
 }
+
+#endif
 
 extern int nor_mxic_read(int autotest)
 {
@@ -139,7 +255,7 @@ extern int nor_mxic_read(int autotest)
   else {
   	data = ioread16(flash_start_addr+ flashoffset);
   	data&=0xffff;
-  	printf("0x%4x\n", data);
+        printf("addr 0x%x data: 0x%4x\n",flash_start_addr+ flashoffset, data);
   }
 	return 0;
 }
@@ -206,37 +322,43 @@ extern int nor_mxic_erase_sector(int autotest)
 erase_break :	
 	printf("choose the type 0.address (offset) 1.sector number : ");
 	scanf("%d\n", &tmp);
-	if(tmp == 0){
-    	while(1){
-			printf("address (offset:0~%x) : ",flashsize-1);
-        	scanf("%x\n", &flashoffset);
-			if(flashoffset >flashsize)
-				printf("address over the range\n");
-			else
-				break;
-		}
-    if(flashoffset<secsize)
-    	sector = flashoffset/(secsize/8);
-    else 
-    	sector = (flashoffset/secsize+7);
-    	
-	}
-	else if(tmp == 1){	
-		while(1){
+	if(tmp == 0) {
+    	        while(1) {
+	        	printf("address (offset:0~%x) : ",flashsize-1);
+                        scanf("%x\n", &flashoffset);
+		        if(flashoffset >flashsize) {
+			        printf("address over the range\n");
+                        }
+                        else {
+			        break;
+                        }
+                }
+                
+                if(flashoffset<secsize) {
+                        sector = flashoffset/(secsize/8);
+                }
+                else {
+    	                sector = (flashoffset/secsize+7);    	
+	        }
+        }	        
+	else if(tmp == 1) {	
+		while(1) {
 			printf("Sector (0~%d): ", (FLASH_TOTAL_SEC_NUM-1));
 			scanf("%d\n", &sector);
-			if(sector >= FLASH_TOTAL_SEC_NUM || sector<0)
+			if(sector >= FLASH_TOTAL_SEC_NUM || sector<0) {
 				printf("sector over the range\n");
-			else
+                        }
+                        else {
 				break;
-		}
+                        }
+                }
 	}
-	else{
+	else {
 		printf("input error\n");
 		goto erase_break;
 	}
 								
-	if(mxic_flash_erase_sector(sector)!=FLASH_NOERROR){
+	if(mxic_flash_erase_sector(sector)!=FLASH_NOERROR) {
 		return -5;
 	}
 	return 0;
@@ -244,38 +366,43 @@ erase_break :
 
 extern int nor_mxic_erase_all(int autotest)
 {
-  if(mode==0) {  	
-		writeb(0xAA,flash_start_addr+0xAAA);
-		writeb(0x55,flash_start_addr+0x555);
-		writeb(0x80,flash_start_addr+0xAAA);
-		writeb(0xAA,flash_start_addr+0xAAA);
-		writeb(0x55,flash_start_addr+0x555);
-		writeb(0x10,flash_start_addr+0xAAA);
-		
-	}
-	else {
-		iowrite16(0xAA,flash_start_addr+0xAAA);
-		iowrite16(0x55,flash_start_addr+0x554);
-		iowrite16(0x80,flash_start_addr+0xAAA);
-		iowrite16(0xAA,flash_start_addr+0xAAA);
-		iowrite16(0x55,flash_start_addr+0x554);
-		iowrite16(0x10,flash_start_addr+0xAAA);
-	}
-	printf("erasing....\n");
-	//MSDELAY(38000);
-	MSDELAY(100000);
-	printf("checking....\n");
-	unsigned long i;
-	for(i=0;i<flashsize;i++) {
-		if(readb(flash_start_addr+i)!=0xFF) {
-			printf("Erase Error at 0x%x\n",flash_start_addr+i);
-			return -5;
-		}
-	}	
-	printf("Erase All Success\n");
-	return 0;
-}
+        unsigned long i;
+  if(mode==0) {                         
+                writeb(0xAA,flash_start_addr+0xAAA);
+                writeb(0x55,flash_start_addr+0x555);
+                writeb(0x80,flash_start_addr+0xAAA);
+                writeb(0xAA,flash_start_addr+0xAAA);
+                writeb(0x55,flash_start_addr+0x555);
+                writeb(0x10,flash_start_addr+0xAAA);            
+        }
+        else {
+                iowrite16(0xAA,flash_start_addr+0xAAA);
+                iowrite16(0x55,flash_start_addr+0x554);
+                iowrite16(0x80,flash_start_addr+0xAAA);
+                iowrite16(0xAA,flash_start_addr+0xAAA);
+                iowrite16(0x55,flash_start_addr+0x554);
+                iowrite16(0x10,flash_start_addr+0xAAA);
+        }
 
+        printf("erasing....\n");
+        //MSDELAY(38000);
+/* added by morganlin */
+#ifdef GDR_NOR                
+        MSDELAY(3050000);
+#else
+        MSDELAY(100000);
+#endif        
+        printf("checking....\n");
+        
+        for(i=0;i<flashsize;i++) {     
+               if(readb(flash_start_addr+i)!=0xFF) {
+                       printf("Erase Error at 0x%x data = 0x%x\n",flash_start_addr+i,readb(flash_start_addr+i));
+                       return -5;        
+               }
+        }       
+        printf("Erase All Success\n");
+        return 0;
+}
 
 int mxic_flash_write(unsigned long flashoffset, unsigned int Data)
 {
@@ -326,7 +453,7 @@ int mxic_flash_write(unsigned long flashoffset, unsigned int Data)
 int mxic_program(unsigned long OffsetAddr, unsigned int data )
 {		
 	int flag=0;
-  int cnt=0;
+        int cnt=0;
 	unsigned long address;
 	unsigned int tmp;
 	
@@ -387,11 +514,10 @@ int mxic_flash_erase_sector(int sector_num)
 	int i,tmp;
 	unsigned long	startaddr;
 	unsigned int sector_size;
-	
+        
 	if(sector_num<8) {
 		sector_size=secsize/8;
 		startaddr = flash_start_addr + sector_size * sector_num;
-		
 	}
 	else {
 		sector_size=secsize;
@@ -408,9 +534,8 @@ int mxic_flash_erase_sector(int sector_num)
 		//MSDELAY(3000);
 		MSDELAY(100000);
 		writeb(0xF0,flash_start_addr);
-	}		
-		
-  else {
+	}				
+        else {
 		iowrite16(0xAA,flash_start_addr+0xAAA);
 		iowrite16(0x55,flash_start_addr+0x554);
 		iowrite16(0x80,flash_start_addr+0xAAA);

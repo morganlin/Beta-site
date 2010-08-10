@@ -31,6 +31,8 @@ extern int test_item_ctrl(struct test_item_container *container, int autotest);
 
 #define GDR_MAC
 
+#define GDR_NOR
+
 #endif /* endif GDR_DIAG */
 
 #endif /* endif __GDR */
