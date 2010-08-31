@@ -55,9 +55,9 @@ socle_buzzer_pwm_test(int autotest)
 	socle_scu_dev_enable(SOCLE_DEVCON_PWM1);
 #endif
 
-	hrc = 0x2500;
-	lrc = 0x5000;
-	prescale = 10;
+	hrc = 0x250;
+	lrc = 0x500;
+	prescale = 1;
 
 	p_pwmt = get_socle_pwmt_structure(1);
 	if (NULL == p_pwmt) {

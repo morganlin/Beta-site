@@ -312,10 +312,10 @@ modification history
         }
 
 #define	sMAC_MII_WTRISTATE(devAdrs)                                       	\
-		{                                                               	\
+        {                                                               	\
         sMAC_MII_BIT_WRITE((devAdrs), 0x1);                               	\
         sMAC_MII_BIT_WRITE((devAdrs), 0x0);                               	\
-		}
+	}
 
 #define sMAC_MII_WRITE(devAdrs, data, bitCount)                           	\
     	{                                                               	\
@@ -385,7 +385,7 @@ USHORT sMacMiiPhyRead
     USHORT retVal=0;
     
     /* Write 34-bit preamble */
-    sMAC_MII_WRITE (pDrvCtrl->devAdrs, MII_PREAMBLE, 32);
+    sMAC_MII_WRITE (pDrvCtrl->devAdrs, MII_PREAMBLE, 32); /* MII_PREAMBLE (ULONG)0xFFFFFFFF */
     /* SW ISSUE Why 2 dummy ? */
     //sMAC_MII_WRITE (pDrvCtrl->devAdrs, MII_PREAMBLE, 2);
 
@@ -459,19 +459,22 @@ int sMacMiiScan
 
 	/* Find first PHY attached to Socle MAC */
 	for (phyAddr = 0; phyAddr < MAC_MAX_PHY; phyAddr++){
-		phy_id0 = sMacMiiPhyRead(pDrvCtrl, phyAddr, MII_PHY_ID0);
+		
+                phy_id0 = sMacMiiPhyRead(pDrvCtrl, phyAddr, MII_PHY_ID0); /* MII_PHY_ID0 0x02 */
 		printf("phy_id0 = 0x%08x\n", phy_id0);
-	    if (phy_id0 == PHY_ID0){ 
-	    	phy_id1 = sMacMiiPhyRead(pDrvCtrl, phyAddr, MII_PHY_ID1);
+                
+                if (phy_id0 == PHY_ID0){ 
+	    	        phy_id1 = sMacMiiPhyRead(pDrvCtrl, phyAddr, MII_PHY_ID1);
 			printf("phy_id1 = 0x%08x\n", phy_id1);
+                        
 	   		if (phy_id1 == PHY_ID1){ /* Found PHY */
 #ifdef SMAC_DEBUG
-	    		printf("!!!! Scan get MII PHY at AD (0x%x)\n", phyAddr);
-	    		//printf("!!!!                     ID0=0x%08x", phy_id0);
-	    		//printf(" ID1=0x%08x\n", phy_id1);
+	    		        printf("!!!! Scan get MII PHY at AD (0x%x)\n", phyAddr);
+	    		        //printf("!!!!                     ID0=0x%08x", phy_id0);
+	    		        //printf(" ID1=0x%08x\n", phy_id1);
 #endif
-	    		break;
-    		}
+	    		        break;
+    		        }
 		}
 	}
 	pDrvCtrl->MII_PhyAD = phyAddr;

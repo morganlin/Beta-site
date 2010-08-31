@@ -391,8 +391,8 @@ typedef struct tDesc
 
 /* MII/PHY defines */
 #define	MAC_MAX_PHY			32	// max number of PHY devices
-#define	MAC_MAX_LINK_TOUT	16	// max link timeout (in secs)
-#define MII_PREAMBLE		((ULONG) 0xFFFFFFFF)
+#define	MAC_MAX_LINK_TOUT	        16	// max link timeout (in secs)
+#define MII_PREAMBLE		        ((ULONG) 0xFFFFFFFF)
 #ifdef	PHY_IC_PLUS
 #define PHY_ID0				0x243
 #define	PHY_ID1				0xC54
@@ -408,21 +408,21 @@ typedef struct tDesc
 #define	MII_WR				0x1	// op-code: Write
 
 /* MII PHY registers */
-#define MII_PHY_CR			0x00	// Control Register
-#define MII_PHY_SR			0x01	// Status Register
-#define MII_PHY_ID0			0x02	// Identifier Register 0
-#define MII_PHY_ID1			0x03	// Identifier Register 1
-#define MII_PHY_ANA			0x04	// Auto Negot'n Advertisement
+#define MII_PHY_CR		0x00	// Control Register
+#define MII_PHY_SR		0x01	// Status Register
+#define MII_PHY_ID0		0x02	// Identifier Register 0
+#define MII_PHY_ID1		0x03	// Identifier Register 1
+#define MII_PHY_ANA		0x04	// Auto Negot'n Advertisement
 #define MII_PHY_ANLPA		0x05	// Auto Negot'n Link Partner Ability
-#define MII_PHY_ANE			0x06	// Auto Negot'n Expansion
-#define MII_PHY_ANP			0x07	// Auto Negot'n Next Page TX
+#define MII_PHY_ANE		0x06	// Auto Negot'n Expansion
+#define MII_PHY_ANP		0x07	// Auto Negot'n Next Page TX
 /* SW ISSUE */
-#define	MII_PHY_LBR         0x11	// Loopback Register
-#define	MII_PHY_TEST        0x19	// Test Register
+#define	MII_PHY_LBR             0x11	// Loopback Register
+#define	MII_PHY_TEST            0x19	// Test Register
 
 /* ID0 values of PHY devices */
-#define	MII_PHY_ID0_NATIONAL	0x2000	/* National TX */
-#define	MII_PHY_ID0_BROADCOM	0x03e0	/* Broadcom T4 */
+#define	MII_PHY_ID0_NATIONAL	        0x2000	/* National TX */
+#define	MII_PHY_ID0_BROADCOM	        0x03e0	/* Broadcom T4 */
 #define	MII_PHY_ID0_SEEQ		0x0016	/* Seeq T4 */
 #define	MII_PHY_ID0_CYPRESS		0x0014	/* Cypress T4 */
 #define	MII_PHY_ID0_REALTEK		0x0000	/* REALTEK RTL8201BL */
@@ -481,9 +481,9 @@ typedef struct tDesc
 #define MII_PHY_ANLPA_10M	0x0060	/* 10Mb Technology Ability Mask */
 #define MII_PHY_ANLPA_CSMA	0x0001	/* CSMA-CD Capable */
 
-#define	MII_PHY_LBR_NORMAL  0x0000	// Loopback Register : Normal Mode
+#define	MII_PHY_LBR_NORMAL      0x0000	// Loopback Register : Normal Mode
 #define	MII_PHY_LBR_PHY  	0x0100	// Loopback Register : PHY
-#define	MII_PHY_LBR_TWISTER 0x0200	// Loopback Register : Twister
+#define	MII_PHY_LBR_TWISTER     0x0200	// Loopback Register : Twister
 #define	MII_PHY_LBR_F100M 	0x0080	// Loopback Register : Force 100M OK
 
 

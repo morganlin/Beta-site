@@ -27,11 +27,23 @@ extern int test_item_ctrl(struct test_item_container *container, int autotest);
 
 #ifdef GDR_DIAG
 
+#define GDR_GPIO
+
+#define GDR_MEM
+
+#define GDR_UART
+
 #define GDR_LCD
 
 #define GDR_MAC
 
-#define GDR_NOR
+#define GDR_NOR_MXIC
+
+#define GDR_RTC
+
+#define GDR_SPI
+
+#define GDR_I2C
 
 #endif /* endif GDR_DIAG */
 

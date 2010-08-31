@@ -14,10 +14,18 @@
 	#define SOCLE_NOR_BASE1	-1
 #endif
 
-#define FLASH_TOTAL_SEC_NUM       71
-#define FLASH_SIZE   0x400000
+//#define FLASH_TOTAL_SEC_NUM       71
+/* added by morganlin */
+#define FLASH_TOTAL_SEC_NUM       128
 
-#define FLASH_SECTOR_SIZE  0x10000
+
+//#define FLASH_SIZE   0x400000
+/* added by morganlin */
+#define FLASH_SIZE      0x1000000 
+
+/* #define FLASH_SECTOR_SIZE  0x10000 */
+/* added by morganlin */
+#define FLASH_SECTOR_SIZE  0x20000 
 
 #if defined (CONFIG_PC9002) || (CONFIG_PC9220 || CONFIG_PC9223 || CONFIG_MDK3D || CONFIG_MDKFHD)
  	#define MODE_BASE (SOCLE_SDRSTMC0+0x8020)

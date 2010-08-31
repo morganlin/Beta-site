@@ -94,8 +94,8 @@ CONFIG_LCD=y
 # CONFIG_PANEL48 is not set
 # CONFIG_PANEL70 is not set
 CONFIG_PWM=y
-# CONFIG_BUZZER is not set
-# CONFIG_ADC=y
+CONFIG_BUZZER=y
+# CONFIG_ADC is not set
 CONFIG_VIOP=y
 # CONFIG_HDVIP is not set
 # CONFIG_LCM is not set

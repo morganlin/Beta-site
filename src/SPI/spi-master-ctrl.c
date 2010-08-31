@@ -66,10 +66,16 @@ extern int socle_spi_master0_test(int autotest)
 		extern struct test_item socle_spi_transfer_test_items[];
 		
 		socle_spi_transfer_test_items[1].enable = SOCLE_SPI_EEPROM_0_TEST;
-		socle_spi_transfer_test_items[2].enable = SOCLE_SPI_MARVEL_WIFI_0_TEST;
-		socle_spi_transfer_test_items[3].enable = SOCLE_SPI_TSC2000_0_TEST;
-		socle_spi_transfer_test_items[4].enable = SOCLE_SPI_ADS7846_0_TEST;
-		socle_spi_transfer_test_items[5].enable = SOCLE_SPI_MAX1110_0_TEST;
+/* added by morganlin */
+#ifndef GDR_SPI		
+                socle_spi_transfer_test_items[2].enable = SOCLE_SPI_MARVEL_WIFI_0_TEST;
+#endif
+                socle_spi_transfer_test_items[3].enable = SOCLE_SPI_TSC2000_0_TEST;
+/* added by morganlin */
+#ifndef GDR_SPI 
+                socle_spi_transfer_test_items[4].enable = SOCLE_SPI_ADS7846_0_TEST;
+#endif		
+                socle_spi_transfer_test_items[5].enable = SOCLE_SPI_MAX1110_0_TEST;
 	}	
 	socle_spi_base = SOCLE_SPI0;
 #if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
@@ -95,8 +101,11 @@ extern int socle_spi_master1_test(int autotest)
 		socle_spi_transfer_test_items[1].enable = SOCLE_SPI_EEPROM_1_TEST;
 		socle_spi_transfer_test_items[2].enable = SOCLE_SPI_MARVEL_WIFI_1_TEST;
 		socle_spi_transfer_test_items[3].enable = SOCLE_SPI_TSC2000_1_TEST;
-		socle_spi_transfer_test_items[4].enable = SOCLE_SPI_ADS7846_1_TEST;
-		socle_spi_transfer_test_items[5].enable = SOCLE_SPI_MAX1110_1_TEST;
+/* added by morganlin */
+#ifndef GDR_SPI 
+                socle_spi_transfer_test_items[4].enable = SOCLE_SPI_ADS7846_1_TEST;
+#endif
+                socle_spi_transfer_test_items[5].enable = SOCLE_SPI_MAX1110_1_TEST;
 	}
 	socle_spi_base = SOCLE_SPI1;
 #if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)

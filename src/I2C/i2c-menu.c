@@ -51,11 +51,19 @@ struct test_item socle_i2c_main_test_items[] = {
 	 1,
 	 SOCLE_I2C_AT24C02B_EEPROM_TEST
 	},
+#ifdef GDR_I2C	
+        {"RM24C16 EEPROM Test",
+         socle_i2c_rm24c16_eeprom_test,
+         0,
+         0
+        },
+#else	
 	{"RM24C16 EEPROM Test",
 	 socle_i2c_rm24c16_eeprom_test,
 	 1,
 	 SOCLE_I2C_RM24C16_EEPROM_TEST
 	},
+#endif	
 };
 
 struct test_item_container socle_i2c_main_test_container = {

@@ -34,8 +34,9 @@ otg_device_start(int autotest)
 		printf("iso_in_mult = %d\n", iso_in_mult);
 	}
 #endif	
+        //printf("before initialize_device\n");//morganlin
 	ret = initialize_device();
-
+        //printf("after initialize_device\n");//morganlin
         //printf("otg_device_start\n");
         ret = _usb_device_init(0, &dev_handle, 4);
 

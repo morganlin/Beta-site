@@ -36,12 +36,15 @@ struct test_item socle_gpio_mode_test_items[] = {
 		1,
 		1
 	},
+/* added by morganlin */
+#ifndef GDR_GPIO	
 	{
 		"Normal Mode Test",
 		socle_gpio_normal_mode,
 		1,
 		1
 	}
+#endif
 };
 
 struct test_item_container socle_gpio_mode_container = {

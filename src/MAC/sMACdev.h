@@ -157,8 +157,8 @@ typedef struct /* drv_ctrl */
 #ifdef 	MAC_DATA_BUFFER_SIZEVARIABLE
 	int			rx_FristNeeded;
 	int			rx_SegLength;
-	RCVDATAPOOL	*rx_PoolPt;
-	char		*rx_PoolCurrentPt;
+	RCVDATAPOOL	        *rx_PoolPt;
+	char		        *rx_PoolCurrentPt;
 	int			rx_PooliMax;
 	int			rx_PooliWrite;
 	int			rx_PooliRead;

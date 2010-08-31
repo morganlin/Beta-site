@@ -40,10 +40,12 @@ struct test_item socle_uart_type_test_items[] = {
 	 socle_uart_normal_test,
 	 1,
 	 1},
+	
 	{"Hardware Dma with Panther7 HDMA Test",
 	 socle_uart_hwdma_panther7_hdma_test,
 	 1,
-	 SOCLE_UART_HWDMA_PANTHER7_HDMA_TEST},
+	 SOCLE_UART_HWDMA_PANTHER7_HDMA_TEST
+        },
 };
 
 struct test_item_container socle_uart_type_test_container = {
@@ -66,10 +68,20 @@ struct test_item socle_uart_transfer_test_items[] = {
 	 socle_uart_ext_loopback_test,
 	 1,
 	 1},
+/* added by morganlin */	 
+#ifdef GDR_UART	 
+        {"Module Test",
+         socle_uart_module_test,
+         0,
+         0
+        }
+#else
 	{"Module Test",
 	 socle_uart_module_test,
 	 1,
-	 1}
+	 1
+        }
+#endif	 
 };
 
 struct test_item_container socle_uart_transfer_test_container = {

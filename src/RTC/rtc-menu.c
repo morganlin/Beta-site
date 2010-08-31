@@ -12,6 +12,8 @@ extern int rtc_get_time_alarm_test(int autotest);
 extern int rtc_get_date_alarm_test(int autotest);
 extern int rtc_wait_for_alarm_test(int autotest);
 extern int rtc_enter_poweroff_mode_test(int autotest);
+extern int rtc_set_time_date_test(int autotest); /* added by morganlin */
+extern int rtc_set_time_date_alarm_test(int autotest); /* added by morganlin */
 
 struct test_item rtc_main_test_items[] = {
 	{
@@ -28,6 +30,22 @@ struct test_item rtc_main_test_items[] = {
 		1
 	},
 #endif
+
+/* added by morganlin */
+#ifdef GDR_RTC
+        {
+                "Set RTC Time & Date",
+                rtc_set_time_date_test,
+                0,
+                1
+        },
+        {
+                "Set RTC Alarm Time & Date",
+                rtc_set_time_date_alarm_test,
+                0,
+                1
+        },                
+#else
 	{
 		"Set RTC Time",
 		rtc_set_time_test,
@@ -39,7 +57,8 @@ struct test_item rtc_main_test_items[] = {
 		rtc_set_date_test,
 		0,
 		1
-	},
+	},	
+	
 	{
 		"Set RTC Alarm Time",
 		rtc_set_time_alarm_test,
@@ -52,6 +71,7 @@ struct test_item rtc_main_test_items[] = {
 		0,
 		1
 	},
+#endif		
 	{
 		"Get RTC Time",
 		rtc_get_time_test,

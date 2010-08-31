@@ -398,20 +398,20 @@
 #define USE_PWM(...)  __VA_ARGS__
 #define SKIP_PWM(...)
 
-#undef CONFIG_BUZZER
-#define ENABLE_BUZZER 0
-#define USE_BUZZER(...)
-#define SKIP_BUZZER(...)  __VA_ARGS__
+#define CONFIG_BUZZER 1
+#define ENABLE_BUZZER 1
+#define USE_BUZZER(...)  __VA_ARGS__
+#define SKIP_BUZZER(...)
 
 #undef CONFIG_ADC
 #define ENABLE_ADC 0
 #define USE_ADC(...)
 #define SKIP_ADC(...)  __VA_ARGS__
 
-#define CONFIG_VIOP 1
-#define ENABLE_VIOP 1
-#define USE_VIOP(...)  __VA_ARGS__
-#define SKIP_VIOP(...)
+#undef CONFIG_VIOP
+#define ENABLE_VIOP 0
+#define USE_VIOP(...)
+#define SKIP_VIOP(...)  __VA_ARGS__
 
 #undef CONFIG_HDVIP
 #define ENABLE_HDVIP 0

@@ -73,24 +73,46 @@ struct test_item socle_spi_transfer_test_items[] = {
 		1,
 		1
 	},
+/* added by morganlin */	
+#ifdef GDR_SPI	
+        {
+                "With Marvel WiFi Module Test",
+                socle_spi_marvel_wifi,
+                0,
+                0
+        },
+#else
 	{
 		"With Marvel WiFi Module Test",
 	 	socle_spi_marvel_wifi,
 	 	1,
 	 	1
 	},
+#endif
+
 	{
 		"With TCS2000 Touch Screen Test",
 		 socle_spi_tsc2000_touch,
 	 	0,
 	 	1
 	},
+/* added by morganlin */
+#ifdef GDR_SPI
+        {
+                "With ADS7846 Touch Screen Test",
+                socle_spi_ads7846_touch,
+                0,
+                0
+        },
+#else
 	{
 		"With ADS7846 Touch Screen Test",
 		socle_spi_ads7846_touch,
 		0,
 		1
 	},
+#endif	
+	
 	{
 		"With MAX1110 ADC Test",
 		socle_spi_max1110_adc,

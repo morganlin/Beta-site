@@ -153,12 +153,22 @@ struct test_item mem_main_test_items[] =
         1,
         1
     },
+/* added by morganlin */    
+#ifdef GDR_MEM    
+    {
+        "Memory Bank Align Test",
+        mem_align_test,
+        1,
+        1
+    },
+#else
     {
         "Memory Bank Align Test",
         mem_align_test,
         0,
         1
     },
+#endif    
     {
         "Repeat Someone Address Test",
         repeat_write_test,
@@ -178,12 +188,22 @@ struct test_item_container mem_main_container =
 
 struct test_item mem_bank_test_items[] =
 {
+/* added by morganlin */
+#ifdef GDR_MEM        
+    {
+        "Bank Normal Test",
+        mem_bank_normal_test,
+        1,
+        1
+    },
+#else
     {
         "Bank Normal Test",
         mem_bank_normal_test,
         0,
         1
-    },
+    },            
+#endif
     {
         "Bank Burn in Test",
         mem_bank_burn_in_test,

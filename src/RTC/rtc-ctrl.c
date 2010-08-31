@@ -52,7 +52,7 @@ rtc_test(int autotest)
 #endif	//CONFIG_LDK5
 
 	RTC_SET_DIVIDER(RTC_DIVIDER);
-	
+	        	
 	RTC_EN();
 	
 	result = test_item_ctrl(&rtc_main_container, autotest);
@@ -90,7 +90,18 @@ rtc_all_alarm_test(int autotest)
 	dt_a.mth      = 2;
 	dt_a.ten_day  = 3;
 	dt_a.day      = 1;
-
+/* added by morganlin */
+#ifdef GDR_RTC
+        // alarm time = Wed 17:58:11.2
+        tm_a.dow      = 3;
+        tm_a.ten_hr   = 1;
+        tm_a.hr       = 7;
+        tm_a.ten_min  = 5;
+        tm_a.min      = 8;
+        tm_a.ten_sec  = 1;
+        tm_a.sec      = 1;
+        tm_a.sos      = 2;
+#else
 	// alarm time = Wed 17:58:15.10
 	tm_a.dow      = 3;
 	tm_a.ten_hr   = 1;
@@ -100,7 +111,7 @@ rtc_all_alarm_test(int autotest)
 	tm_a.ten_sec  = 1;
 	tm_a.sec      = 5;
 	tm_a.sos      = 10;
-
+#endif
 	// Set date and time
 	// date = C21 06/12/31
 	dt.ten_cent = 2;
@@ -111,7 +122,7 @@ rtc_all_alarm_test(int autotest)
 	dt.mth      = 2;
 	dt.ten_day  = 3;
 	dt.day      = 1;
-	
+        
 	// time = Wed 17:58:10.2
 	tm.dow      = 3;
 	tm.ten_hr   = 1;
@@ -195,7 +206,18 @@ rtc_second_test(int autotest)
 	dt_a.mth      = 2;
 	dt_a.ten_day  = 3;
 	dt_a.day      = 1;
-	
+/* added by morganlin */        
+#ifdef GDR_RTC	
+        // alarm time = Wed 17:58:55.1
+        tm_a.dow      = 3;
+        tm_a.ten_hr   = 1;
+        tm_a.hr       = 7;
+        tm_a.ten_min  = 5;
+        tm_a.min      = 8;
+        tm_a.ten_sec  = 5;
+        tm_a.sec      = 5;
+        tm_a.sos      = 1;
+#else
 	// alarm time = Wed 17:58:59.1
 	tm_a.dow      = 3;
 	tm_a.ten_hr   = 1;
@@ -205,7 +227,7 @@ rtc_second_test(int autotest)
 	tm_a.ten_sec  = 5;
 	tm_a.sec      = 9;
 	tm_a.sos      = 1;
-	
+#endif	
 	// Set date and time
 	// date = C21 06/12/31
 	dt.ten_cent = 2;
@@ -259,7 +281,7 @@ rtc_minute_test(int autotest)
 	tm_a.sos      = 1;
 	
 	// Set date and time
-	// date = C21 06/12/31
+	//date = C21 06/12/31
 	dt.ten_cent = 2;
 	dt.cent     = 1;
 	dt.ten_yr   = 0;
@@ -268,17 +290,29 @@ rtc_minute_test(int autotest)
 	dt.mth      = 2;
 	dt.ten_day  = 3;
 	dt.day      = 1;
-	
-	// time = Wed 17:58:55.0
-	tm.dow      = 3;
-	tm.ten_hr   = 1;
-	tm.hr       = 7;
-	tm.ten_min  = 5;
-	tm.min      = 8;
-	tm.ten_sec  = 5;
-	tm.sec      = 5;
-	tm.sos      = 0;
-	
+
+/* added by morganlin */        
+#ifdef GDR_RTC
+        // alarm time = Wed 17:58:59.0
+        tm.dow      = 3;
+        tm.ten_hr   = 1;
+        tm.hr       = 7;
+        tm.ten_min  = 5;
+        tm.min      = 8;
+        tm.ten_sec  = 5;
+        tm.sec      = 9;
+        tm.sos      = 0;
+#else
+        // time = Wed 17:58:55.0
+        tm.dow      = 3;
+        tm.ten_hr   = 1;
+        tm.hr       = 7;
+        tm.ten_min  = 5;
+        tm.min      = 8;
+        tm.ten_sec  = 5;
+        tm.sec      = 5;
+        tm.sos      = 0;
+#endif	
 	result = rtc_sub_alarm_test(SOCLE_RTC_TALRM_CM, 0);
 	
 	return result;
@@ -299,7 +333,18 @@ rtc_hour_test(int autotest)
 	dt_a.mth      = 2;
 	dt_a.ten_day  = 3;
 	dt_a.day      = 1;
-	
+/* added by morganlin */
+#ifdef GDR_RTC
+        // alarm time = Wed 18:00:00.0
+        tm_a.dow      = 3;
+        tm_a.ten_hr   = 1;
+        tm_a.hr       = 8;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 0;
+        tm_a.sos      = 0;
+#else
 	// alarm time = Wed 18:00:01.1
 	tm_a.dow      = 3;
 	tm_a.ten_hr   = 1;
@@ -309,7 +354,7 @@ rtc_hour_test(int autotest)
 	tm_a.ten_sec  = 0;
 	tm_a.sec      = 1;
 	tm_a.sos      = 1;
-	
+#endif                                
 	// Set date and time
 	// date = C21 06/12/31
 	dt.ten_cent = 2;
@@ -321,16 +366,30 @@ rtc_hour_test(int autotest)
 	dt.ten_day  = 3;
 	dt.day      = 1;
 	
-	// time = Wed 17:59:56.0
-	tm.dow      = 3;
-	tm.ten_hr   = 1;
-	tm.hr       = 7;
-	tm.ten_min  = 5;
-	tm.min      = 9;
-	tm.ten_sec  = 5;
-	tm.sec      = 6;
-	tm.sos      = 0;
-	
+
+
+/* added by morganlin */        
+#ifdef GDR_RTC
+        // alarm time = Wed 17:59:59.0
+        tm.dow      = 3;
+        tm.ten_hr   = 1;
+        tm.hr       = 7;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 9;
+        tm.sos      = 0;
+#else
+        // time = Wed 17:59:56.0
+        tm.dow      = 3;
+        tm.ten_hr   = 1;
+        tm.hr       = 7;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 6;
+        tm.sos      = 0;
+#endif                        
 	result = rtc_sub_alarm_test(SOCLE_RTC_TALRM_CH, 0);
 	
 	return result;
@@ -351,7 +410,18 @@ rtc_day_of_week_test(int autotest)
 	dt_a.mth      = 2;
 	dt_a.ten_day  = 2;
 	dt_a.day      = 1;
-	
+/* added morganlin */
+#ifdef GDR_RTC
+        // alarm time = Thu 00:00:00.0
+        tm_a.dow      = 4;
+        tm_a.ten_hr   = 0;
+        tm_a.hr       = 0;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 0;
+        tm_a.sos      = 0;
+#else
 	// alarm time = Thu 00:00:01.1
 	tm_a.dow      = 4;
 	tm_a.ten_hr   = 0;
@@ -361,7 +431,7 @@ rtc_day_of_week_test(int autotest)
 	tm_a.ten_sec  = 0;
 	tm_a.sec      = 1;
 	tm_a.sos      = 1;
-	
+#endif	
 	// Set date and time
 	// date = C21 06/12/20
 	dt.ten_cent = 2;
@@ -371,18 +441,29 @@ rtc_day_of_week_test(int autotest)
 	dt.ten_mth  = 1;
 	dt.mth      = 2;
 	dt.ten_day  = 2;
-	dt.day      = 0;
-	
-	// time = Wed 23:59:56.0
-	tm.dow      = 3;
-	tm.ten_hr   = 2;
-	tm.hr       = 3;
-	tm.ten_min  = 5;
-	tm.min      = 9;
-	tm.ten_sec  = 5;
-	tm.sec      = 6;
-	tm.sos      = 0;
-	
+	dt.day      = 0;	
+/* added by morganlin */        
+#ifdef GDR_RTC
+        // alarm time = Wed 23:59:59.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 9;
+        tm.sos      = 0;
+#else
+        // time = Wed 23:59:56.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 6;
+        tm.sos      = 0;
+#endif         
 	result = rtc_sub_alarm_test(SOCLE_RTC_TALRM_CDOW, 0);
 	
 	return result;
@@ -404,15 +485,28 @@ rtc_day_test(int autotest)
 	dt_a.ten_day  = 2;
 	dt_a.day      = 1;
 	
-	// alarm time = Thu 00:00:01.1
-	tm_a.dow      = 4;
-	tm_a.ten_hr   = 0;
-	tm_a.hr       = 0;
-	tm_a.ten_min  = 0;
-	tm_a.min      = 0;
-	tm_a.ten_sec  = 0;
-	tm_a.sec      = 1;
-	tm_a.sos      = 1;
+/* added morganlin */
+#ifdef GDR_RTC
+        // alarm time = Thu 00:00:00.0
+        tm_a.dow      = 4;
+        tm_a.ten_hr   = 0;
+        tm_a.hr       = 0;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 0;
+        tm_a.sos      = 0;
+#else
+        // alarm time = Thu 00:00:01.1
+        tm_a.dow      = 4;
+        tm_a.ten_hr   = 0;
+        tm_a.hr       = 0;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 1;
+        tm_a.sos      = 1;
+#endif
 	
 	// Set date and time
 	// date = C21 06/12/20
@@ -425,15 +519,28 @@ rtc_day_test(int autotest)
 	dt.ten_day  = 2;
 	dt.day      = 0;
 	
-	// time = Wed 23:59:56.0
-	tm.dow      = 3;
-	tm.ten_hr   = 2;
-	tm.hr       = 3;
-	tm.ten_min  = 5;
-	tm.min      = 9;
-	tm.ten_sec  = 5;
-	tm.sec      = 6;
-	tm.sos      = 0;
+/* added by morganlin */        
+#ifdef GDR_RTC
+        // alarm time = Wed 23:59:59.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 9;
+        tm.sos      = 0;
+#else
+        // time = Wed 23:59:56.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 6;
+        tm.sos      = 0;
+#endif
 	
 	result = rtc_sub_alarm_test(0, SOCLE_RTC_DALRM_CD);
 	
@@ -456,15 +563,28 @@ rtc_month_test(int autotest)
 	dt_a.ten_day  = 0;
 	dt_a.day      = 1;
 	
-	// alarm time = Thu 00:00:01.1
-	tm_a.dow      = 4;
-	tm_a.ten_hr   = 0;
-	tm_a.hr       = 0;
-	tm_a.ten_min  = 0;
-	tm_a.min      = 0;
-	tm_a.ten_sec  = 0;
-	tm_a.sec      = 1;
-	tm_a.sos      = 1;
+/* added morganlin */
+#ifdef GDR_RTC
+        // alarm time = Thu 00:00:00.0
+        tm_a.dow      = 4;
+        tm_a.ten_hr   = 0;
+        tm_a.hr       = 0;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 0;
+        tm_a.sos      = 0;
+#else
+        // alarm time = Thu 00:00:01.1
+        tm_a.dow      = 4;
+        tm_a.ten_hr   = 0;
+        tm_a.hr       = 0;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 1;
+        tm_a.sos      = 1;
+#endif
 	
 	// Set date and time
 	// date = C21 06/12/31
@@ -477,15 +597,28 @@ rtc_month_test(int autotest)
 	dt.ten_day  = 3;
 	dt.day      = 1;
 	
-	// time = Wed 23:59:56.0
-	tm.dow      = 3;
-	tm.ten_hr   = 2;
-	tm.hr       = 3;
-	tm.ten_min  = 5;
-	tm.min      = 9;
-	tm.ten_sec  = 5;
-	tm.sec      = 6;
-	tm.sos      = 0;
+/* added by morganlin */        
+#ifdef GDR_RTC
+        // alarm time = Wed 23:59:59.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 9;
+        tm.sos      = 0;
+#else
+        // time = Wed 23:59:56.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 6;
+        tm.sos      = 0;
+#endif
 	
 	result = rtc_sub_alarm_test(0, SOCLE_RTC_DALRM_CM);
 	
@@ -508,15 +641,28 @@ rtc_year_test(int autotest)
 	dt_a.ten_day  = 0;
 	dt_a.day      = 1;
 	
-	// alarm time = Thu 00:00:01.1
-	tm_a.dow      = 4;
-	tm_a.ten_hr   = 0;
-	tm_a.hr       = 0;
-	tm_a.ten_min  = 0;
-	tm_a.min      = 0;
-	tm_a.ten_sec  = 0;
-	tm_a.sec      = 1;
-	tm_a.sos      = 1;
+/* added morganlin */
+#ifdef GDR_RTC 
+        // alarm time = Thu 00:00:00.0
+        tm_a.dow      = 4;
+        tm_a.ten_hr   = 0;
+        tm_a.hr       = 0;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 0;
+        tm_a.sos      = 0;
+#else
+        // alarm time = Thu 00:00:01.1
+        tm_a.dow      = 4;
+        tm_a.ten_hr   = 0;
+        tm_a.hr       = 0;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 1;
+        tm_a.sos      = 1;
+#endif
 	
 	// Set date and time
 	// date = C21 06/12/31
@@ -529,15 +675,28 @@ rtc_year_test(int autotest)
 	dt.ten_day  = 3;
 	dt.day      = 1;
 	
-	// time = Wed 23:59:56.0
-	tm.dow      = 3;
-	tm.ten_hr   = 2;
-	tm.hr       = 3;
-	tm.ten_min  = 5;
-	tm.min      = 9;
-	tm.ten_sec  = 5;
-	tm.sec      = 6;
-	tm.sos      = 0;
+/* added by morganlin */        
+#ifdef GDR_RTC
+        // alarm time = Wed 23:59:59.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 9;
+        tm.sos      = 0;
+#else
+        // time = Wed 23:59:56.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 6;
+        tm.sos      = 0;
+#endif
 	
 	result = rtc_sub_alarm_test(0, SOCLE_RTC_DALRM_CY);
 	
@@ -559,17 +718,29 @@ rtc_cenury_test(int autotest)
 	dt_a.mth      = 1;
 	dt_a.ten_day  = 0;
 	dt_a.day      = 1;
-	
-	// alarm time = Thu 00:00:01.1
-	tm_a.dow      = 4;
-	tm_a.ten_hr   = 0;
-	tm_a.hr       = 0;
-	tm_a.ten_min  = 0;
-	tm_a.min      = 0;
-	tm_a.ten_sec  = 0;
-	tm_a.sec      = 1;
-	tm_a.sos      = 1;
-	
+	       
+/* added morganlin */
+#ifdef GDR_RTC
+        // alarm time = Thu 00:00:00.0
+        tm_a.dow      = 4;
+        tm_a.ten_hr   = 0;
+        tm_a.hr       = 0;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 0;
+        tm_a.sos      = 0;
+#else
+        // alarm time = Thu 00:00:01.1
+        tm_a.dow      = 4;
+        tm_a.ten_hr   = 0;
+        tm_a.hr       = 0;
+        tm_a.ten_min  = 0;
+        tm_a.min      = 0;
+        tm_a.ten_sec  = 0;
+        tm_a.sec      = 1;
+        tm_a.sos      = 1;
+#endif                                	
 	// Set date and time
 	// date = C21 99/12/31
 	dt.ten_cent = 2;
@@ -580,17 +751,30 @@ rtc_cenury_test(int autotest)
 	dt.mth      = 2;
 	dt.ten_day  = 3;
 	dt.day      = 1;
-	
-	// time = Wed 23:59:56.0
-	tm.dow      = 3;
-	tm.ten_hr   = 2;
-	tm.hr       = 3;
-	tm.ten_min  = 5;
-	tm.min      = 9;
-	tm.ten_sec  = 5;
-	tm.sec      = 6;
-	tm.sos      = 0;
-	
+
+/* added by morganlin */        
+#ifdef GDR_RTC 
+        // alarm time = Wed 23:59:59.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 9;
+        tm.sos      = 0;
+#else
+        // time = Wed 23:59:56.0
+        tm.dow      = 3;
+        tm.ten_hr   = 2;
+        tm.hr       = 3;
+        tm.ten_min  = 5;
+        tm.min      = 9;
+        tm.ten_sec  = 5;
+        tm.sec      = 6;
+        tm.sos      = 0;
+#endif        
+        
 	result = rtc_sub_alarm_test(0, SOCLE_RTC_DALRM_CC);
 	
 	return result;
@@ -781,6 +965,125 @@ rtc_isr_alarm_hit(void* pparam)
 	*p_hit = 1;
 }
 
+/* added by morganlin */
+#ifdef GDR_RTC
+
+extern int
+rtc_set_time_date_test(int autotest)
+{
+        rtc_time_t time;
+        rtc_date_t date;
+        
+        printf("Please input the RTC time, ex: on Monday, 5:30:40:00 PM\n");
+        printf("Set Time = 1:17:30:40:00, Your Time = ");
+        scanf("%d:%1d%1d:%1d%1d:%1d%1d:%d", &time.dow, &time.ten_hr, &time.hr,  \
+                                &time.ten_min, &time.min, &time.ten_sec, &time.sec, &time.sos);
+        
+        PDEBUG("Input Time = %d:%d%d:%d%d:%d%d:%d\n", time.dow, time.ten_hr, time.hr,   \
+                                time.ten_min, time.min, time.ten_sec, time.sec, time.sos);        
+                                
+        printf("\n");
+        
+        printf("Please input the RTC date, ex: on 21st centry, 06/05/23\n");
+        printf("Set Date = 21:06:05:23, Your Date = ");
+        scanf("%1d%1d:%1d%1d:%1d%1d:%1d%1d", &date.ten_cent, &date.cent, &date.ten_yr, &date.yr,        \
+                                &date.ten_mth, &date.mth, &date.ten_day, &date.day);
+        
+        PDEBUG("Input Date = %d%d:%d%d:%d%d:%d%d\n", date.ten_cent, date.cent, date.ten_yr, date.yr,    \
+                                date.ten_mth, date.mth, date.ten_day, date.day);
+        rtc_set_time(&time);
+        rtc_set_date(&date);
+        
+        return 0;
+}
+
+extern int
+rtc_set_time_date_alarm_test(int autotest)
+{
+        u32_t alarm_time_flag = 0 , alarm_date_flag = 0;
+        rtc_time_t time;
+        rtc_date_t date;
+        char input[1];
+        
+        printf("Please input the RTC alarm time, ex: on Monday, 5:30:40:00 PM\n");
+        printf("Set Time = 1:17:30:40:00, Your Time = ");
+        scanf("%d:%1d%1d:%1d%1d:%1d%1d:%d", &time.dow, &time.ten_hr, &time.hr,  \
+                                &time.ten_min, &time.min, &time.ten_sec, &time.sec, &time.sos);
+        
+        PDEBUG("Input Time = %d:%d%d:%d%d:%d%d:%d\n", time.dow, time.ten_hr, time.hr,   \
+                                time.ten_min, time.min, time.ten_sec, time.sec, time.sos);
+        
+        printf("Alarm Time on Sixteen of Second? (y/n)... ");
+        input[0] = getchar();
+        printf("%s\n",input);
+        if (('y' == input[0]) || ('Y' == input[0]))
+                alarm_time_flag |= SOCLE_RTC_TALRM_CSOS;
+
+        printf("Alarm Time on Second? (y/n)... ");
+        input[0] = getchar();
+        printf("%s\n",input);
+        if (('y' == input[0]) || ('Y' == input[0]))
+                alarm_time_flag |= SOCLE_RTC_TALRM_CS;
+
+        printf("Alarm Time on Minute? (y/n)... ");
+        input[0] = getchar();
+        printf("%s\n",input);
+        if (('y' == input[0]) || ('Y' == input[0]))
+                alarm_time_flag |= SOCLE_RTC_TALRM_CM;
+
+        printf("Alarm Time on Hour? (y/n)... ");
+        input[0] = getchar();
+        printf("%s\n",input);
+        if (('y' == input[0]) || ('Y' == input[0]))
+                alarm_time_flag |= SOCLE_RTC_TALRM_CH;
+
+        printf("Alarm Time on Day of Week? (y/n)... ");
+        input[0] = getchar();
+        printf("%s\n",input);
+        if (('y' == input[0]) || ('Y' == input[0]))
+                alarm_time_flag |= SOCLE_RTC_TALRM_CDOW;        
+        
+        printf("\n");
+        
+        printf("Please input the RTC alarm date, ex: on 21st centry, 06/05/23\n");
+        printf("Set Date = 21:06:05:23, Your Date = ");
+        scanf("%1d%1d:%1d%1d:%1d%1d:%1d%1d", &date.ten_cent, &date.cent, &date.ten_yr, &date.yr,        \
+                                &date.ten_mth, &date.mth, &date.ten_day, &date.day);
+        
+        PDEBUG("Input Date = %d%d:%d%d:%d%d:%d%d\n", date.ten_cent, date.cent, date.ten_yr, date.yr,    \
+                                date.ten_mth, date.mth, date.ten_day, date.day);
+        
+        printf("Alarm Date on Day? (y/n)... ");
+        input[0] = getchar();
+        printf("%s\n",input);
+        if (('y' == input[0]) || ('Y' == input[0]))
+                alarm_date_flag |= SOCLE_RTC_DALRM_CD;
+
+        printf("Alarm Date on Month? (y/n)... ");
+        input[0] = getchar();
+        printf("%s\n",input);
+        if (('y' == input[0]) || ('Y' == input[0]))
+                alarm_date_flag |= SOCLE_RTC_DALRM_CM;
+
+        printf("Alarm Date on Year? (y/n)... ");
+        input[0] = getchar();
+        printf("%s\n",input);
+        if (('y' == input[0]) || ('Y' == input[0]))
+                alarm_date_flag |= SOCLE_RTC_DALRM_CY;
+
+        printf("Alarm Date on Century? (y/n)... ");
+        input[0] = getchar();
+        printf("%s\n",input);
+        if (('y' == input[0]) || ('Y' == input[0]))
+                alarm_date_flag |= SOCLE_RTC_DALRM_CC;
+
+        rtc_set_time_alarm(&time, alarm_time_flag);
+        rtc_set_date_alarm(&date, alarm_date_flag);
+        
+        return 0;                        
+}
+
+#else
 
 extern int
 rtc_set_time_test(int autotest)
@@ -796,7 +1099,7 @@ rtc_set_time_test(int autotest)
 				time.ten_min, time.min, time.ten_sec, time.sec, time.sos);
 
 	rtc_set_time(&time);
-
+                       
 	return 0;
 }
 
@@ -903,6 +1206,8 @@ rtc_set_date_alarm_test(int autotest)
 	return 0;
 }
 
+#endif /* endif GDR_RTC */
+
 extern int
 rtc_get_time_test(int autotest)
 {
@@ -995,7 +1300,8 @@ rtc_wait_for_alarm_test(int autotest)
 	
 	if (('y' == input[0]) || ('Y' == input[0])) {
 		hit = 0;
-		
+                
+                MSDELAY(10000);
 		// enable interrupt
 		request_irq(RTC_INT, rtc_isr_alarm_hit, (void *)&hit);
 

@@ -273,14 +273,14 @@ void	Display_SROMMenu(void);
 
 extern	int sMacEnableDataShow;
 
-int		Enable_Log_HIF;
+int	Enable_Log_HIF;
 int     Forever_Test;
 
-int		RealEtherPacketLen;
-int		RealEtherPacketID;
+int	RealEtherPacketLen;
+int	RealEtherPacketID;
 
-int mac_reg_base;
-int mac_int;
+int     mac_reg_base;
+int     mac_int;
 					
 extern struct test_item_container mac_main_container;
 
@@ -299,8 +299,10 @@ extern struct test_item_container mac_mode_container;
 int mac_0_test(int autotest)
 {
 	int ret=0;
-	mac_reg_base = MAC_REG_BASE;
-	mac_int = MAC_INT;
+        
+	mac_reg_base = MAC_REG_BASE; /* MAC_REG_BASE 0x18060000 */
+	
+	mac_int = MAC_INT;  /* MAC_INT 15  */
 	
 	ret=test_item_ctrl(&mac_mode_container,autotest);
 	
@@ -325,9 +327,9 @@ int mac_phy_clock_test(int autotest)
 {
 	int ret=0;
 	
-	Testing_DevicePt=&socle_MacDevice;
-	Testing_DevicePt->devAdrs=mac_reg_base;
-	Testing_DevicePt->MII_PhyAD=MAC_MAX_PHY;
+	Testing_DevicePt=&socle_MacDevice;       
+	Testing_DevicePt->devAdrs=mac_reg_base;  /* mac_reg_base 0x18060000 */
+	Testing_DevicePt->MII_PhyAD=MAC_MAX_PHY; /* MAC_MAX_PHY 32 */
 		
 	ret=test_item_ctrl(&mac_phy_container,autotest);
 	

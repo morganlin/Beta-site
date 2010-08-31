@@ -72,7 +72,7 @@ nor_mxic_test_1 (int autotest)
 }
 
 /* added by morganlin */
-#ifdef GDR_NOR
+#ifdef GDR_NOR_MXIC
 extern int 
 nor_mxic_sector_rw(int autotest)
 {        
@@ -88,16 +88,9 @@ nor_mxic_sector_rw(int autotest)
         if(autotest) {
                 start = flash_total_sec_num-1;
                 end = 0;
-                for(;start >= end;start--) {
-                       
-                        if( start < 8 ) {
-                                sector_size = secsize/8;
-                                start_base_addr = flash_start_addr + (sector_size * start);
-                        }
-                        else {
-                                sector_size = secsize;
-                                start_base_addr = flash_start_addr + (sector_size * ( start - 7 ));
-                        }
+                for(;start >= end;start--) {                       
+                        sector_size = secsize;
+                        start_base_addr = flash_start_addr + (sector_size * start);
                         
                         if( mode == 0 ) {
                                 byteshift = 1;        
@@ -265,6 +258,8 @@ extern int nor_mxic_write(int autotest)
 	unsigned int data;
 	unsigned long	flashoffset;
 	
+        printf("flashsize = 0x%x\n",flashsize);
+        
 	while(1){
 		printf("address (offset:0~%x) : ",flashsize-1);
 		scanf("%x\n", &flashoffset);
@@ -333,13 +328,17 @@ erase_break :
 			        break;
                         }
                 }
-                
+/* added by morganlin */                
+#ifdef GDR_NOR_MXIC
+                sector = flashoffset/secsize;
+#else                
                 if(flashoffset<secsize) {
                         sector = flashoffset/(secsize/8);
                 }
                 else {
     	                sector = (flashoffset/secsize+7);    	
 	        }
+#endif
         }	        
 	else if(tmp == 1) {	
 		while(1) {
@@ -385,10 +384,9 @@ extern int nor_mxic_erase_all(int autotest)
         }
 
         printf("erasing....\n");
-        //MSDELAY(38000);
 /* added by morganlin */
-#ifdef GDR_NOR                
-        MSDELAY(3050000);
+#ifdef GDR_NOR_MXIC                
+        MSDELAY(7680000);
 #else
         MSDELAY(100000);
 #endif        
@@ -411,17 +409,24 @@ int mxic_flash_write(unsigned long flashoffset, unsigned int Data)
 	int	sector;
 	unsigned long addr;
 	unsigned int sector_size;
-	
+
+/* added by morganlin */        
+#ifdef GDR_NOR_MXIC
+        sector_size=secsize;
+        sector = flashoffset/sector_size;
+        startAddr = sector*(sector_size);        
+#else        
 	if(flashoffset<secsize) {
 		sector_size=secsize/8;
 		sector = flashoffset/sector_size;
 		startAddr = sector*(sector_size);	
 	}
-  else {   
-  	sector_size=secsize;
-   	sector = (flashoffset/secsize+7);
+        else {   
+  	        sector_size=secsize;
+   	        sector = (flashoffset/secsize+7);
 		startAddr = secsize*(sector-7);
 	}
+#endif	
 	addr=flash_start_addr+startAddr;
 	if(mode==0) {		
 		for(i=0;i<sector_size;i++)
@@ -501,20 +506,21 @@ int mxic_program(unsigned long OffsetAddr, unsigned int data )
 				}
 			}
 		}
-	}
-
-  
+	}  
 	return FLASH_NOERROR;
 }
 
 /* flash_num and sector_num are 0 based. */
 int mxic_flash_erase_sector(int sector_num)
-{
-	
+{	
 	int i,tmp;
 	unsigned long	startaddr;
 	unsigned int sector_size;
-        
+/* added by morganlin */
+#ifdef GDR_NOR_MXIC
+        sector_size=secsize;
+        startaddr = flash_start_addr + sector_size * sector_num;
+#else        
 	if(sector_num<8) {
 		sector_size=secsize/8;
 		startaddr = flash_start_addr + sector_size * sector_num;
@@ -523,7 +529,7 @@ int mxic_flash_erase_sector(int sector_num)
 		sector_size=secsize;
 		startaddr = flash_start_addr + secsize*(sector_num-7);
 	}
-
+#endif
 	if(mode==0) { 
 		writeb(0xAA,flash_start_addr+0xAAA);
 		writeb(0x55,flash_start_addr+0x555);
@@ -568,7 +574,11 @@ int mxic_sector_write(int sector)
 	unsigned long	offaddr;
 	unsigned int	i,j;
 	unsigned int sector_size;
-	
+/* addded by morganlin */
+#ifdef GDR_NOR_MXIC
+        sector_size=secsize;
+        offaddr =sector*sector_size ;
+#else        
 	if(sector<8) {
 		sector_size=secsize/8 ;
 		offaddr =sector*sector_size ;
@@ -577,7 +587,7 @@ int mxic_sector_write(int sector)
 		sector_size=secsize ;
 		offaddr = secsize*(sector-7);
 	}	
-
+#endif
 
 	if(mxic_flash_erase_sector(sector)!=FLASH_NOERROR)
 		return (FLASH_ERROR);	

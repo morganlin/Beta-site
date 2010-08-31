@@ -76,7 +76,6 @@ uint_8 _usb_dci_vusb20_init
    #ifdef _DEVICE_DEBUG_
       DEBUG_LOG_TRACE("_usb_dci_vusb20_init");
    #endif
-   
    usb_dev_ptr = (USB_DEV_STATE_STRUCT_PTR)handle;
 
    //cap_dev_ptr = 0x1cb20100;
@@ -94,8 +93,7 @@ uint_8 _usb_dci_vusb20_init
          (cap_dev_ptr->REGISTERS.CAPABILITY_REGISTERS.DCC_PARAMS & 
          VUSB20_MAX_ENDPTS_SUPPORTED);
       
-      temp = (usb_dev_ptr->MAX_ENDPOINTS * 2);
-   
+      temp = (usb_dev_ptr->MAX_ENDPOINTS * 2); 
        /****************************************************************   
          Consolidated memory allocation    
        ****************************************************************/   
@@ -118,7 +116,6 @@ uint_8 _usb_dci_vusb20_init
       Zero out the memory allocated
     ****************************************************************/   
    USB_memzero((void *) driver_memory,total_memory );
-
    /****************************************************************   
      Keep a pointer to driver memory alloctaion
    ****************************************************************/   
@@ -200,26 +197,33 @@ void _usb_dci_vusb20_chip_initialize
    #ifdef _DEVICE_DEBUG_
       DEBUG_LOG_TRACE("_usb_dci_vusb20_chip_initialize");
    #endif
+   //printf("_usb_dci_vusb20_chip_initialize\n");//morganlin
    
    usb_dev_ptr = (USB_DEV_STATE_STRUCT_PTR)handle;
 
+   //printf("flag1\n");//morganlin
    dev_ptr = (VUSB20_REG_STRUCT_PTR)usb_dev_ptr->DEV_PTR;
+   //printf("flag2\n");//morganlin
    //cap_dev_ptr = 0x1cb20100;
    //cap_dev_ptr = 0x180a0100;
    cap_dev_ptr = (VUSB20_REG_STRUCT_PTR)otg_base + 0x100;
-   
+  // printf("flag3\n");//morganlin
    /* Stop the controller */
-   dev_ptr->REGISTERS.OPERATIONAL_DEVICE_REGISTERS.USB_CMD &= 
-      ~EHCI_CMD_RUN_STOP;
+   dev_ptr->REGISTERS.OPERATIONAL_DEVICE_REGISTERS.USB_CMD &= ~EHCI_CMD_RUN_STOP;
+   //printf("flag4\n");//morganlin
       
    /* Reset the controller to get default values */
    dev_ptr->REGISTERS.OPERATIONAL_DEVICE_REGISTERS.USB_CMD = EHCI_CMD_CTRL_RESET;
-
+   //printf("flag5\n");//morganlin
+   //printf("_usb_dci_vusb20_chip_initialize before while()\n");//morganlin
    while (dev_ptr->REGISTERS.OPERATIONAL_DEVICE_REGISTERS.USB_CMD & 
       EHCI_CMD_CTRL_RESET) 
    {
+           printf("dev_ptr->REGISTERS.OPERATIONAL_DEVICE_REGISTERS.USB_CMD = %08x\n",dev_ptr->REGISTERS.OPERATIONAL_DEVICE_REGISTERS.USB_CMD);
+           printf("EHCI_CMD_CTRL_RESET = %08x\n",EHCI_CMD_CTRL_RESET);
       /* Wait for the controller reset to complete */
    } /* EndWhile */
+   //printf("_usb_dci_vusb20_chip_initialize after while()\n");//morganlin
 
    /* Program the controller to be the USB device controller */ 
    dev_ptr->REGISTERS.OPERATIONAL_DEVICE_REGISTERS.USB_MODE = 

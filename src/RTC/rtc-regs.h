@@ -81,8 +81,8 @@
 
 //#define SOCLE_RTC_DIVIDER		(32768)
 //#define SOCLE_RTC_DIVIDER		(4)
-#define RTC_CLK_FREQ		(32768)
-#define RTC_DIVIDER		((RTC_CLK_FREQ /16)-1)
+#define RTC_CLK_FREQ		(32768/2)
+#define RTC_DIVIDER		((RTC_CLK_FREQ /16)-1) /* modify by morganlin */
 
 #define RTC_IS_GOOD		(readw(SOCLE_RTC_PWOFF) & SOCLE_RTC_PWOFF_INDT)
 #define RTC_IS_PWFAIL		(readw(SOCLE_RTC_RTCPWFAIL) & SOCLE_RTC_RTCPWFAIL_RTCPWFAIL)

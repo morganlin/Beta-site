@@ -117,7 +117,7 @@ uint_8 _usb_device_init
    
    #ifdef _DEVICE_DEBUG_
       DEBUG_LOG_TRACE("_usb_device_init");
-   #endif
+   #endif   
    
    #ifndef REDUCED_ERROR_CHECKING                   
       
@@ -221,8 +221,10 @@ uint_8 _usb_device_init
       
    /* Initialize the USB controller chip */
 
+   //printf("before _usb_dci_vusb20_init\n");//morganlin
    error = _usb_dci_vusb20_init(devnum, usb_dev_ptr);
-
+   //printf("after _usb_dci_vusb20_init\n");//morganlin     
+   
    if (error) 
    {
       #ifdef _DEVICE_DEBUG_

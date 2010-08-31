@@ -16,7 +16,7 @@ struct test_item pwm_main_test_items[] = {
 		"Buzzer Test",
 		socle_buzzer_test,
 		1,
-		0
+		1
 	},
 #endif
 };
@@ -233,7 +233,7 @@ struct test_item buzzer_main_test_items[] = {
 	{
 		"PWM control test",
 		socle_buzzer_pwm_test,
-		1,
+		0,
 		1
 	},
 #ifdef CONFIG_GPIO
@@ -241,7 +241,7 @@ struct test_item buzzer_main_test_items[] = {
 		"GPIO control test",
 		socle_buzzer_gpio_test,
 		1,
-		1
+		0
 	},
 #endif
 };
