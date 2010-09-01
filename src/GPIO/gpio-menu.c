@@ -11,12 +11,6 @@ struct test_item socle_gpio_main_test_items[] = {
 		1,
 		1
 	},
-	{
-		"FPGA GPIO Test(APB)",
-		socle_gpio_fpga_test,
-		1,
-		SCDK_FPGA_TEST
-	}
 };
 
 struct test_item_container socle_gpio_main_container = {
@@ -69,7 +63,7 @@ struct test_item socle_gpio_normal_test_items[] = {
 		"KeyPad Test",
 		socle_gpio_kpd_test,
 		0,
-		SOCLE_GPIO_KPD_TEST
+		SQ_GPIO_KPD_TEST
 	},
 };
 
@@ -95,7 +89,7 @@ struct test_item socle_gpio_int_test_items[] = {
 		"With Interrupt Test",
 		socle_gpio_with_int,
 		1,
-		SOCLE_GPIO_SUPPORT_INT
+		SQ_GPIO_SUPPORT_INT
 	}
 };
 
@@ -124,19 +118,19 @@ struct test_item socle_gpio_rw_test_items[] = {
 		"Port E ~ H",
 		socle_gpio_port_e_to_h,
 		1,
-		SOCLE_GPIO_GP1
+		SQ_GPIO_GP1
 	},
 	{
 		"Port I ~ L",
 		socle_gpio_port_i_to_l,
 		1,
-		SOCLE_GPIO_GP2
+		SQ_GPIO_GP2
 	},
 	{
 		"Port M ~ P",
 		socle_gpio_port_m_to_p,
 		1,
-		SOCLE_GPIO_GP3
+		SQ_GPIO_GP3
 	},
 };
 

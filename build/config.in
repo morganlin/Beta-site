@@ -3,42 +3,7 @@ mainmenu "SOCLE Diagnostic Program Configuration"
 comment "Socle Platforms"
 choice
 	prompt "Platform Type"
-	default CONFIG_LDK3V21
-
-config CONFIG_LDK3V21
-	bool "LDK3V21"
-	help
-		LDK3V21
-
-config CONFIG_LDK5
-	bool "LDK5"
-	help
-		LDK5
-
-config CONFIG_SEDK
-	bool "SEDK"
-	help
-		SEDK
-
-config CONFIG_CDK
-	bool "CDK"
-	help
-		CDK
-
-config CONFIG_PDK
-	bool "Panther7"
-	help
-		PDK
-
-config CONFIG_PC7210
-	bool "PDK-PC7210/PDK-PC7230"
-	help
-		PDK-PC7210/PDK-PC7230
-
-config CONFIG_PC9002
-	bool "PDK-PC9002"
-	help
-		PDK-PC9002
+	default CONFIG_PC9223
 		
 config CONFIG_PC9220
 	bool "PDK-PC9220"

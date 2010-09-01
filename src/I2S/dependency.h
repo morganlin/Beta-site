@@ -37,28 +37,12 @@
 #define SOCLE_I2S_SUPPORT_DMAC_TEST_IMPLEMENT 0
 #endif
 
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210) || defined(CONFIG_MSMV) || defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
 #define TX_DMA_EXT_HDREQ 6
 #define RX_DMA_EXT_HDREQ 7
-#elif defined(CONFIG_CDK) || defined(CONFIG_PC9002) || defined(CONFIG_SCDK)
-#define TX_DMA_EXT_HDREQ 0
-#define RX_DMA_EXT_HDREQ 1
-#elif defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-#define TX_DMA_EXT_HDREQ 5
-#define RX_DMA_EXT_HDREQ 5
-#else
-#define TX_DMA_EXT_HDREQ 0
-#define RX_DMA_EXT_HDREQ 0
-#endif
 
-#if defined(CONFIG_PDK) ||defined(CONFIG_PC7210) || defined(CONFIG_PC9220) || defined(CONFIG_PC9223) || defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-#define SOCLE_I2S_HDMA_AUTO_TEST	1
+#define SOCLE_I2S_HDMA_AUTO_TEST	0
 #define SOCLE_I2S_HWDMA_BURST_INCR8	0
 #define SOCLE_I2S_HWDMA_BURST_INCR16	0
-#else
-#define SOCLE_I2S_HDMA_AUTO_TEST        1
-#define SOCLE_I2S_HWDMA_BURST_INCR8	1
-#define SOCLE_I2S_HWDMA_BURST_INCR16	1
-#endif
+
 
 #endif

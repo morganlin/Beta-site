@@ -10,7 +10,7 @@
 	#define GPIO_DBG(fmt, args...)
 #endif
 
-#define SOCLE_GPIO_MAX_PIN_NUM		(GPIO_PER_PORT_PIN_NUM * GPIO_PORT_NUM * (1 + SOCLE_GPIO_GP1+SOCLE_GPIO_GP2+SOCLE_GPIO_GP3))
+#define SOCLE_GPIO_MAX_PIN_NUM		(GPIO_PER_PORT_PIN_NUM * GPIO_PORT_NUM * (1 + SQ_GPIO_GP1+SQ_GPIO_GP2+SQ_GPIO_GP3))
 
 #define GET_GPIO_PORT_FROM_PIN_NUM(pin)		((pin) / GPIO_PER_PORT_PIN_NUM)
 #define GET_GPIO_GP_PIN_FROM_PIN_NUM(pin)		((pin) % (GPIO_PER_PORT_PIN_NUM * GPIO_PORT_NUM))
@@ -18,7 +18,7 @@
 #define GET_GPIO_GROUP_FROM_PORT_NUM(port)		((port) / GPIO_PORT_NUM)
 
 
-static struct socle_gpio_s socle_gpio[1 + SOCLE_GPIO_GP1 + SOCLE_GPIO_GP2 + SOCLE_GPIO_GP3];
+static struct socle_gpio_s socle_gpio[1 + SQ_GPIO_GP1 + SQ_GPIO_GP2 + SQ_GPIO_GP3];
 
 
 #define GPIO_GET_VALUE_WITH_MASK(fun_get, port, mask)	(fun_get((port)) & (mask))
@@ -635,7 +635,7 @@ socle_gpio_test_mode_ctrl(u8 port, int mode)
 
 ///////////////// * GPIO Interrupt Service * /////////////////
 
-#ifdef SOCLE_GPIO_WITH_INT
+#ifdef SQ_GPIO_WITH_INT
 
 extern int
 socle_gpio_get_irq(u8 port)
@@ -863,7 +863,7 @@ socle_gpio_get_irq(u8 port)
 {
 	return 0;
 }
-#endif	//SOCLE_GPIO_WITH_INT
+#endif	//SQ_GPIO_WITH_INT
 
 
 extern void
@@ -871,46 +871,46 @@ socle_init_gpio_irq(void)
 {
 	memset((char *)socle_gpio, 0, sizeof(socle_gpio));
 
-	socle_gpio[0].base = SOCLE_GPIO0;
+	socle_gpio[0].base = SQ_GPIO0;
 
-#if SOCLE_GPIO_GP1 == 1
-	socle_gpio[1].base = SOCLE_GPIO1;
+#if SQ_GPIO_GP1 == 1
+	socle_gpio[1].base = SQ_GPIO1;
 #endif
 
-#if SOCLE_GPIO_GP2 == 1
-	socle_gpio[2].base = SOCLE_GPIO2;
+#if SQ_GPIO_GP2 == 1
+	socle_gpio[2].base = SQ_GPIO2;
 #endif
 
-#if SOCLE_GPIO_GP2 == 1
-	socle_gpio[3].base = SOCLE_GPIO3;
+#if SQ_GPIO_GP2 == 1
+	socle_gpio[3].base = SQ_GPIO3;
 #endif
 
 
 
-#ifdef SOCLE_GPIO_WITH_INT
-	socle_gpio[0].irq = SOCLE_INTC_GPIO0;
+#ifdef SQ_GPIO_WITH_INT
+	socle_gpio[0].irq = SQ_INTC_GPIO0;
 	socle_gpio[0].irq_num = 0;
 	request_irq(socle_gpio[0].irq, socle_gpio_isr_gp0, NULL);
 
-#if SOCLE_GPIO_GP1 == 1
-	socle_gpio[1].irq = SOCLE_INTC_GPIO1;
+#if SQ_GPIO_GP1 == 1
+	socle_gpio[1].irq = SQ_INTC_GPIO1;
 	socle_gpio[1].irq_num = 0;
 	request_irq(socle_gpio[1].irq, socle_gpio_isr_gp1, NULL);
 #endif
 
-#if SOCLE_GPIO_GP2 == 1
-	socle_gpio[2].irq = SOCLE_INTC_GPIO2;
+#if SQ_GPIO_GP2 == 1
+	socle_gpio[2].irq = SQ_INTC_GPIO2;
 	socle_gpio[2].irq_num = 0;
 	request_irq(socle_gpio[2].irq, socle_gpio_isr_gp2, NULL);
 #endif
 
-#if SOCLE_GPIO_GP3 == 1
-	socle_gpio[3].irq = SOCLE_INTC_GPIO3;
+#if SQ_GPIO_GP3 == 1
+	socle_gpio[3].irq = SQ_INTC_GPIO3;
 	socle_gpio[3].irq_num = 0;
 	request_irq(socle_gpio[3].irq, socle_gpio_isr_gp3, NULL);
 #endif
 
-#endif	//SOCLE_GPIO_WITH_INT
+#endif	//SQ_GPIO_WITH_INT
 
 }
 

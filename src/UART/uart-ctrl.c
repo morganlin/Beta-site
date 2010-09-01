@@ -15,11 +15,6 @@
 #include <pc9223-scu.h>
 #endif
 
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-#include <scu.h>
-#endif
-
-
 static inline void
 socle_uart_write(u32 reg, u32 value, u32 base)
 {
@@ -75,10 +70,6 @@ uart_main_test(int autotest)
 	int ret = 0;
 	
 /*	UART clock enable	*/
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-	socle_scu_upll_normal();
-#endif
-
 	ret = test_item_ctrl(&socle_uart_ip_test_container, autotest);
 	return ret;
 }
@@ -189,10 +180,6 @@ socle_uart_1_test(int autotest)
 	//socle_uart_rx_dma_ext_hdreq = 0;
 #endif
 
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-	socle_scu_hdma_req23_uart(1);
-#endif
-
 	ret = test_item_ctrl(&socle_uart_type_test_container, autotest);
 
 	free_irq(SOCLE_INTC_UART1);
@@ -241,19 +228,13 @@ socle_uart_2_test(int autotest)
 
 	request_irq(SOCLE_INTC_UART2, socle_uart_isr, NULL);
 
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined(CONFIG_MDKFHD)
 	socle_uart_tx_dma_ext_hdreq = 4; 
 	socle_uart_rx_dma_ext_hdreq = 4;
 #else
 	socle_uart_tx_dma_ext_hdreq = 3; 
 	socle_uart_rx_dma_ext_hdreq = 2;
-	//socle_uart_tx_dma_ext_hdreq = 1; 
-	//socle_uart_rx_dma_ext_hdreq = 0;
 #endif	
-
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-	socle_scu_hdma_req23_uart(2);
-#endif
 
 	ret = test_item_ctrl(&socle_uart_type_test_container, autotest);
 
@@ -299,10 +280,6 @@ socle_uart_3_test(int autotest)
 
 	socle_uart_tx_dma_ext_hdreq = 3; 
 	socle_uart_rx_dma_ext_hdreq = 2;
-
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-	socle_scu_hdma_req23_uart(3);
-#endif
 
 	ret = test_item_ctrl(&socle_uart_type_test_container, autotest);
 
@@ -577,7 +554,7 @@ socle_uart_set_baudrate(int baudrate)
 	u32 old_lcr;
 	u32 dlsb, dmsb;
 
-	dlsb = socle_scu_uart_clock_get (0) / (16 * baudrate);
+	dlsb = sq_scu_uart_clock_get (0) / (16 * baudrate);
 
 	dmsb = dlsb >> 8;
 	dlsb &= 0xff;

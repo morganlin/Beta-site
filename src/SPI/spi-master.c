@@ -1,5 +1,5 @@
 #include "spi-master.h"
-#include <socle-scu.h>
+#include <sq-scu.h>
 
 static volatile int socle_spi_tx_complete_flag = 0;
 static volatile int socle_spi_rx_complete_flag = 0;
@@ -152,7 +152,7 @@ socle_spi_calculate_divisor(u32 clk)
 	 *  SCLK Divisor = (SPICDVR[5:3] + 1) * 2 power(SPICDVR[2:0] + 1)
 	 *  SCLK = PCLK / SCLK Divisor
 	 *  */
-	pclk = socle_scu_apb_clock_get();
+	pclk = sq_scu_apb_clock_get();
 	while (1) {
 		power = socle_spi_power(2, div_low_3+1);
 		for (div_high_3 = 0; div_high_3 < 8; div_high_3++) {

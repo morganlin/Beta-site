@@ -9,41 +9,6 @@
  *  Socle Platforms
  */
 
-#undef CONFIG_LDK3V21
-#define ENABLE_LDK3V21 0
-#define USE_LDK3V21(...)
-#define SKIP_LDK3V21(...)  __VA_ARGS__
-
-#undef CONFIG_LDK5
-#define ENABLE_LDK5 0
-#define USE_LDK5(...)
-#define SKIP_LDK5(...)  __VA_ARGS__
-
-#undef CONFIG_SEDK
-#define ENABLE_SEDK 0
-#define USE_SEDK(...)
-#define SKIP_SEDK(...)  __VA_ARGS__
-
-#undef CONFIG_CDK
-#define ENABLE_CDK 0
-#define USE_CDK(...)
-#define SKIP_CDK(...)  __VA_ARGS__
-
-#undef CONFIG_PDK
-#define ENABLE_PDK 0
-#define USE_PDK(...)
-#define SKIP_PDK(...)  __VA_ARGS__
-
-#undef CONFIG_PC7210
-#define ENABLE_PC7210 0
-#define USE_PC7210(...)
-#define SKIP_PC7210(...)  __VA_ARGS__
-
-#undef CONFIG_PC9002
-#define ENABLE_PC9002 0
-#define USE_PC9002(...)
-#define SKIP_PC9002(...)  __VA_ARGS__
-
 #undef CONFIG_PC9220
 #define ENABLE_PC9220 0
 #define USE_PC9220(...)

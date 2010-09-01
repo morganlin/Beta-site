@@ -6,9 +6,6 @@
 #include "mem-ctrl.h"
 #include "memctrl-regs.h"
 #include "mem-menu.h"
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-#include <scu.h>
-#endif
 
 
 #define SCU_AHB_MODE (0x1<<6)
@@ -516,13 +513,6 @@ static int MemoryAddrSetting(void)
 			size = 0x8000000;
 		else
 			size = SOCLE_MEMORY_ADDR_SIZE;
-
-            #if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-                if(SOCLE_SCU_SDRAM_BUS_WIDTH_32 == socle_scu_sdram_bus_width_status())
-                {
-                    size = size * 2;// if bus width =32, the size would be double
-                }
-            #endif
 
 		if (bus_mode == fpga_axi) {
 			mem_start = 0x37000000;

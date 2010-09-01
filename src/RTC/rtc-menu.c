@@ -22,14 +22,6 @@ struct test_item rtc_main_test_items[] = {
 		1,
 		1
 	},
-#ifdef CONFIG_LDK5
-	{
-		"Auto Poweroff Alarm Test",
-		auto_poweroff_alarm_test,
-		0,
-		1
-	},
-#endif
 
 /* added by morganlin */
 #ifdef GDR_RTC
@@ -102,14 +94,6 @@ struct test_item rtc_main_test_items[] = {
 		0,
 		1
 	},
-#ifdef CONFIG_LDK5
-	{
-		"Enter RTC Power Off Mode",
-		rtc_enter_poweroff_mode_test,
-		0,
-		1
-	}
-#endif
 };
 
 struct test_item_container rtc_main_container = {

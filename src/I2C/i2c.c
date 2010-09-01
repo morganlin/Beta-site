@@ -521,7 +521,7 @@ socle_i2c_calculate_divisor(u32 clk)
 	 *  SCL = PCLK / 5 * SCLK Divisor
 	 *  */
 
-	pclk = socle_scu_apb_clock_get();
+	pclk = sq_scu_apb_clock_get();
 	while (1) {
 		power = socle_i2c_power(2, div_low_3+1);
 		for (div_high_3 = 0; div_high_3 < 8; div_high_3++) {

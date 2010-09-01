@@ -35,22 +35,6 @@ rtc_test(int autotest)
 {
 	int result = 0;
 	
-#if defined(CONFIG_LDK5) || defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-	u32 check;
-	check = ioread32(SOCLE_RTC_TIME);
-	RESET_RTC_CIRCUIT();
-	MSDELAY(1000);
-	if(ioread32(SOCLE_RTC_TIME) == check)
-        	RESET_RTC_COUNTER();       
-	 if (RTC_IS_PWFAIL) {
-                printf("Warning: RTC Power Fail!!\n");
-                printf("\tPlease change your battery and then reset RTC again...\n");
-        }
-        if(!RTC_IS_GOOD){
-                printf("RTC is not Power Good\n");
-        }
-#endif	//CONFIG_LDK5
-
 	RTC_SET_DIVIDER(RTC_DIVIDER);
 	        	
 	RTC_EN();

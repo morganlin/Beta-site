@@ -115,7 +115,7 @@ struct socle_gpio_irq_s {
 struct socle_gpio_s {
 	int base;
 	int irq;
-#ifdef SOCLE_GPIO_WITH_INT
+#ifdef SQ_GPIO_WITH_INT
 	int irq_num;
 	struct socle_gpio_irq_s pin[GPIO_PER_PORT_PIN_NUM * GPIO_PORT_NUM];
 #endif
@@ -128,7 +128,7 @@ extern int socle_gpio_get_irq(u8 port);
 	// return: irq number
 extern void socle_set_gpio_base(u8 group, u32 base_addr);
 
-#ifdef SOCLE_GPIO_WITH_INT
+#ifdef SQ_GPIO_WITH_INT
 
 
 extern void socle_set_gpio_irq(u8 group, u32 int_num);
@@ -151,7 +151,7 @@ extern int socle_request_gpio_irq(int pin, void (*sub_routine)(void *pparam), in
 extern void socle_free_gpio_irq(int pin);
 extern void socle_enable_gpio_irq(int pin);
 extern void socle_disable_gpio_irq(int pin);
-#endif	//SOCLE_GPIO_WITH_INT
+#endif	//SQ_GPIO_WITH_INT
 
 #endif	//__GPIO_H
 

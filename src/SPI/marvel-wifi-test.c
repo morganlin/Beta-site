@@ -65,7 +65,7 @@ socle_spi_marvel_wifi(int autotest)
 			SOCLE_SPI_CLK_DIV(divisor),
 			SOCLE_SPI_SSCR);
 
-	apb_clk = socle_scu_apb_clock_get();
+	apb_clk = sq_scu_apb_clock_get();
 
 	// if apb_clk <= 25M, the RX will overflow
 	if (apb_clk > 25000000) {

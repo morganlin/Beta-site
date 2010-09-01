@@ -17,7 +17,7 @@ TestEntry(void)
 #include <test_item.h>
 #include <dma/dma.h>
 #include <revision.h>
-#include <socle-scu.h>
+#include <sq-scu.h>
 
 #ifdef CONFIG_GPIO
 #include <GPIO/gpio.h>
@@ -133,16 +133,11 @@ static void
 ns16550_init(int baud_rate)
 {
 #include "UART/dependency.h"
-	int baud_divisor = socle_scu_uart_clock_get (0) / 16 / baud_rate;
+	int baud_divisor = sq_scu_uart_clock_get (0) / 16 / baud_rate;
 
 	volatile unsigned long *p;
 
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-	if(((ioread32(SOCLE_SCU0+0xc) >> 13) & 0x7) !=6)		//20071231 leonid+ for check scu_ucfg
-		p = (unsigned long *) SOCLE_UART1;
-	else
-		p = (unsigned long *) SOCLE_UART0;
-#elif defined CONFIG_ARM9_HI
+#if defined CONFIG_ARM9_HI
 	p = (unsigned long *) SOCLE_UART2;
 #else 
 	p = (unsigned long *) SOCLE_UART0;
@@ -241,13 +236,9 @@ TestEntry(void)
 
 #if defined(SEMI_HOST_FUNCTION_ARM) && defined(UART_DEBUG)
 
-	#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-		socle_scu_upll_normal();
-	#endif
-
-	#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
         	socle_scu_dev_enable(SOCLE_DEVCON_UART0);
-	#endif
+#endif
 
 	ns16550_init(SOCLE_CONSOLE_BAUD_RATE);		// initiate UART console
 #endif
@@ -271,7 +262,7 @@ TestEntry(void)
 
 	printf("\nRevision: %s\n" "Build on %s %s\n", REVISION, __DATE__, __TIME__);
 
-	cpu_clk_mhz = socle_scu_cpu_clock_get() / (1000 * 1000);
+	cpu_clk_mhz = sq_scu_cpu_clock_get() / (1000 * 1000);
 
 	result = test_item_ctrl(&main_test_item_container, 0);
 	

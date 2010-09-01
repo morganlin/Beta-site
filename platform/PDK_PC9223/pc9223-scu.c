@@ -21,7 +21,7 @@
 #include <type.h>
 #include <io.h>
 #include <platform.h>
-#include <socle-scu.h>
+#include <sq-scu.h>
 #include <pc9223-scu.h>
 #include "regs-pc9223-scu.h"
 
@@ -58,9 +58,9 @@ socle_scu_read(u32 reg)
 }
 
 static inline void
-socle_scu_write(u32 val, u32 reg) 
+sq_scu_write(u32 val, u32 reg) 
 {
-	SCUDBUG("socle_scu_write : reg = 0x%08x, val = 0x%08x\n", reg, val);
+	SCUDBUG("sq_scu_write : reg = 0x%08x, val = 0x%08x\n", reg, val);
 	
 	iowrite32(val, socle_scu_base + reg);
 }
@@ -68,11 +68,11 @@ socle_scu_write(u32 val, u32 reg)
 
 	/* read chip ID	*/
 extern u32 
-socle_scu_chip_id (void)
+sq_scu_chip_id (void)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_CID);
+	tmp = socle_scu_read(SQ_SCU_CID);
 
 	return tmp;
 }
@@ -93,7 +93,7 @@ socle_scu_pll_formula (int m, int n, int od, int xin)
 
 /* MPLL configuration */
 extern int 
-socle_scu_mpll_clock_set (int mpll_clock)
+sq_scu_mpll_clock_set (int mpll_clock)
 {
 	u32 tmp, mpll;
 	
@@ -215,22 +215,22 @@ socle_scu_mpll_clock_set (int mpll_clock)
 			break;
 	}
 
-	mpll = ((socle_scu_read(SOCLE_SCU_MPLLCON) & ~SCU_MPLLCON_PLL_MASK) | (tmp ));
+	mpll = ((socle_scu_read(SQ_SCU_MPLLCON) & ~SCU_MPLLCON_PLL_MASK) | (tmp ));
 	
-	socle_scu_write(mpll, SOCLE_SCU_MPLLCON);
+	sq_scu_write(mpll, SQ_SCU_MPLLCON);
 	
-	socle_scu_cpu_clock_get();	
+	sq_scu_cpu_clock_get();	
 
 	return 0;
 }
 	
 extern u32
-socle_scu_mpll_clock_get (void)
+sq_scu_mpll_clock_get (void)
 {
 	u32 m,n,od;
 	u32 mclk;
 
-	mclk = socle_scu_read(SOCLE_SCU_MPLLCON);
+	mclk = socle_scu_read(SQ_SCU_MPLLCON);
 	
 	n = (mclk & SCU_MPLLCON_N_MASK) >> SCU_MPLLCON_N;
 	m = (mclk & SCU_MPLLCON_M_MASK) >> SCU_MPLLCON_M;
@@ -243,16 +243,16 @@ socle_scu_mpll_clock_get (void)
 
 /* MPLL power down/normal	*/
 extern void 
-socle_scu_mpll_power_status_set (int act)
+sq_scu_mpll_power_status_set (int act)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON);
+	tmp = socle_scu_read(SQ_SCU_PWMCON);
 
 	if(act)
-		socle_scu_write(tmp | SCU_PWMCON_PWR_NOR , SOCLE_SCU_PWMCON);
+		sq_scu_write(tmp | SCU_PWMCON_PWR_NOR , SQ_SCU_PWMCON);
 	else
-		socle_scu_write(tmp & ~SCU_PWMCON_PWR_NOR , SOCLE_SCU_PWMCON);
+		sq_scu_write(tmp & ~SCU_PWMCON_PWR_NOR , SQ_SCU_PWMCON);
 		
 	return ;
 }
@@ -262,7 +262,7 @@ socle_scu_mpll_status_get (void)		//return 1:act 0:power down
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON) & SCU_PWMCON_PWR_NOR;
+	tmp = socle_scu_read(SQ_SCU_PWMCON) & SCU_PWMCON_PWR_NOR;
 
 	if(SCU_PWMCON_PWR_NOR == tmp)
 		return 1;
@@ -273,7 +273,7 @@ socle_scu_mpll_status_get (void)		//return 1:act 0:power down
 
 /* UPLL configuration */
 extern int 
-socle_scu_upll_clock_set (int clock)
+sq_scu_upll_clock_set (int clock)
 {
 	u32 tmp, upll;
 
@@ -287,20 +287,20 @@ socle_scu_upll_clock_set (int clock)
 			break;
 	}
 
-	upll = ((socle_scu_read(SOCLE_SCU_UPLLCON) & ~SCU_UPLLCON_PLL_MASK) | (tmp ));
+	upll = ((socle_scu_read(SQ_SCU_UPLLCON) & ~SCU_UPLLCON_PLL_MASK) | (tmp ));
 	
-	socle_scu_write(upll, SOCLE_SCU_UPLLCON);
+	sq_scu_write(upll, SQ_SCU_UPLLCON);
 	
 	return 0;
 }		
 
 extern u32 
-socle_scu_upll_clock_get (void)
+sq_scu_upll_clock_get (void)
 {
 	int m,n,od;
 	u32 uclk;
 
-	uclk = socle_scu_read(SOCLE_SCU_UPLLCON);
+	uclk = socle_scu_read(SQ_SCU_UPLLCON);
 	
 	n = (uclk & SCU_UPLLCON_N_MASK) >> SCU_UPLLCON_N;
 	m = (uclk & SCU_UPLLCON_M_MASK) >>SCU_UPLLCON_M;
@@ -314,26 +314,26 @@ socle_scu_upll_clock_get (void)
 
 /* UPLL power down/normal	*/
 extern void 
-socle_scu_upll_power_status_set (int act)
+sq_scu_upll_power_status_set (int act)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_UPLLCON);
+	tmp = socle_scu_read(SQ_SCU_UPLLCON);
 	
 	if(act)
-		socle_scu_write(tmp & (~SCU_UPLLCON_PLL_PWR_DN) , SOCLE_SCU_UPLLCON);
+		sq_scu_write(tmp & (~SCU_UPLLCON_PLL_PWR_DN) , SQ_SCU_UPLLCON);
 	else
-		socle_scu_write(tmp | SCU_UPLLCON_PLL_PWR_DN , SOCLE_SCU_UPLLCON);	
+		sq_scu_write(tmp | SCU_UPLLCON_PLL_PWR_DN , SQ_SCU_UPLLCON);	
 		
 	return ;
 }
 	
 extern int 
-socle_scu_upll_power_status_get (void)
+sq_scu_upll_power_status_get (void)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_UPLLCON) & SCU_UPLLCON_PLL_PWR_DN;
+	tmp = socle_scu_read(SQ_SCU_UPLLCON) & SCU_UPLLCON_PLL_PWR_DN;
 
 	if(SCU_MPLLCON_PLL_PWR_DN == tmp)
 		return 0;
@@ -347,7 +347,7 @@ socle_scu_uart_clk_src_get (int uart)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV);
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV);
 
 	switch(uart){
 		case 0 :
@@ -385,11 +385,11 @@ socle_scu_uart_clk_src_get (int uart)
 
 	/*	hclk enable/disable	*/
 extern int 
-socle_scu_hclk_enable (int hclk, int en)
+sq_scu_hclk_enable (int hclk, int en)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKEN);
+	tmp = socle_scu_read(SQ_SCU_MCLKEN);
 
 	if(en){	
 		switch(hclk){
@@ -473,18 +473,18 @@ socle_scu_hclk_enable (int hclk, int en)
 		}
 	}		
 				
-	socle_scu_write(tmp, SOCLE_SCU_MCLKEN);	
+	sq_scu_write(tmp, SQ_SCU_MCLKEN);	
 	
 	return 0;
 }
 
 	/*	pclk enable/disable	*/
 extern int 
-socle_scu_pclk_enable (int pclk, int en)
+sq_scu_pclk_enable (int pclk, int en)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKEN);
+	tmp = socle_scu_read(SQ_SCU_MCLKEN);
 
 	if(en){	
 		switch(pclk){
@@ -604,18 +604,18 @@ socle_scu_pclk_enable (int pclk, int en)
 		}	
 	}
 				
-	socle_scu_write(tmp, SOCLE_SCU_MCLKEN);	
+	sq_scu_write(tmp, SQ_SCU_MCLKEN);	
 	
 	return 0;
 }
 
 	/*	aclk enable/disable	*/
 extern int 
-socle_scu_aclk_enable (int aclk, int en)
+sq_scu_aclk_enable (int aclk, int en)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_ACLKEN);
+	tmp = socle_scu_read(SQ_SCU_ACLKEN);
 	
 	if(en){
 		switch(aclk){
@@ -705,18 +705,18 @@ socle_scu_aclk_enable (int aclk, int en)
 		}
 	}		
 
-	socle_scu_write(tmp, SOCLE_SCU_ACLKEN);	
+	sq_scu_write(tmp, SQ_SCU_ACLKEN);	
 	
 	return 0;
 }
 
 /* CPU/AHB clock ratio	*/
 extern int 
-socle_scu_cpu_hclk_ratio_set (int ratio)
+sq_scu_cpu_hclk_ratio_set (int ratio)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV) & ~SCU_MCLKDIV_CLK_RATIO_MASK;
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV) & ~SCU_MCLKDIV_CLK_RATIO_MASK;
 
 	switch(ratio){
 		case SOCLE_SCU_CLOCK_RATIO_1_1 :
@@ -739,18 +739,18 @@ socle_scu_cpu_hclk_ratio_set (int ratio)
 			return -1;
 			break;			
 	}
-	socle_scu_write(tmp, SOCLE_SCU_MCLKDIV);
+	sq_scu_write(tmp, SQ_SCU_MCLKDIV);
 	
 	return 0;
 }
 	
 extern int 
-socle_scu_cpu_hclk_ratio_get (void)
+sq_scu_cpu_hclk_ratio_get (void)
 {
 	u32 tmp;
 	int ratio;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV) & SCU_MCLKDIV_CLK_RATIO_MASK;
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV) & SCU_MCLKDIV_CLK_RATIO_MASK;
 
 	switch(tmp){
 		case SCU_MCLKDIV_CLK_RATIO_1_1 :
@@ -781,17 +781,17 @@ socle_scu_cpu_hclk_ratio_get (void)
 
 
 extern void 
-socle_scu_sw_reset(void)
+sq_scu_sw_reset(void)
 {
-	socle_scu_write(socle_scu_chip_id(), SOCLE_SCU_SWRST);
+	sq_scu_write(sq_scu_chip_id(), SQ_SCU_SWRST);
 
 }
 
 
 extern void 
-socle_scu_remap(int arg)
+sq_scu_remap(int arg)
 {
-	socle_scu_write(socle_scu_chip_id(), SOCLE_SCU_REMAP);
+	sq_scu_write(sq_scu_chip_id(), SQ_SCU_REMAP);
 }
 
 	
@@ -800,19 +800,19 @@ socle_scu_remap(int arg)
 /*	SCU_INFORM0	*/
 	/*	User defined information register	*/
 extern void 
-socle_scu_info_set (int index, u32 info)	
+sq_scu_info_set (int index, u32 info)	
 {
-	socle_scu_write(info, SOCLE_SCU_INFORM0 + index*4);
+	sq_scu_write(info, SQ_SCU_INFORM0 + index*4);
 			
 	return ;
 }		
 
 extern u32 
-socle_scu_info_get (int index)						//return information0 value
+sq_scu_info_get (int index)						//return information0 value
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_INFORM0 + index*4);
+	tmp = socle_scu_read(SQ_SCU_INFORM0 + index*4);
 			
 	return tmp;
 }		
@@ -821,40 +821,40 @@ socle_scu_info_get (int index)						//return information0 value
 
 
 extern u32
-socle_scu_cpu_clock_get (void)
+sq_scu_cpu_clock_get (void)
 {	
 	/*	get power mode */
 	if(0 == socle_scu_mpll_status_get())
 		socle_clock.cpu_clock = MPLL_XIN;	
 	else
-		socle_clock.cpu_clock = socle_scu_mpll_clock_get();
+		socle_clock.cpu_clock = sq_scu_mpll_clock_get();
 				
 	return socle_clock.cpu_clock ;
 }
 
 extern u32
-socle_scu_ahb_clock_get (void)
+sq_scu_ahb_clock_get (void)
 {
 	int ratio;
 	
-	ratio = socle_scu_cpu_hclk_ratio_get();
+	ratio = sq_scu_cpu_hclk_ratio_get();
 
-	socle_clock.ahb_clock = socle_scu_cpu_clock_get() / ratio;
+	socle_clock.ahb_clock = sq_scu_cpu_clock_get() / ratio;
 	
 	return socle_clock.ahb_clock;
 }
 
 extern u32
-socle_scu_apb_clock_get (void)
+sq_scu_apb_clock_get (void)
 {
-	socle_clock.apb_clock = socle_scu_ahb_clock_get() / 2;
+	socle_clock.apb_clock = sq_scu_ahb_clock_get() / 2;
 	
 	return socle_clock.apb_clock;
 }
 
 
 extern u32
-socle_scu_uart_clock_get (int uart)
+sq_scu_uart_clock_get (int uart)
 {
 	int tmp;
 	int div;
@@ -880,16 +880,16 @@ socle_scu_uart_clock_get (int uart)
 			break;
 	}
 	
-	socle_clock.uart_clock = socle_scu_upll_clock_get() / div;
+	socle_clock.uart_clock = sq_scu_upll_clock_get() / div;
 					
 	return socle_clock.uart_clock ;
 }
 
 
 extern void
-socle_scu_show_system_info (void)
+sq_scu_show_system_info (void)
 {
-	socle_scu_apb_clock_get();
+	sq_scu_apb_clock_get();
 	
 	SCUMSG("CPU = %d MHz , HCLCK = %d MHz ",
 		socle_clock.cpu_clock/1000000, socle_clock.ahb_clock/1000000);
@@ -911,7 +911,7 @@ socle_scu_hardmacro_chip_stop_mode_disable (int chip)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_ACLKEN);
+	tmp = socle_scu_read(SQ_SCU_ACLKEN);
 	
 	switch(chip){
 		case SOCLE_SCU_SDC_HARDMACRO :
@@ -944,7 +944,7 @@ socle_scu_hardmacro_chip_stop_mode_disable (int chip)
 			break;
 	}		
 
-	socle_scu_write(tmp, SOCLE_SCU_ACLKEN);	
+	sq_scu_write(tmp, SQ_SCU_ACLKEN);	
 	
 	return 0;
 }
@@ -954,7 +954,7 @@ socle_scu_hardmacro_chip_stop_mode_no_pwr_control (int chip)
 {	
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_ACLKEN);
+	tmp = socle_scu_read(SQ_SCU_ACLKEN);
 	
 	switch(chip){
 		case SOCLE_SCU_SDC_HARDMACRO :
@@ -987,7 +987,7 @@ socle_scu_hardmacro_chip_stop_mode_no_pwr_control (int chip)
 			break;
 	}		
 
-	socle_scu_write(tmp, SOCLE_SCU_ACLKEN);	
+	sq_scu_write(tmp, SQ_SCU_ACLKEN);	
 	
 	return 0;
 }	
@@ -1000,7 +1000,7 @@ socle_scu_dev_enable(u32 dev)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	
 	switch(dev){
 		case SOCLE_DEVCON_NFC :
@@ -1072,7 +1072,7 @@ socle_scu_dev_enable(u32 dev)
 			break;
 	}
 				
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);	
+	sq_scu_write(tmp, SQ_SCU_DEVCON);	
 
 	return 0;
 }
@@ -1083,7 +1083,7 @@ socle_scu_dev_disable(u32 dev)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	
 	switch(dev){
 		case SOCLE_DEVCON_NFC :
@@ -1155,7 +1155,7 @@ socle_scu_dev_disable(u32 dev)
 			break;
 	}
 				
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);	
+	sq_scu_write(tmp, SQ_SCU_DEVCON);	
 	
 	return 0;
 
@@ -1173,9 +1173,9 @@ socle_scu_pll_lock_period_set (int period)
 	if(period < 2)
 		period = 2;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV) & ~SCU_MCLKDIV_PLL_LOCK_PERIOD_M;
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV) & ~SCU_MCLKDIV_PLL_LOCK_PERIOD_M;
 	tmp = tmp | period;
-	socle_scu_write(tmp, SOCLE_SCU_MCLKDIV);
+	sq_scu_write(tmp, SQ_SCU_MCLKDIV);
 	
 	return ;
 }	
@@ -1185,7 +1185,7 @@ socle_scu_pll_lock_period_get ()
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV) & SCU_MCLKDIV_PLL_LOCK_PERIOD_M;
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV) & SCU_MCLKDIV_PLL_LOCK_PERIOD_M;
 	tmp = tmp >> SCU_MCLKDIV_PLL_LOCK_PERIOD_S;
 	
 	return tmp;
@@ -1199,9 +1199,9 @@ socle_scu_adc_clk_div_set (int div)
 	if(div < 2)
 		div = 2;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV) & ~SCU_MCLKDIV_ADC_CLK_DIV_M;
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV) & ~SCU_MCLKDIV_ADC_CLK_DIV_M;
 	tmp = tmp | div;
-	socle_scu_write(tmp, SOCLE_SCU_MCLKDIV);
+	sq_scu_write(tmp, SQ_SCU_MCLKDIV);
 	
 	return ;
 }	
@@ -1211,7 +1211,7 @@ socle_scu_adc_clk_div_get ()
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV) & SCU_MCLKDIV_ADC_CLK_DIV_M;
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV) & SCU_MCLKDIV_ADC_CLK_DIV_M;
 	tmp = tmp >> SCU_MCLKDIV_ADC_CLK_DIV_S;
 	
 	return tmp;
@@ -1222,7 +1222,7 @@ socle_scu_uart_clk_24_set (int uart)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV);
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV);
 
 	switch(uart){
 		case 0 :
@@ -1239,7 +1239,7 @@ socle_scu_uart_clk_24_set (int uart)
 			return -1;
 			break;			
 	}
-	socle_scu_write(tmp, SOCLE_SCU_MCLKDIV);
+	sq_scu_write(tmp, SQ_SCU_MCLKDIV);
 	
 	return 0;
 }
@@ -1249,7 +1249,7 @@ socle_scu_uart_clk_upll_set (int uart)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV);
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV);
 
 	switch(uart){
 		case 0 :
@@ -1266,7 +1266,7 @@ socle_scu_uart_clk_upll_set (int uart)
 			return -1;
 			break;			
 	}
-	socle_scu_write(tmp, SOCLE_SCU_MCLKDIV);
+	sq_scu_write(tmp, SQ_SCU_MCLKDIV);
 	
 	return 0;
 }
@@ -1276,7 +1276,7 @@ socle_scu_uart_clk_upll_2_set (int uart)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV);
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV);
 
 	switch(uart){
 		case 0 :
@@ -1293,7 +1293,7 @@ socle_scu_uart_clk_upll_2_set (int uart)
 			return -1;
 			break;			
 	}
-	socle_scu_write(tmp, SOCLE_SCU_MCLKDIV);
+	sq_scu_write(tmp, SQ_SCU_MCLKDIV);
 	
 	return 0;
 }
@@ -1303,7 +1303,7 @@ socle_scu_uart_clk_upll_4_set (int uart)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_MCLKDIV);
+	tmp = socle_scu_read(SQ_SCU_MCLKDIV);
 
 	switch(uart){
 		case 0 :
@@ -1320,7 +1320,7 @@ socle_scu_uart_clk_upll_4_set (int uart)
 			return -1;
 			break;			
 	}
-	socle_scu_write(tmp, SOCLE_SCU_MCLKDIV);
+	sq_scu_write(tmp, SQ_SCU_MCLKDIV);
 
 	return 0;
 	
@@ -1332,10 +1332,10 @@ socle_scu_lcdc_clk_input_mpll_outpput(void)
 {
 	u32 tmp;
 	
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	tmp |= SCU_DEVCON_LCD_CLK_MPLL_OUTPUT;
 
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);
+	sq_scu_write(tmp, SQ_SCU_DEVCON);
 
 }
 
@@ -1344,10 +1344,10 @@ socle_scu_lcdc_clk_input_mpll_xin(void)
 {
 	u32 tmp;
 	
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	tmp &= ~SCU_DEVCON_LCD_CLK_MPLL_OUTPUT;
 
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);
+	sq_scu_write(tmp, SQ_SCU_DEVCON);
 
 }
 
@@ -1357,10 +1357,10 @@ socle_scu_hdma_req45_spi0(void)
 {
 	u32 tmp;
 	
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	tmp &= ~SCU_DEVCON_HDMA45_SPI1;
 
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);
+	sq_scu_write(tmp, SQ_SCU_DEVCON);
 
 }
 
@@ -1369,10 +1369,10 @@ socle_scu_hdma_req45_spi1(void)
 {
 	u32 tmp;
 	
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	tmp |= SCU_DEVCON_HDMA45_SPI1;
 
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);
+	sq_scu_write(tmp, SQ_SCU_DEVCON);
 
 }
 
@@ -1381,7 +1381,7 @@ socle_scu_hdma_req01_uart(int uart)
 {
 	u32 tmp;
 	
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	tmp &= ~SCU_DEVCON_UART_HDMA01_M;
 	switch(uart){
 		case 0:
@@ -1399,7 +1399,7 @@ socle_scu_hdma_req01_uart(int uart)
 			break;			
 	}
 
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);
+	sq_scu_write(tmp, SQ_SCU_DEVCON);
 	
 	return 0;
 }
@@ -1409,7 +1409,7 @@ socle_scu_hdma_req23_uart(int uart)
 {
 	u32 tmp;
 	
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	tmp &= ~SCU_DEVCON_UART_HDMA23_M;
 	switch(uart){
 		case 0:
@@ -1427,7 +1427,7 @@ socle_scu_hdma_req23_uart(int uart)
 			break;			
 	}
 
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);
+	sq_scu_write(tmp, SQ_SCU_DEVCON);
 	
 	return 0;
 }
@@ -1437,22 +1437,22 @@ socle_scu_wdt_reset_enable(int en)
 {
 	u32 tmp;
 	
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	
 	if(en == 1)
 		tmp &= ~ SCU_DEVCON_WDT_RST;
 	else
 		tmp |= SCU_DEVCON_WDT_RST;
 		
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);	
+	sq_scu_write(tmp, SQ_SCU_DEVCON);	
 }
 
 extern void 
-socle_scu_sw_reset_enable(int en)
+sq_scu_sw_reset_enable(int en)
 {
 	u32 tmp;
 	
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	
 	if(en == 1)
 		tmp &= ~SCU_DEVCON_SW_RST;
@@ -1461,7 +1461,7 @@ socle_scu_sw_reset_enable(int en)
 		
 	SCUDBUG("SCU_DEVCON_SW_RST = 0x%08x, tmp = 0x%08x\n", SCU_DEVCON_SW_RST, tmp);
 		
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);	
+	sq_scu_write(tmp, SQ_SCU_DEVCON);	
 }
 
 
@@ -1475,7 +1475,7 @@ socle_scu_sdram_bus_width_status (void)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON) & SCU_PWMCON_SDR_WIDTH;
+	tmp = socle_scu_read(SQ_SCU_PWMCON) & SCU_PWMCON_SDR_WIDTH;
 
 	if(tmp == SCU_PWMCON_SDR_WIDTH_32)
 		return SOCLE_SCU_SDRAM_BUS_WIDTH_32;
@@ -1490,7 +1490,7 @@ socle_scu_dcm_mode_status (void)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON) & SCU_PWMCON_DCM_MODE;
+	tmp = socle_scu_read(SQ_SCU_PWMCON) & SCU_PWMCON_DCM_MODE;
 
 	if(tmp == SCU_PWMCON_DCM_MODE_DCM)
 		return SOCLE_SCU_DCM_MODE_DCM;
@@ -1505,7 +1505,7 @@ socle_scu_tps_mac_status (void)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON) & SCU_PWMCON_TPS_MAC;
+	tmp = socle_scu_read(SQ_SCU_PWMCON) & SCU_PWMCON_TPS_MAC;
 
 	if(tmp == SCU_PWMCON_TPS_MAC)
 		return 1;
@@ -1520,7 +1520,7 @@ socle_scu_rps_mac_status (void)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON) & SCU_PWMCON_RPS_MAC;
+	tmp = socle_scu_read(SQ_SCU_PWMCON) & SCU_PWMCON_RPS_MAC;
 
 	if(tmp == SCU_PWMCON_RPS_MAC)
 		return 1;
@@ -1535,7 +1535,7 @@ socle_scu_boot_source_status (void)
 {
 	u32 tmp, status=0;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON) & SCU_PWMCON_BOOT_MODE;
+	tmp = socle_scu_read(SQ_SCU_PWMCON) & SCU_PWMCON_BOOT_MODE;
 
 	switch(tmp){
 		case SCU_PWMCON_BOOT_MODE_NOR_16 :
@@ -1562,12 +1562,12 @@ socle_scu_pw_standbywfi_enable (int i)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON);
+	tmp = socle_scu_read(SQ_SCU_PWMCON);
 
 	if(i ==1)
-		socle_scu_write(tmp | SCU_PWMCON_STANDBYWFI , SOCLE_SCU_PWMCON);
+		sq_scu_write(tmp | SCU_PWMCON_STANDBYWFI , SQ_SCU_PWMCON);
 	else 
-		socle_scu_write(tmp & ~SCU_PWMCON_STANDBYWFI , SOCLE_SCU_PWMCON);
+		sq_scu_write(tmp & ~SCU_PWMCON_STANDBYWFI , SQ_SCU_PWMCON);
 	
 	return ;
 }
@@ -1578,12 +1578,12 @@ socle_scu_stop_mode_enable (int i)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON);
+	tmp = socle_scu_read(SQ_SCU_PWMCON);
 
 	if(i == 1)
-		socle_scu_write(tmp | SCU_PWMCON_PWR_STOP , SOCLE_SCU_PWMCON);
+		sq_scu_write(tmp | SCU_PWMCON_PWR_STOP , SQ_SCU_PWMCON);
 	else 
-		socle_scu_write(tmp & ~SCU_PWMCON_PWR_STOP , SOCLE_SCU_PWMCON);
+		sq_scu_write(tmp & ~SCU_PWMCON_PWR_STOP , SQ_SCU_PWMCON);
 
 	return ;
 }
@@ -1594,12 +1594,12 @@ socle_scu_slow_mode_disable (int i)
 {
 	u32 tmp;
 
-	tmp = socle_scu_read(SOCLE_SCU_PWMCON);
+	tmp = socle_scu_read(SQ_SCU_PWMCON);
 
 	if(i == 1)
-		socle_scu_write(tmp & ~SCU_PWMCON_PWR_NOR, SOCLE_SCU_PWMCON);
+		sq_scu_write(tmp & ~SCU_PWMCON_PWR_NOR, SQ_SCU_PWMCON);
 	else 
-		socle_scu_write(tmp | SCU_PWMCON_PWR_NOR, SOCLE_SCU_PWMCON);
+		sq_scu_write(tmp | SCU_PWMCON_PWR_NOR, SQ_SCU_PWMCON);
 
 	return ;
 }
@@ -1610,13 +1610,13 @@ socle_scu_nfiq_polarity_high(int en)
 {
 	u32 tmp;
 	
-	tmp = socle_scu_read(SOCLE_SCU_DEVCON) ;
+	tmp = socle_scu_read(SQ_SCU_DEVCON) ;
 	
 	if(en == 1)
 		tmp |= SCU_DEVCON_FIQ_POLAR_HIGH;
 	else
 		tmp &= ~SCU_DEVCON_FIQ_POLAR_HIGH;
 		
-	socle_scu_write(tmp, SOCLE_SCU_DEVCON);	
+	sq_scu_write(tmp, SQ_SCU_DEVCON);	
 }
 

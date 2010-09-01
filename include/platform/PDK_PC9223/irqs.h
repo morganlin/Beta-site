@@ -3,12 +3,12 @@
 
 #define	SOCLE_INTC_EXTERNAL1		30
 #define	SOCLE_INTC_EXTERNAL0		29
-#define	SOCLE_INTC_GPIO3			28
+#define	SQ_INTC_GPIO3			28
 #define	SOCLE_INTC_NAND0			27
-#define	SOCLE_INTC_GPIO2			26
+#define	SQ_INTC_GPIO2			26
 #define	SOCLE_INTC_LCD0			25
-#define	SOCLE_INTC_GPIO1			24
-#define	SOCLE_INTC_GPIO0			23
+#define	SQ_INTC_GPIO1			24
+#define	SQ_INTC_GPIO0			23
 #define	SOCLE_INTC_HDMA0			22
 #define	SOCLE_INTC_SDHC0			21
 #define	SOCLE_INTC_OTG1     		20

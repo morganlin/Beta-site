@@ -1,7 +1,7 @@
 #include <test_item.h>
 #include <genlib.h>
 #include <global.h>
-#include <socle-scu.h>
+#include <sq-scu.h>
 #include "nand.h"
 #include "dependency.h"
 #include "socle_nand_regs.h"

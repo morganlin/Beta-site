@@ -95,7 +95,7 @@ socle_sdhc_host_initialize(struct socle_sdhc_host *host)
 	while(socle_sdhc_read(SOCLE_SDHC_HRS0) & HSFR0_SOFTWARE_RESET);
 
 	//DP * Tclk = 20ms
-	DP = socle_scu_ahb_clock_get() * 20 /1000; 
+	DP = sq_scu_ahb_clock_get() * 20 /1000; 
 //	printf("DP = %x \n", DP);
 	socle_sdhc_write(DEBOUNCING_TIME, SOCLE_SDHC_HRS1);
 

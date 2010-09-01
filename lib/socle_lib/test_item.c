@@ -1,7 +1,7 @@
 #include <test_item.h>
 #include <global.h>
 #include <ctype.h>
-#include <socle-scu.h>
+#include <sq-scu.h>
 
 extern char cpu_type[];
 
@@ -150,17 +150,17 @@ static void
 socle_development_board_information(void)
 {
 	printf("CPU Type --- %s\n", cpu_type);
-	printf("CPU     Clock Frequency : %4dM Hz\n", socle_scu_cpu_clock_get() / (1000 * 1000));
-	printf("AHB Bus Clock Frequency : %4dM Hz\n", socle_scu_ahb_clock_get() / (1000 * 1000));
-	printf("APB Bus Clock Frequency : %4dM Hz\n", socle_scu_apb_clock_get() / (1000 * 1000));
+	printf("CPU     Clock Frequency : %4dM Hz\n", sq_scu_cpu_clock_get() / (1000 * 1000));
+	printf("AHB Bus Clock Frequency : %4dM Hz\n", sq_scu_ahb_clock_get() / (1000 * 1000));
+	printf("APB Bus Clock Frequency : %4dM Hz\n", sq_scu_apb_clock_get() / (1000 * 1000));
 #if defined(CONFIG_PC9220) || defined(CONFIG_PC9223) || defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
 	{
 		int i;
 		for (i = 0; i < 4; i++)
-			printf("UART%d Frequency         : %4dM Hz\n", i, socle_scu_uart_clock_get(i) / (1000 * 1000));
+			printf("UART%d Frequency         : %4dM Hz\n", i, sq_scu_uart_clock_get(i) / (1000 * 1000));
 	}
 #else
-	printf("UART Frequency          : %4dM Hz\n", socle_scu_uart_clock_get(0) / (1000 * 1000));
+	printf("UART Frequency          : %4dM Hz\n", sq_scu_uart_clock_get(0) / (1000 * 1000));
 #endif
 	printf("--------------------------------------------------\n");
 	printf("Code End Address = 0x%08x, TEST_PATTERN_START = 0x%08x\n", _end, TEST_PATTERN_START);

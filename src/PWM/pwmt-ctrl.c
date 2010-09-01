@@ -1,10 +1,6 @@
 #include <global.h>
 #include <test_item.h>
-#include <socle-scu.h>
-
-#if defined (CONFIG_PC7210) || defined (CONFIG_PDK)
-#include <scu.h>
-#endif
+#include <sq-scu.h>
 
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
@@ -266,7 +262,7 @@ socle_pwm_timer_isr(void *pparam)
 
 	// let single counter mode to exit
 	if (socle_pwmt_count >= 5)
-		pwmt_drv->set_counter(p_pwmt, socle_scu_apb_clock_get()+1);
+		pwmt_drv->set_counter(p_pwmt, sq_scu_apb_clock_get()+1);
 
 	// clear isr
 	pwmt_drv->clear_interrupt(p_pwmt);
@@ -288,8 +284,8 @@ socle_pwmt_timer_mode_test_init(int single_mode)
 	
 	pwmt_drv->reset(p_pwmt);
 	pwmt_drv->write_prescale_factor(p_pwmt, DEFAULT_PRE_SCL);
-	pwmt_drv->write_hrc(p_pwmt, socle_scu_apb_clock_get());
-	pwmt_drv->write_lrc(p_pwmt, socle_scu_apb_clock_get());
+	pwmt_drv->write_hrc(p_pwmt, sq_scu_apb_clock_get());
+	pwmt_drv->write_lrc(p_pwmt, sq_scu_apb_clock_get());
 	pwmt_drv->single_counter_mode_enable(p_pwmt, single_mode);
 	pwmt_drv->enable_interrupt(p_pwmt, 1);
 	pwmt_drv->output_enable(p_pwmt, 1);

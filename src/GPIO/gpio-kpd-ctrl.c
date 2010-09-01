@@ -121,72 +121,10 @@ pdk_gpio_kpd_isr(void *param)
 	int tmp2, row;
 #endif
 	KPD_DBG("\n");
-//printf("@@--%s--start\n", __func__);
-#if defined CONFIG_PC7210	//20080109 leonid+ for PDK-PC7210
-	// read col pins
-	// PA4, PA5
-	socle_gpio_get_value_with_mask(PA, 0x30);
-	// PF4, PF5
-	socle_gpio_get_value_with_mask(PF, 0x30);
-
-	// read status
-	tmp1 = socle_gpio_get_interrupt_status_with_port(PA);
-	tmp2 = socle_gpio_get_interrupt_status_with_port(PF);
-
-	// clear interrupt
-	socle_gpio_set_interrupt_clear(PA, tmp1);
-	socle_gpio_set_interrupt_clear(PF, tmp2);
-
-	KPD_DBG("tmp1 = 0x%x, tmp2 = 0x%x\n", tmp1, tmp2);
-#if (KPD_NUM == 4)
-	// 4 X 4
-	col = kpd_value_convert((tmp1 & 0xf));
-	row = kpd_value_convert(((tmp1 & 0x30) >> 4) | (tmp2 & 0x30) >> 2);
-#endif
-#if (KPD_NUM == 3)
-	// 3 X 3
-	col = kpd_value_convert(tmp1 & 0x7);
-	row = kpd_value_convert(((tmp1 & 0x30) >> 4) | (tmp2 & 0x10) >> 2);
-#endif
-
-#elif defined (CONFIG_PC9220)
-	// read col pins
-	socle_gpio_get_value_with_mask(PJ, 0xf0);
-
-	// read status
-	tmp1 = socle_gpio_get_interrupt_status_with_port(PJ);
-	tmp2 = socle_gpio_get_value_with_mask(PJ, 0xf0);
-
-	// clear interrupt
-	socle_gpio_set_interrupt_clear(PJ, tmp1);
-
-	KPD_DBG("tmp1 = 0x%x \n", tmp1);
-	// 4 X 4
-	col = kpd_value_convert((tmp1 & 0xf));
-	row = kpd_value_convert((tmp2 & 0xf0) >> 4);
-
-#elif defined(CONFIG_MDKFHD)
-	// read col pins
-	socle_gpio_get_value_with_mask(PB, 0xf0);
-
-	// read status
-	tmp1 = socle_gpio_get_interrupt_status_with_port(PB);
-	tmp2 = socle_gpio_get_value_with_mask(PB, 0xf0);
-
-	// clear interrupt
-	socle_gpio_set_interrupt_clear(PB, tmp1);
-
-	KPD_DBG("tmp1 = 0x%x \n", tmp1);
-	// 4 X 4
-	col = kpd_value_convert((tmp1 & 0xf));
-	row = kpd_value_convert((tmp2 & 0xf0) >> 4);
-
-#elif defined (CONFIG_PC9223)
+#if defined (CONFIG_PC9223)
 	//read status
 	tmp1 = socle_gpio_get_interrupt_status_with_port(PN);
-//printf("@@--%s--tmp1 = 0x%x\n", __func__, tmp1);
 	// clear interrupt
-	//socle_gpio_set_interrupt_clear(PN, tmp1);
 	socle_gpio_set_interrupt_mask_with_mask(PN, 0x0, 0xfc);
 
 	col = kpd_value_convert((tmp1 & 0xfc)) - 2;
@@ -198,19 +136,15 @@ pdk_gpio_kpd_isr(void *param)
 		
 		temp = socle_gpio_get_value_with_mask(PN, 0xfc);
 		temp = (~temp) & 0xfc;
-//printf("@@--%s--temp = 0x%x\n", __func__, temp);
 		if (temp == 0)
 			break;
 	}
-//printf("@@--%s--col = 0x%x\n", __func__, col);
-#else	//PDK-PC700x
+#else	
 	// read col pins
 	// PA3, PA4, PA5
 	socle_gpio_get_value_with_mask(PA, 0x38);
 	// PC1
 	socle_gpio_get_value_with_mask(PC, 0x2);
-
-//	MSDELAY(300);
 
 	// read status
 	tmp1 = socle_gpio_get_interrupt_status_with_port(PA);
@@ -263,17 +197,11 @@ pdk_gpio_kpd_isr(void *param)
 
 	MSDELAY(100);
 
-#if defined CONFIG_PC7210	//20080109 leonid+ for PDK-PC7210
-	// write col pins as 0
-	// PA4, PA5
-	socle_gpio_set_value_with_mask(PA, 0x0, 0x30);
-	// PF4, PF5
-	socle_gpio_set_value_with_mask(PF, 0x0, 0x30);
-#elif defined (CONFIG_PC9220) || defined (CONFIG_PC9223)
+#if defined (CONFIG_PC9223)
 	// write col pins as 0
 	// PJ4, PJ5, PJ6, PJ7	
 	socle_gpio_set_value_with_mask(PJ, 0x0, 0xf0);
-#else	//PDK-PC700x
+#else	
 	// write col pins as 0
 	// PA3, PA4, PA5
 	socle_gpio_set_value_with_mask(PA, 0x0, 0x38);
@@ -292,95 +220,7 @@ gpio_kpd_init(void)
 		for (j = 0; j < KPD_NUM; j++)
 			kpd_matrix[i][j] = 0;
 
-#if defined (CONFIG_PC7210)	//20080109 leonid+ for PDK-PC7210
-	// normal mode
-	socle_gpio_test_mode_en(PA, 0);
-	socle_gpio_test_mode_en(PF, 0);
-	// single low edge trigger (row - PA0, PA1, PA2, PA3)
-	// PA0, PA1, PA2, PA3
-	socle_gpio_set_interrupt_sense_with_mask(PA, 0x0, 0xf);
-	socle_gpio_set_interrupt_both_edges_with_mask(PA, 0x0, 0xf);
-	socle_gpio_set_interrupt_event_with_mask(PA, 0x0, 0xf);
-
-	// single high edge trigger (col - PA4, PA5, PF4, PF5)
-	// PA4, PA5,
-	socle_gpio_set_interrupt_sense_with_mask(PA, 0x0, 0x30);
-	socle_gpio_set_interrupt_both_edges_with_mask(PA, 0x0, 0x30);
-	socle_gpio_set_interrupt_event_with_mask(PA, 0x30, 0x30);
-	// PF4, PF5
-	socle_gpio_set_interrupt_sense_with_mask(PF, 0x0, 0x30);
-	socle_gpio_set_interrupt_both_edges_with_mask(PF, 0x0, 0x30);
-	socle_gpio_set_interrupt_event_with_mask(PF, 0x30, 0x30);
-
-	// set row as input
-	// PA0, PA1, PA2, PA3
-	socle_gpio_get_value_with_mask(PA, 0xf);
-
-	// write col pins as 0
-	// PA4, PA5,
-	socle_gpio_set_value_with_mask(PA, 0x0, 0x30);
-	// PF4, PF5
-	socle_gpio_set_value_with_mask(PF, 0x0, 0x30);
-
-	// enable all interrupt
-	socle_gpio_set_interrupt_mask_with_mask(PA, 0x3F, 0x3F);
-	socle_gpio_set_interrupt_mask_with_mask(PF, 0x30, 0x30);
-
-#elif defined (CONFIG_PC9220) 	//20080109 leonid+ for PDK-PC7210
-	// normal mode
-	socle_gpio_test_mode_en(PJ, 0);
-
-	// single low edge trigger (row - PJ0, PJ1, PJ2, PJ3)
-	// PJ0, PJ1, PJ2, PJ3
-	socle_gpio_set_interrupt_sense_with_mask(PJ, 0x0, 0xf);
-	socle_gpio_set_interrupt_both_edges_with_mask(PJ, 0x0, 0xf);
-	socle_gpio_set_interrupt_event_with_mask(PJ, 0x0, 0xf);
-
-	// single high edge trigger (col - PJ4, PJ5, PJ6, PJ7)
-	// PJ4, PJ5, PJ6, PJ7
-	socle_gpio_set_interrupt_sense_with_mask(PJ, 0x0, 0xf0);
-	socle_gpio_set_interrupt_both_edges_with_mask(PJ, 0x0, 0xf0);
-	socle_gpio_set_interrupt_event_with_mask(PJ, 0xf0, 0xf0);
-
-	// set row as input
-	// PJ0, PJ1, PJ2, PJ3
-	socle_gpio_get_value_with_mask(PJ, 0xf);
-
-	// write col pins as 0
-	// PJ4, PJ5,
-	socle_gpio_set_value_with_mask(PJ, 0x0, 0xf0);
-
-	// enable all interrupt
-	socle_gpio_set_interrupt_mask_with_mask(PJ, 0xff, 0xff);
-
-#elif defined(CONFIG_MDKFHD)
-	// normal mode
-	socle_gpio_test_mode_en(PB, 0);
-
-	// single low edge trigger (row - PB0, PB1, PB2, PB3)
-	// PB0, PB1, PB2, PB3
-	socle_gpio_set_interrupt_sense_with_mask(PB, 0x0, 0xf);
-	socle_gpio_set_interrupt_both_edges_with_mask(PB, 0x0, 0xf);
-	socle_gpio_set_interrupt_event_with_mask(PB, 0x0, 0xf);
-
-	// single high edge trigger (col - PB4, PB5, PB6, PB7)
-	// PB4, PB5, PB6, PB7
-	socle_gpio_set_interrupt_sense_with_mask(PB, 0x0, 0xf0);
-	socle_gpio_set_interrupt_both_edges_with_mask(PB, 0x0, 0xf0);
-	socle_gpio_set_interrupt_event_with_mask(PB, 0xf0, 0xf0);
-
-	// set row as input
-	// PB0, PB1, PB2, PB3
-	socle_gpio_get_value_with_mask(PB, 0xf);
-
-	// write col pins as 0
-	// PB4, PB5,
-	socle_gpio_set_value_with_mask(PB, 0x0, 0xf0);
-
-	// enable all interrupt
-	socle_gpio_set_interrupt_mask_with_mask(PB, 0xff, 0xff);
-
-#elif defined (CONFIG_PC9223)	//Jerry Hsieh add for PDK-PC9223 ; 2010/04/26
+#if defined (CONFIG_PC9223)
 	//normal mode
 	socle_gpio_test_mode_en(PN, 0);
 
@@ -396,7 +236,7 @@ gpio_kpd_init(void)
 	// enable all interrupt
 	socle_gpio_set_interrupt_mask_with_mask(PN, 0xff, 0xff);
 
-#else	//PDK-PC700x
+#else	
 	// normal mode
 	socle_gpio_test_mode_en(PA, 0);
 	// single low edge trigger (row - PA0, PA1, PA2, PC0)

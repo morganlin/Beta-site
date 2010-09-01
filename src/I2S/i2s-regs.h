@@ -1,15 +1,12 @@
 #ifndef __I2S_H_INCLUDED
 #define __I2S_H_INCLUDED
 
-#if defined(CONFIG_PDK) ||defined(CONFIG_PC7210) || defined(CONFIG_PC9220) || defined(CONFIG_PC9223) || defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined(CONFIG_PC9223)
 #define FIFO_DEPTH 8
 #define PCM_BURST_TYPE SOCLE_DMA_BURST_INCR4
 #endif
 
-#if defined(CONFIG_CDK) || defined(CONFIG_PC9002) || defined(CONFIG_SCDK) || defined(CONFIG_MSMV)
-#define FIFO_DEPTH 32
-#define PCM_BURST_TYPE SOCLE_DMA_BURST_INCR16
-#endif
+
 
 /*
  *  Registers

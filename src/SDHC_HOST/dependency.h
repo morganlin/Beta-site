@@ -49,11 +49,7 @@
 #endif
 
 #ifndef SOCLE_SDHC0
-#if defined(CONFIG_CDK)
-#define SOCLE_SDHC0	SOCLE_MP1
-#else
 #error "SDHC Host IP base address is not defined"
-#endif
 #endif
 
 #ifndef SOCLE_SDHC0
@@ -71,11 +67,7 @@
 #endif
 
 #ifndef SOCLE_INTC_SDHC0
-#if defined(CONFIG_CDK)
-#define SOCLE_INTC_SDHC0	SOCLE_INTC_MPS1
-#else
 #error "SDHC Host IRQ is not defined"
-#endif
 #endif
 
 #ifndef SOCLE_INTC_SDHC1
@@ -97,13 +89,9 @@
 #define SOCLE_SDMMC_SWDMA_HDMA_TEST 0
 #endif
 
-#if defined(CONFIG_PANTHER7_HDMA) && (defined(CONFIG_PDK) || defined(CONFIG_PC7210) || defined(CONFIG_PC9002) || defined(CONFIG_SCDK))
-#define SOCLE_SDMMC_SWDMA_PANTHER7_HDMA_TEST 1
-#else
 #define SOCLE_SDMMC_SWDMA_PANTHER7_HDMA_TEST 0
-#endif
 
-#if defined(CONFIG_CDK) || defined(CONFIG_PC9220) || defined(CONFIG_PC9223) || defined(CONFIG_PC9002) || defined(CONFIG_SCDK) || defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined(CONFIG_PC9223)
 #define SOCLE_SDMMC_MUTLIPLE_PARTIAL_READ_TEST 0
 #define SDHC_NORMAL_TEST	1
 #else

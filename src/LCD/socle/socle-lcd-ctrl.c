@@ -113,11 +113,11 @@ static int lcdc_regs_set(struct soclefb_info *sfb)
 	}
 
 #if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	in_clk=socle_scu_apb_clock_get()/1000000;  //get_apb_clk
+	in_clk=sq_scu_apb_clock_get()/1000000;  //get_apb_clk
 #elif defined(CONFIG_MDK3D)
 	in_clk=54;
 #else
-	in_clk=socle_scu_ahb_clock_get()/1000000;
+	in_clk=sq_scu_ahb_clock_get()/1000000;
 #endif
 	pix_clk=(1000000/(screen->pixclock));
 

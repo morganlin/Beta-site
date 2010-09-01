@@ -1248,9 +1248,6 @@ case_f_break:
 						}
 
 						MSDELAY(100);
-#ifdef CONFIG_PC7210
-						printf(".");	//leonid+ for 7210 20080123
-#endif
 
 						if( (sMAC_READ_CSR(Testing_DevicePt->devAdrs, CSR5) & CSR5_RS_MSK) != CSR5_RS_SURB ){
 							printf("MAC_TESTITEM_FAIL\n");
@@ -1682,9 +1679,6 @@ case_m_break:
 								intnum++;
 								//Delay to finish loopback
 								MSDELAY(100);
-#ifdef CONFIG_PC7210
-						printf(".");	//leonid+ for 7210 20080123
-#endif
 								MacTestPolling();
 								//Return to Mask
 								sMAC_WRITE_CSR( Testing_DevicePt->devAdrs, CSR7, (CSR7_NIS|CSR7_RI|CSR7_TI) );
@@ -1933,9 +1927,6 @@ case_t_break:
 						}
 	
 						MSDELAY(200);
-#ifdef CONFIG_PC7210
-						printf(".");	//leonid+ for 7210 20080123
-#endif
 	
 						for(j=1;j<NUM_RDS;j++){
 							desPt = (SMAC_RDE *)( (int)&Rx_Desc[j] );

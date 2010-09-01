@@ -31,9 +31,6 @@ nor_mxic_test (int autotest)
 	mode=ioread32(MODE_BASE)&0x1;
 	if(mode==1) {
 		printf("\n Flash run in word mode \n");
-#if defined(CONFIG_PC7210) || defined(CONFIG_PDK)
-		iowrite32(0x1, 0x18058320);	// for 2nd nor 16bit
-#endif
 	}
 	else {                
 		printf("\n Flash run in byte mode \n");

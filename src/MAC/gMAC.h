@@ -3,11 +3,6 @@
 
 #include <platform.h>
 
-#if (CONFIG_SEDK)
-#define MAC_INT		SOCLE_INTC_MAC1
-#endif
-
-
 #ifndef MAC_REG_BASE
 #define MAC_REG_BASE		SOCLE_MAC0
 #endif

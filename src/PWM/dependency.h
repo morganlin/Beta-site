@@ -2,20 +2,13 @@
 #include <irqs.h>
 
 
-#if defined(CONFIG_CDK) || defined(CONFIG_PC9002) || defined(CONFIG_PC9220) \
-		|| defined(CONFIG_PC9223) || defined(CONFIG_SCDK) || defined(CONFIG_MSMV)
+#if defined(CONFIG_PC9223)
 #define SOCLE_PWM_NUM			2
-#elif defined(CONFIG_PDK) || defined(CONFIG_PC7210) || defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-#define SOCLE_PWM_NUM			4
 #else
 #define SOCLE_PWM_NUM			1
 #endif
 
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-#define SUPT_CH			6
-#elif defined(CONFIG_PC9002)
-#define SUPT_CH			2
-#elif defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 #define SUPT_CH			5
 #else
 #define SUPT_CH			8
@@ -23,9 +16,7 @@
 
 
 // use pwm number to test adc
-#if defined(CONFIG_CDK) || defined(CONFIG_PC9002) || defined(CONFIG_PC9220) || defined(CONFIG_PC9223) || defined(CONFIG_SCDK) || defined(CONFIG_MSMV)
-#define USE_PWM_NUM			1
-#elif defined(CONFIG_PDK) || defined(CONFIG_PC7210)
+#if defined(CONFIG_PC9223)
 #define USE_PWM_NUM			1
 #else
 #define USE_PWM_NUM			0

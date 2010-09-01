@@ -56,20 +56,20 @@
 /*
  *  Register for SCU
  *  */
-#define SOCLE_SCU_MPLLCON		0x00		/*	Main PLL control register	*/
-#define SOCLE_SCU_UPLLCON		0x04		/*	UART PLL control register	*/
-#define SOCLE_SCU_MCLKEN		0x10		/*	Main clock enable register	*/
-#define SOCLE_SCU_ACLKEN		0x14		/*	Application clock enable 	*/
-#define SOCLE_SCU_MCLKDIV		0x18		/*	Main clock divide register	*/
-#define SOCLE_SCU_PWMCON		0x1C		/*	Power management  register	*/
-#define SOCLE_SCU_SWRST		0x20		/*	Software reset register		*/
-#define SOCLE_SCU_REMAP		0x24		/*	Decoder remap contrl register*/
-#define SOCLE_SCU_DEVCON		0x28		/*	System device mode setting  register	*/
-#define SOCLE_SCU_INFORM0		0x34		/*	User defined register		*/
-#define SOCLE_SCU_INFORM1		0x38		/*	User defined register		*/
-#define SOCLE_SCU_INFORM2		0x3C		/*	User defined register		*/
-#define SOCLE_SCU_INFORM3		0x40		/*	User defined register		*/
-#define SOCLE_SCU_CID			0x44		/*	Chip ID register		*/
+#define SQ_SCU_MPLLCON		0x00		/*	Main PLL control register	*/
+#define SQ_SCU_UPLLCON		0x04		/*	UART PLL control register	*/
+#define SQ_SCU_MCLKEN		0x10		/*	Main clock enable register	*/
+#define SQ_SCU_ACLKEN		0x14		/*	Application clock enable 	*/
+#define SQ_SCU_MCLKDIV		0x18		/*	Main clock divide register	*/
+#define SQ_SCU_PWMCON		0x1C		/*	Power management  register	*/
+#define SQ_SCU_SWRST		0x20		/*	Software reset register		*/
+#define SQ_SCU_REMAP		0x24		/*	Decoder remap contrl register*/
+#define SQ_SCU_DEVCON		0x28		/*	System device mode setting  register	*/
+#define SQ_SCU_INFORM0		0x34		/*	User defined register		*/
+#define SQ_SCU_INFORM1		0x38		/*	User defined register		*/
+#define SQ_SCU_INFORM2		0x3C		/*	User defined register		*/
+#define SQ_SCU_INFORM3		0x40		/*	User defined register		*/
+#define SQ_SCU_CID			0x44		/*	Chip ID register		*/
 
 /*	Main PLL control register	0x00 */
 #define SCU_MPLLCON_PLL_RFEN		(1<<29)

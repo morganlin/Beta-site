@@ -15,11 +15,6 @@
 #include "sdhc.h"
 #include "host.h"
 
-#ifdef CONFIG_PC9002
-#include "MP_GPIO/regs-mp-gpio.h"
-#include "MP_GPIO/mp-gpio.h"
-#endif
-
 //#define SDHC_DEBUG
 
 #ifdef SDHC_DEBUG
@@ -2593,11 +2588,7 @@ sdhc_host_test(int autotest)
 {
 	int ret;
 
-#ifdef CONFIG_PC9002
-	socle_mp_gpio_set_port_num_value(PA,5,0);
-#endif
-
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 	socle_scu_dev_enable(SOCLE_DEVCON_SDMMC);	
 #endif
 

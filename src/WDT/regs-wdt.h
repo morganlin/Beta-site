@@ -3,32 +3,27 @@
 
 #include "platform.h"
 
-
-#if defined(CONFIG_LDK5) && defined(CONFIG_ARM7_HI)
-#define WDT_REG_BASE		SOCLE_APB1_WDT
-#endif
-
 #ifndef WDT_REG_BASE
 #define WDT_REG_BASE		SOCLE_WDT0
 #endif
 
 
-#define SOCLE_WDTLR          (addr_t)(WDT_REG_BASE + 0x0000)
-#define SOCLE_WDTCVR         (addr_t)(WDT_REG_BASE + 0x0004)
-#define SOCLE_WDTCON         (addr_t)(WDT_REG_BASE + 0x0008)
+#define SQ_WDTLR          (addr_t)(WDT_REG_BASE + 0x0000)
+#define SQ_WDTCVR         (addr_t)(WDT_REG_BASE + 0x0004)
+#define SQ_WDTCON         (addr_t)(WDT_REG_BASE + 0x0008)
 
 #define WDT_SHIFT_RST (1<<4)
 #define WDT_SHIFT_EN  (1<<3)
 
 // macro lib
-#define WDT_CTRL_SET_FLAG(x)    (writew(readw(SOCLE_WDTCON) | (x), SOCLE_WDTCON))
-#define WDT_CTRL_CLR_FLAG(x)    (writew(readw(SOCLE_WDTCON) & ~(x),SOCLE_WDTCON))
+#define WDT_CTRL_SET_FLAG(x)    (writew(readw(SQ_WDTCON) | (x), SQ_WDTCON))
+#define WDT_CTRL_CLR_FLAG(x)    (writew(readw(SQ_WDTCON) & ~(x),SQ_WDTCON))
 
 #define WDT_RST_EN()   			WDT_CTRL_SET_FLAG(WDT_SHIFT_RST)
 #define WDT_RST_DIS()  			WDT_CTRL_CLR_FLAG(WDT_SHIFT_RST)
 #define WDT_EN()       			WDT_CTRL_SET_FLAG(WDT_SHIFT_EN)
 #define WDT_DIS()      			WDT_CTRL_CLR_FLAG(WDT_SHIFT_EN)
-#define WDT_PRESCALE(x)         (writew((readw(SOCLE_WDTCON) & ~0x7) | (x) , SOCLE_WDTCON))
+#define WDT_PRESCALE(x)         (writew((readw(SQ_WDTCON) & ~0x7) | (x) , SQ_WDTCON))
 
 
 // const for TIMER and WATCHDOG

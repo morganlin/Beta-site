@@ -13,16 +13,12 @@ extern int
 wdt_test(int autotest)
 {
 	int ret = 0, pseudo_flag = 0;
-
-#if defined(CONFIG_CDK) || defined(CONFIG_PC9002) || defined(CONFIG_SCDK)
-	iowrite32(ioread32(SOCLE_SCU0 + 0x28) | (0x1 << 13), SOCLE_SCU0 + 0x28);
-#endif
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 	socle_scu_wdt_reset_enable(1);
 #endif
 
 	// set reload reg, prescaler
-	iowrite32(socle_scu_apb_clock_get() / 60 * 3, SOCLE_WDTLR);
+	iowrite32(sq_scu_apb_clock_get() / 60 * 3, SQ_WDTLR);
 	WDT_PRESCALE(PRESCALE_64);
 
 	printf("WDT: The system will reset now!!\n");

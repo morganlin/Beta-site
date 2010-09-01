@@ -1,10 +1,6 @@
 #ifndef _regs_timer_H_
 #define _regs_timer_H_
 
-#if defined(CONFIG_LDK5) && defined(CONFIG_ARM7_HI)
-#define TIMER_REG_BASE		SOCLE_APB1_TIMER
-#endif
-
 #ifndef TIMER_REG_BASE
 #define TIMER_REG_BASE		SOCLE_TIMER0
 #endif

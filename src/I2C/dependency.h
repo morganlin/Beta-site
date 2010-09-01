@@ -31,7 +31,7 @@
 #define SOCLE_INTC_I2C2 SOCLE_INTC_I2C0
 #endif
 
-#if defined(CONFIG_PC7210) || defined(CONFIG_PC9002) || defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 #define SOCLE_I2C_AT24C02B_EEPROM_TEST 0
 #else
 #define SOCLE_I2C_AT24C02B_EEPROM_TEST 1

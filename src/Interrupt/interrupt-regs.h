@@ -1,10 +1,6 @@
 #ifndef _interrupt_regs_H_
 #define _interrupt_regs_H_
 
-#if defined(CONFIG_LDK5) && defined(CONFIG_ARM7_HI)
-#define INTC_REG_BASE		SOCLE_INTC1
-#endif
-
 #ifndef INTC_REG_BASE
 #define INTC_REG_BASE		SOCLE_INTC0
 #endif

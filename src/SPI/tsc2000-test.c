@@ -1,12 +1,6 @@
 //TSC2000 Test Function 
 #include "spi-master.h"
 #include "regs-tsc2000.h"
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-#include "../GPIO/gpio.h"
-#endif
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -166,26 +160,10 @@ socle_spi_tsc2000_touch(int autotest)
 	}
 
 	// enable interrupt
-#if defined(CONFIG_PDK) 
-	//cyli 20071122 modify
-	//set PA5 as low level triggle interrupt
-	if (socle_request_gpio_irq(SET_GPIO_PIN_NUM(PA, 5), tsc2000_isr, GPIO_INT_SENSE_LEVEL | GPIO_INT_SINGLE_EDGE | GPIO_INT_EVENT_LO, NULL)) {
-		printf("touch_screen_test: GPIO pin[%d] is busy!\n", SET_GPIO_PIN_NUM(PA, 5));
-		return -1;
-	}
-#elif defined(CONFIG_PC7210)	//20080123 Leonid add
-	//set PF6 as low level triggle interrupt
-	if (socle_request_gpio_irq(SET_GPIO_PIN_NUM(PF, 6), tsc2000_isr, GPIO_INT_SENSE_LEVEL | GPIO_INT_SINGLE_EDGE | GPIO_INT_EVENT_LO, NULL)) {
-		printf("touch_screen_test: GPIO pin[%d] is busy!\n", SET_GPIO_PIN_NUM(PF, 6));
-		return -1;
-	}
-#else
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 	socle_scu_dev_enable(SOCLE_DEVCON_EXT_INT0);
 #endif
 	request_irq(TSC2000_INTR, tsc2000_isr, null);
-#endif
-
 
 	printf("=======================\n");
 	printf("====Please Touch Panel ====\n");
@@ -210,15 +188,9 @@ socle_spi_tsc2000_touch(int autotest)
 	return 0;
 	
 	// enable interrupt
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-	//cyli 20071122 modify
-	//set PA5 as low level triggle interrupt
-	socle_free_gpio_irq(SET_GPIO_PIN_NUM(PA, 5));
-#else
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 	socle_scu_dev_disable(SOCLE_DEVCON_EXT_INT0);
 #endif
 	free_irq(TSC2000_INTR);
-#endif
 	
 }

@@ -193,16 +193,9 @@ socle_vip_to_vop_run(void)
 	int offset=0x100000;
 	vipReset();
 	vopReset();
-#if defined(CONFIG_LDK3V21)	
-	ret |= tvp5145I2C_init();
-	ret |= ch700x_init(format);
-#elif defined(CONFIG_PC9223)
+
 	ret |= mt9v125_init();
 	ret |= ch7026_init(CCIR656);
-#else
-	printf("platform not support!!\n");
-	return -1;
-#endif
 	ret |= vipSetOutFormat(format);
 	ret |= vopSetOutFormat(format);
 	ret |= vipSetFrameSize(size);
@@ -377,16 +370,7 @@ socle_vop_color_display_run(void)
 	struct color_info cinfo;
 	
 	vopReset();
-	
-#if defined(CONFIG_PC9220) ||  defined(CONFIG_LDK3V21)
-	ret |= ch700x_init(format);
-#elif defined(CONFIG_PC9223)
 	ret |= ch7026_init(CCIR656);
-#else
-	printf("platform not support!!\n");
-	return -1;
-#endif
-
 	switch(size) {
 		case FRAMESIZE_QVGA:
 			vop_xres=320;

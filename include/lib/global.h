@@ -4,7 +4,7 @@
 #include <io.h>
 #include <type.h>
 #include <genlib.h>
-#include <socle-scu.h>
+#include <sq-scu.h>
 #include <platform.h>
 #include <irqs.h>
 

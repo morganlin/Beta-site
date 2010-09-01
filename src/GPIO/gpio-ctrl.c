@@ -87,7 +87,7 @@ socle_gpio_onboard_test(int autotest)
 	{	
   	extern struct test_item socle_gpio_int_test_items[];
 		socle_gpio_int_test_items[1].enable=0;
-		socle_set_gpio_base(0, SOCLE_GPIO0);
+		socle_set_gpio_base(0, SQ_GPIO0);
 	}
 #endif
 	ret = test_item_ctrl(&socle_gpio_mode_container, autotest);
@@ -104,7 +104,7 @@ socle_gpio_fpga_test(int autotest)
 	}
 #ifdef CONFIG_SCDK
 	socle_set_gpio_base(0, SOCLE_MP_GPIO0);
-#ifdef SOCLE_GPIO_WITH_INT
+#ifdef SQ_GPIO_WITH_INT
 	socle_set_gpio_irq(0, SOCLE_INTC_MPS0);
 #endif
 #endif

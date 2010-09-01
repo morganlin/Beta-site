@@ -1,12 +1,12 @@
 #include <test_item.h>
 
-#if defined(CONFIG_LDK3V21) || defined(CONFIG_MDK3D) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 #define HAVE_VIP 1
 #else
 #define HAVE_VIP 0
 #endif
 
-#if defined(CONFIG_LDK3V21) || defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 #define HAVE_VOP 1
 #else
 #define HAVE_VOP 0

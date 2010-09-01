@@ -1,6 +1,6 @@
 #include <genlib.h>
 #include <type.h>
-#include <socle-scu.h>
+#include <sq-scu.h>
 #include <io.h>
 
 //#define CONFIG_SOCLE_WAIT_DEBUG
@@ -14,7 +14,7 @@
 extern int
 socle_wait_for_int(volatile int *flag, int sec)
 {
-	int t = 0, threshold = socle_scu_cpu_clock_get() / 95 * sec;
+	int t = 0, threshold = sq_scu_cpu_clock_get() / 95 * sec;
 
 #if defined(CONFIG_ARM7) || (CONFIG_ARM7_HI)
 	threshold /= 2;
@@ -44,7 +44,7 @@ socle_wait_for_int(volatile int *flag, int sec)
 extern int
 socle_wait_by_poll(int addr, int mask, int exp_val, int sec)
 {
-	int t = 0, val, threshold = socle_scu_cpu_clock_get() / 170 * sec;
+	int t = 0, val, threshold = sq_scu_cpu_clock_get() / 170 * sec;
 
 #if defined(CONFIG_ARM7) || (CONFIG_ARM7_HI)
 	threshold /= 2;

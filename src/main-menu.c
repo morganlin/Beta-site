@@ -526,50 +526,12 @@ struct test_item main_test_items [] = {
 };
 
 struct test_item_container main_test_item_container = {
-
-#if defined (CONFIG_LDK3V21)
-	"Leopard Development Kit III.A Test Program",
-	"LDK3V21",
-#elif defined (CONFIG_LDK5)
-	"Leopard Development Kit V Test Program",
-	"LDK5",
-#elif defined (CONFIG_SEDK)
-	"Soc Enable Development Kit Test Program",
-	"SEDK",
-#elif defined (CONFIG_CDK)
-	"Cheetah Development Kit Test Program",
-	"CDK",
-#elif defined (CONFIG_PDK)
-	"Panterh7 Development Kit Test Program",
-	"PDK",
-#elif defined (CONFIG_PC7210)
-	"PDK-PC7210 Development Kit Test Program",
-	"PDK-PC7210",
-#elif defined (CONFIG_PC9002)
-	"PDK-PC9002 Development Kit Test Program",
-	"PDK-PC9002",
-#elif defined (CONFIG_PC9220)
-	"PDK-PC9220 Development Kit Test Program",
-	"PDK-PC9220",
-#elif defined (CONFIG_PC9223)
+#if defined (CONFIG_PC9223)
         "PDK-PC9223 Development Kit Test Program",
         "PDK-PC9223",
-#elif defined (CONFIG_SCDK)
-	"SCDK Development Kit Test Program",
-	"SCDK",
-#elif defined (CONFIG_MSMV)
-	"MSMV Development Kit Test Program",
-	"MSMV",
-#elif defined (CONFIG_MDK3D)
-	"MDK3D Development Kit Test Program",
-	"MDK3D",
-#elif defined (CONFIG_MDKFHD)
-        "MDKFHD Development Kit Test Program",
-        "MDKFHD",
 #else
 #error "PLATFORM is not well defined!"
 #endif
-
 	.items = main_test_items,
 	.test_item_size = sizeof(main_test_items)
 };

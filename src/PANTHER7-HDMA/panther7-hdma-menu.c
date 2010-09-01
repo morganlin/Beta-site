@@ -1,11 +1,5 @@
 #include <test_item.h>
 
-#ifdef CONFIG_SCDK
-#define SCDK_FPGA_TEST 1
-#else
-#define SCDK_FPGA_TEST 0
-#endif
-
 #ifdef CONFIG_MDK3D
 #define PANTHER7_HDMA1_TEST	1
 #else
@@ -20,10 +14,6 @@ struct test_item panther7_hdma_main_test_items[] = {
 	 panther7_hdma_onboard_test,
 	 1,
 	 1},
-	{"FPGA EXT Board Test(AHB)",
-	 panther7_hdma_fpga_test,
-	 1,
-	 SCDK_FPGA_TEST}
 };
 
 struct test_item_container panther7_hdma_main_test_container = {

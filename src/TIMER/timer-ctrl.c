@@ -11,7 +11,7 @@
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
-#include <socle-scu.h>
+#include <sq-scu.h>
 
 static u32
 socle_timer_read(u32 reg, u32 base)
@@ -54,7 +54,7 @@ timer_test(int autotest)
 #endif
 
 	socle_timer_base = SOCLE_TIMER0;
-	socle_timer_apb_clk = socle_scu_apb_clock_get();
+	socle_timer_apb_clk = sq_scu_apb_clock_get();
 	printf("Socle Timer: current apb clock is %d\n", socle_timer_apb_clk);
 
 	/* Disable the timers */

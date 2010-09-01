@@ -5,7 +5,7 @@
 #ifdef SOCLE_NOR_FLASH_BANK0
 #define SOCLE_NOR_BASE0	SOCLE_NOR_FLASH_BANK0;
 #else 
-#error ¡§we don¡¦t define IP address¡¨ 
+#error ï¿½ï¿½we donï¿½ï¿½t define IP addressï¿½ï¿½ 
 #endif
 
 #if defined SOCLE_NOR_FLASH_BANK1
@@ -19,13 +19,10 @@
 
 #define FLASH_SECTOR_SIZE  0x20000
 
-#if defined (CONFIG_PC9002) || (CONFIG_PC9220 || CONFIG_PC9223 || CONFIG_MDK3D || CONFIG_MDKFHD)
+#if defined(CONFIG_PC9223)
  	#define MODE_BASE (SOCLE_SDRSTMC0+0x8020)
 #endif
 
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
- 	#define MODE_BASE (SOCLE_DDRMC0+0x220)
-#endif
 
 /*define errror code*/
 #define FLASH_NOERROR				 0

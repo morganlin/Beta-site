@@ -61,12 +61,7 @@ int printf (char *fmt, ...)
 static void	semi_puts(char *s)
 {
 	volatile char* p;
-#if defined(CONFIG_PDK) || defined(CONFIG_PC7210)
-	if(((ioread32(SOCLE_SCU0+0xc) >> 13) & 0x7) !=6)		//20071231 leonid+ for check scu_ucfg
-		p=(char*)SOCLE_UART1;
-	else
-		p=(char*)SOCLE_UART0;
-#elif defined CONFIG_ARM9_HI
+#if defined CONFIG_ARM9_HI
 	p = (unsigned long *) SOCLE_UART2;
 #else 
 	p = (unsigned long *) SOCLE_UART0;

@@ -439,19 +439,19 @@ socle_nfc_configure_timing(struct socle_nand_timing *Timings, u8 CheckDeviceDone
 	if (CheckDeviceDone == 0) {
 		socle_nfc_write(0xFFFFFFFF, NF_SFR_FLCONF);
 		NDEBUG("Use Default Timing \n" );
-		NDEBUG("cpu clock = %d\n",socle_scu_cpu_clock_get() );
-		NDEBUG("ahp clock = %d\n",socle_scu_ahb_clock_get() );
+		NDEBUG("cpu clock = %d\n",sq_scu_cpu_clock_get() );
+		NDEBUG("ahp clock = %d\n",sq_scu_ahb_clock_get() );
 		NDEBUG("NF_SFR_FLCONF=0x%x\n",socle_nfc_read(NF_SFR_FLCONF));
 		return;
 	}
 	NDEBUG("Calculate NAND Timing \n" );
 
-	NDEBUG("cpu clock = %d\n",socle_scu_cpu_clock_get() );
-	NDEBUG("ahp clock = %d\n",socle_scu_ahb_clock_get() );
+	NDEBUG("cpu clock = %d\n",sq_scu_cpu_clock_get() );
+	NDEBUG("ahp clock = %d\n",sq_scu_ahb_clock_get() );
 
 	NDEBUG(" tWBns = %d\n",Timings->tWBns);
 
-	thclk = NANOSec / socle_scu_ahb_clock_get();  //Need Measure from Board
+	thclk = NANOSec / sq_scu_ahb_clock_get();  //Need Measure from Board
 
 	MaskTemp = socle_nfc_select_timing_mask(twb_mask);
 	if ((TWB = Timings->tWBns / thclk - 1) < 0 )
