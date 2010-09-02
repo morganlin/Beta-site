@@ -115,7 +115,7 @@ socle_buzzer_gpio_test(int autotest)
 	sq_scu_dev_disable(SQ_DEVCON_PWM1);
 #endif
 
-	socle_gpio_test_mode_en(PK, 0);
+	sq_gpio_test_mode_en(PK, 0);
 
 	while(1) {
 
@@ -129,11 +129,11 @@ socle_buzzer_gpio_test(int autotest)
 		switch(test_item) {
 			case '1':
 printf("start gpio\n");
-				socle_gpio_set_value_with_mask(PK, 0x20, 0x20);
+				sq_gpio_set_value_with_mask(PK, 0x20, 0x20);
 				break;
 			case '2':
 printf("stop gpio\n");
-				socle_gpio_set_value_with_mask(PK, 0x00, 0x20);
+				sq_gpio_set_value_with_mask(PK, 0x00, 0x20);
 				break;
 			case 'x':
 			case 'X':
@@ -316,11 +316,11 @@ socle_pwmt_periodical_counter_mode_test(int autotest)
 
 	socle_pwmt_timer_mode_test_init(0);
 
-	if (socle_wait_for_int(&socle_pwmt_isr_flag, 3)) {
+	if (sq_wait_for_int(&socle_pwmt_isr_flag, 3)) {
 		printf("Timeout!\n");
 		ret = -1;
 	} else {
-		if (socle_wait_for_int(&socle_pwmt_isr_flag, 3)) {
+		if (sq_wait_for_int(&socle_pwmt_isr_flag, 3)) {
 			printf("Timeout!\n");
 			ret = -1;
 		} else {
@@ -345,7 +345,7 @@ socle_pwmt_single_counter_mode_test(int autotest)
 
 	socle_pwmt_timer_mode_test_init(1);
 
-	if (socle_wait_for_int(&socle_pwmt_isr_flag, 3)) {
+	if (sq_wait_for_int(&socle_pwmt_isr_flag, 3)) {
 		printf("Timeout!\n");
 		ret = -1;
 	}

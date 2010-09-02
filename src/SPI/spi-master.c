@@ -111,13 +111,13 @@ socle_spi_transfer(void *tx_buf, void *rx_buf, u32 len)
 
 	/* Wait for transfer to be complete */
 	if (rx_cnt > 0) {
-		if (socle_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
+		if (sq_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
 			printf("Timeout\n");
 			return -1;
 		}
 	} 
 	else {
-		if (socle_wait_for_int(&socle_spi_tx_complete_flag, 30)) {
+		if (sq_wait_for_int(&socle_spi_tx_complete_flag, 30)) {
 			printf("Timeout\n");
 			return -1;
 		}

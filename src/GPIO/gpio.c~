@@ -73,6 +73,8 @@ sq_gpio_get_value(u8 port)
 	return value;
 }
 
+
+
 extern void
 sq_gpio_set_value(u8 port, u8 value)
 {

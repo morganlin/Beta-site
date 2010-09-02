@@ -823,7 +823,7 @@ rtc_sub_alarm_test(u32_t f_time, u32_t f_date)
 
 	printf("Waiting for the alarm...\n");
 	
-	if (socle_wait_for_int(&hit, 10)) {
+	if (sq_wait_for_int(&hit, 10)) {
 		printf("Timeout!!\n");
 		result = -1;
 	}

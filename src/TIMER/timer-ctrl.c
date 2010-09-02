@@ -123,7 +123,7 @@ extern int socle_timer_mode_1(int autotest)
 	socle_timer_write(SOCLE_TMR0CON, socle_timer_conf[0], socle_timer_base);
 	socle_timer_write(SOCLE_TMR1CON, socle_timer_conf[1], socle_timer_base);
 
-	if (socle_wait_for_int(&socle_timer_int_flag, 10)) {
+	if (sq_wait_for_int(&socle_timer_int_flag, 10)) {
 		printf("Timeout\n");
 		err_flag = -1;
 	} else
@@ -172,7 +172,7 @@ extern int socle_timer_mode_2(int autotest)
 	socle_timer_write(SOCLE_TMR1CON, socle_timer_conf[1], socle_timer_base);
 	socle_timer_write(SOCLE_TMR2CON, socle_timer_conf[2], socle_timer_base);
 
-	if (socle_wait_for_int(&socle_timer_int_flag, 15)) {
+	if (sq_wait_for_int(&socle_timer_int_flag, 15)) {
 		printf("Timeout\n");
 		err_flag = -1;
 	} else
@@ -260,13 +260,13 @@ socle_timer_cnt_free_running(int autotest)
 	/* Enable the timer */
 	socle_timer_write(timer_conf_idx, socle_timer_conf[socle_timer_cur_idx], socle_timer_base);
 
-	if (socle_wait_for_int(&socle_timer_int_flag, 5)) {
+	if (sq_wait_for_int(&socle_timer_int_flag, 5)) {
 		printf("Timeout\n");
 		err_flag = -1;
 		goto out;
 	} else
 		printf("%d second\n", socle_timer_sec);
-	if (socle_wait_for_int(&socle_timer_int_flag, 5))
+	if (sq_wait_for_int(&socle_timer_int_flag, 5))
 		printf("Timeout\n");
 	else {
 		printf("%d second\n", socle_timer_sec);
@@ -319,13 +319,13 @@ socle_timer_cnt_periodical(int autotest)
 	/* Enable the timer */
 	socle_timer_write(timer_conf_idx, socle_timer_conf[socle_timer_cur_idx], socle_timer_base);
 
-	if (socle_wait_for_int(&socle_timer_int_flag, 5)) {
+	if (sq_wait_for_int(&socle_timer_int_flag, 5)) {
 		printf("Timeout\n");
 		err_flag = -1;
 		goto out;
 	} else
 		printf("%d second\n", socle_timer_sec);
-	if (socle_wait_for_int(&socle_timer_int_flag, 5)) {
+	if (sq_wait_for_int(&socle_timer_int_flag, 5)) {
 		printf("Timeout\n");
 		err_flag = -1;
 	}else 

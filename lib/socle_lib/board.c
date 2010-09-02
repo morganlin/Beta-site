@@ -12,7 +12,7 @@
 
 
 extern int
-socle_wait_for_int(volatile int *flag, int sec)
+sq_wait_for_int(volatile int *flag, int sec)
 {
 	int t = 0, threshold = sq_scu_cpu_clock_get() / 95 * sec;
 

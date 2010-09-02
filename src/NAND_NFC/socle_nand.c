@@ -1155,7 +1155,7 @@ socle_nfc_page_read(struct socle_nand_info *info, u32 page_number)
 
 	//interrupt or pulling
 	if(info->irq_on) {
-		if (socle_wait_for_int(&socle_nfc_int_flag, 10)) {
+		if (sq_wait_for_int(&socle_nfc_int_flag, 10)) {
 			NDEBUG("Socle NAND Flash host: page read is timeout\n");
 			return -1;
 		}
@@ -1194,7 +1194,7 @@ socle_nfc_interrupt_page_read(struct socle_nand_info *info, u32 page_number, u32
 	// Command
 	socle_nfc_write(NFG_CMD_PAGE_READ, NF_SFR_FLCOMM);
 	/* Wait for the transimission to be complete */
-	if (socle_wait_for_int(&socle_nfc_int_flag, 10)) {
+	if (sq_wait_for_int(&socle_nfc_int_flag, 10)) {
 		NDEBUG("Socle NAND Flash host: page read is timeout\n");
 		return -1;
 	}
@@ -1245,7 +1245,7 @@ socle_nfc_dma_interrupt_page_read(struct socle_nand_info *info, u32 page_number,
 		NDEBUG("DMA Busy\n");
 
 	/* Wait for the transimission to be complete */
-	if (socle_wait_for_int(&socle_nfc_int_flag, 10)) {
+	if (sq_wait_for_int(&socle_nfc_int_flag, 10)) {
 		NDEBUG("Socle NAND Flash host: page read is timeout\n");
 		return -1;
 	}    
@@ -1278,7 +1278,7 @@ socle_nfc_page_program(struct socle_nand_info *info, u32 page_number)
 
 	//interrupt or pulling
 	if(info->irq_on) {
-		if (socle_wait_for_int(&socle_nfc_int_flag, 10)) {
+		if (sq_wait_for_int(&socle_nfc_int_flag, 10)) {
 			NDEBUG("Socle NAND Flash host: page read is timeout\n");
 			return -1;
 		}
@@ -1329,7 +1329,7 @@ socle_nfc_interrupt_page_program(struct socle_nand_info *info, u32 page_number, 
 	socle_nfc_write(socle_nfc_read( NF_SFR_FLCTRL) | (NF_CTRL_INT_EN|NF_CTRL_PROT_IE) , NF_SFR_FLCTRL);        	
 	socle_nfc_write(NFG_CMD_PROGRAM_PAGE, NF_SFR_FLCOMM);
 	/* Wait for the transimission to be complete */
-	if (socle_wait_for_int(&socle_nfc_int_flag, 10)) {
+	if (sq_wait_for_int(&socle_nfc_int_flag, 10)) {
 		NDEBUG("Socle NAND Flash host: page read is timeout\n");
 		return -1;
 	}
@@ -1371,7 +1371,7 @@ socle_nfc_dma_interrupt_page_program(struct socle_nand_info *info, u32 page_numb
 		NDEBUG("DMA Busy\n");
 
 	/* Wait for the transimission to be complete */
-	if (socle_wait_for_int(&socle_nfc_int_flag, 10)) {
+	if (sq_wait_for_int(&socle_nfc_int_flag, 10)) {
 		NDEBUG("Socle NAND Flash host: page read is timeout\n");
 		return -1;
 	}    
@@ -1451,7 +1451,7 @@ socle_nfc_block_erase(struct socle_nand_info *info, u32 block_number)
 
 	//interrupt or pulling
 	if(info->irq_on) {
-		if (socle_wait_for_int(&socle_nfc_int_flag, 10)) {
+		if (sq_wait_for_int(&socle_nfc_int_flag, 10)) {
 			NDEBUG("Socle NAND Flash host: page read is timeout\n");
 			return -1;
 		}

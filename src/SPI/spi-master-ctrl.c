@@ -600,7 +600,7 @@ socle_spi_master_internal_hdma_run(int autotest)
 		SOCLE_SPI_OP_LOOPBACK,			
 		SOCLE_SPI_FWCR);
 
-	if (socle_wait_for_int(&socle_spi_rx_complete_flag, 30))
+	if (sq_wait_for_int(&socle_spi_rx_complete_flag, 30))
 		printf("Timeout\n");
 	
 	return socle_spi_compare_memory(socle_spi_pattern_buf, socle_spi_cmpr_buf, PATTERN_BUF_SIZE, autotest);

@@ -291,7 +291,7 @@ panther7_hdma_software_dma_tranfer(int autotest)
 	panther7_complete_flag = 0;
 	socle_enable_dma(panther7_hdma_channel_num);
 	
-	if (socle_wait_for_int(&panther7_complete_flag, 30)) {
+	if (sq_wait_for_int(&panther7_complete_flag, 30)) {
 		printf("Timeout\n");
 		return -1;
 	}

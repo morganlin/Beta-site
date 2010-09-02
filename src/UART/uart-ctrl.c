@@ -565,7 +565,7 @@ socle_uart_normal(int autotest)
 			 socle_uart_base);
 
 	/* Wait for transfer to be complete */
-	if (socle_wait_for_int(&socle_uart_rx_complete_flag, 10)) {
+	if (sq_wait_for_int(&socle_uart_rx_complete_flag, 10)) {
 		printf("Timeout\n");
 		return -1;
 	}
@@ -781,7 +781,7 @@ socle_uart_hwdma_panther7_hdma(int autotest)
 	socle_enable_dma(socle_uart_rx_dma_ch_num);
 
 	/* Wait for transfer to be complete */
-	if (socle_wait_for_int(&socle_uart_rx_complete_flag, 80)) {
+	if (sq_wait_for_int(&socle_uart_rx_complete_flag, 80)) {
 		printf("Timeout\n");
 		return -1;
 	}

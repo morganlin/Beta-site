@@ -65,7 +65,7 @@ extern void asm_delay(u32 inst);
  *				sec: wait time (seconds)
  * Output	:	return 0: succeed, -1: timeout
  */
-extern int socle_wait_for_int(volatile int *flag, int sec);
+extern int sq_wait_for_int(volatile int *flag, int sec);
 
 /*
  * Input	:	addr: ip address

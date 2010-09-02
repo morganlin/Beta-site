@@ -44,7 +44,6 @@ kpd_value_convert(int val)
 	case 8:
 		ret = 3;
 		break;
-// Jerry Hsieh add for PDK_PC9223 ; 2010/04/26
 	case 16:
 		ret = 4;
 		break;
@@ -123,9 +122,9 @@ pdk_gpio_kpd_isr(void *param)
 	KPD_DBG("\n");
 #if defined (CONFIG_PC9223)
 	//read status
-	tmp1 = socle_gpio_get_interrupt_status_with_port(PN);
+	tmp1 = sq_gpio_get_interrupt_status_with_port(PN);
 	// clear interrupt
-	socle_gpio_set_interrupt_mask_with_mask(PN, 0x0, 0xfc);
+	sq_gpio_set_interrupt_mask_with_mask(PN, 0x0, 0xfc);
 
 	col = kpd_value_convert((tmp1 & 0xfc)) - 2;
 
@@ -134,7 +133,7 @@ pdk_gpio_kpd_isr(void *param)
 	while (1) {
 		int temp = 0;
 		
-		temp = socle_gpio_get_value_with_mask(PN, 0xfc);
+		temp = sq_gpio_get_value_with_mask(PN, 0xfc);
 		temp = (~temp) & 0xfc;
 		if (temp == 0)
 			break;
@@ -142,17 +141,17 @@ pdk_gpio_kpd_isr(void *param)
 #else	
 	// read col pins
 	// PA3, PA4, PA5
-	socle_gpio_get_value_with_mask(PA, 0x38);
+	sq_gpio_get_value_with_mask(PA, 0x38);
 	// PC1
-	socle_gpio_get_value_with_mask(PC, 0x2);
+	sq_gpio_get_value_with_mask(PC, 0x2);
 
 	// read status
-	tmp1 = socle_gpio_get_interrupt_status_with_port(PA);
-	tmp2 = socle_gpio_get_interrupt_status_with_port(PC);
+	tmp1 = sq_gpio_get_interrupt_status_with_port(PA);
+	tmp2 = sq_gpio_get_interrupt_status_with_port(PC);
 
 	// clear interrupt
-	socle_gpio_set_interrupt_clear(PA, tmp1);
-	socle_gpio_set_interrupt_clear(PC, tmp2);
+	sq_gpio_set_interrupt_clear(PA, tmp1);
+	sq_gpio_set_interrupt_clear(PC, tmp2);
 
 	KPD_DBG("tmp1 = 0x%x, tmp2 = 0x%x\n", tmp1, tmp2);
 #if (KPD_NUM == 4)
@@ -179,7 +178,7 @@ pdk_gpio_kpd_isr(void *param)
 		pdk_check_kpd();
 	}
 
-	socle_gpio_set_interrupt_mask_with_mask(PN, 0xfc, 0xfc);
+	sq_gpio_set_interrupt_mask_with_mask(PN, 0xfc, 0xfc);
 
 #else
 	KPD_DBG("row = %d, col = %d\n", row, col);
@@ -200,13 +199,13 @@ pdk_gpio_kpd_isr(void *param)
 #if defined (CONFIG_PC9223)
 	// write col pins as 0
 	// PJ4, PJ5, PJ6, PJ7	
-	socle_gpio_set_value_with_mask(PJ, 0x0, 0xf0);
+	sq_gpio_set_value_with_mask(PJ, 0x0, 0xf0);
 #else	
 	// write col pins as 0
 	// PA3, PA4, PA5
-	socle_gpio_set_value_with_mask(PA, 0x0, 0x38);
+	sq_gpio_set_value_with_mask(PA, 0x0, 0x38);
 	// PC1
-	socle_gpio_set_value_with_mask(PC, 0x0, 0x2);
+	sq_gpio_set_value_with_mask(PC, 0x0, 0x2);
 #endif
 }
 
@@ -222,71 +221,71 @@ gpio_kpd_init(void)
 
 #if defined (CONFIG_PC9223)
 	//normal mode
-	socle_gpio_test_mode_en(PN, 0);
+	sq_gpio_test_mode_en(PN, 0);
 
 	//single low edge trigger
 	// PI2, PI3, PI4, PI5, PI6, PI7
-	socle_gpio_set_interrupt_sense_with_mask(PN, 0x0, 0xfc);
-	socle_gpio_set_interrupt_both_edges_with_mask(PN, 0x0, 0xfc);
-	socle_gpio_set_interrupt_event_with_mask(PN, 0x0, 0xfc);
+	sq_gpio_set_interrupt_sense_with_mask(PN, 0x0, 0xfc);
+	sq_gpio_set_interrupt_both_edges_with_mask(PN, 0x0, 0xfc);
+	sq_gpio_set_interrupt_event_with_mask(PN, 0x0, 0xfc);
 
 	//set gpio as input
-	socle_gpio_get_value_with_mask(PN, 0xfc);
+	sq_gpio_get_value_with_mask(PN, 0xfc);
 
 	// enable all interrupt
-	socle_gpio_set_interrupt_mask_with_mask(PN, 0xff, 0xff);
+	sq_gpio_set_interrupt_mask_with_mask(PN, 0xff, 0xff);
 
 #else	
 	// normal mode
-	socle_gpio_test_mode_en(PA, 0);
+	sq_gpio_test_mode_en(PA, 0);
 	// single low edge trigger (row - PA0, PA1, PA2, PC0)
 	// PA0, PA1, PA2
-	socle_gpio_set_interrupt_sense_with_mask(PA, 0x0, 0x7);
-	socle_gpio_set_interrupt_both_edges_with_mask(PA, 0x0, 0x7);
-	socle_gpio_set_interrupt_event_with_mask(PA, 0x0, 0x7);
+	sq_gpio_set_interrupt_sense_with_mask(PA, 0x0, 0x7);
+	sq_gpio_set_interrupt_both_edges_with_mask(PA, 0x0, 0x7);
+	sq_gpio_set_interrupt_event_with_mask(PA, 0x0, 0x7);
 	// PC0
-	socle_gpio_set_interrupt_sense_with_mask(PC, 0x0, 0x1);
-	socle_gpio_set_interrupt_both_edges_with_mask(PC, 0x0, 0x1);
-	socle_gpio_set_interrupt_event_with_mask(PC, 0x0, 0x1);
+	sq_gpio_set_interrupt_sense_with_mask(PC, 0x0, 0x1);
+	sq_gpio_set_interrupt_both_edges_with_mask(PC, 0x0, 0x1);
+	sq_gpio_set_interrupt_event_with_mask(PC, 0x0, 0x1);
 
 	// single high edge trigger (col - PA3, PA4, PA5, PC1)
 	// PA3, PA4, PA5,
-	socle_gpio_set_interrupt_sense_with_mask(PA, 0x0, 0x38);
-	socle_gpio_set_interrupt_both_edges_with_mask(PA, 0x0, 0x38);
-	socle_gpio_set_interrupt_event_with_mask(PA, 0x38, 0x38);
+	sq_gpio_set_interrupt_sense_with_mask(PA, 0x0, 0x38);
+	sq_gpio_set_interrupt_both_edges_with_mask(PA, 0x0, 0x38);
+	sq_gpio_set_interrupt_event_with_mask(PA, 0x38, 0x38);
 	// PC1
-	socle_gpio_set_interrupt_sense_with_mask(PC, 0x0, 0x2);
-	socle_gpio_set_interrupt_both_edges_with_mask(PC, 0x0, 0x2);
-	socle_gpio_set_interrupt_event_with_mask(PC, 0x2, 0x2);
+	sq_gpio_set_interrupt_sense_with_mask(PC, 0x0, 0x2);
+	sq_gpio_set_interrupt_both_edges_with_mask(PC, 0x0, 0x2);
+	sq_gpio_set_interrupt_event_with_mask(PC, 0x2, 0x2);
 
 	// set row as input
 	// PA0, PA1, PA2
-	socle_gpio_get_value_with_mask(PA, 0x7);
+	sq_gpio_get_value_with_mask(PA, 0x7);
 	// PC0
-	socle_gpio_get_value_with_mask(PC, 0x1);
+	sq_gpio_get_value_with_mask(PC, 0x1);
 
 	// write col pins as 0
 	// PA3, PA4, PA5
-	socle_gpio_set_value_with_mask(PA, 0x0, 0x38);
+	sq_gpio_set_value_with_mask(PA, 0x0, 0x38);
 	// PC1
-	socle_gpio_set_value_with_mask(PC, 0x0, 0x2);
+	sq_gpio_set_value_with_mask(PC, 0x0, 0x2);
 
 	// enable all interrupt
-	socle_gpio_set_interrupt_mask_with_mask(PA, 0x3F, 0x3F);
-	socle_gpio_set_interrupt_mask_with_mask(PC, 0x3, 0x3);
+	sq_gpio_set_interrupt_mask_with_mask(PA, 0x3F, 0x3F);
+	sq_gpio_set_interrupt_mask_with_mask(PC, 0x3, 0x3);
 #endif
 }
 
 
 extern int
-socle_gpio_kpd_test(int autotest)
+sq_gpio_kpd_test(int autotest)
 {
 	int ret = 0, count = 0, irq;
 
 #if defined(CONFIG_PC9223)
-	irq = socle_gpio_get_irq(PN);
+	irq = sq_gpio_get_irq(PN);
 #else
-	irq = socle_gpio_get_irq(PA);
+	irq = sq_gpio_get_irq(PA);
 #endif
 	request_irq(irq, pdk_gpio_kpd_isr, (void*)&count);
 
@@ -301,7 +300,7 @@ socle_gpio_kpd_test(int autotest)
 	finish = 0;
 
 	free_irq(irq);
-	socle_init_gpio_irq();
+	sq_init_gpio_irq();
 
 	return ret;
 }

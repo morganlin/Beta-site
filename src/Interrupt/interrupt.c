@@ -62,7 +62,7 @@ irq_test_mode_test(int autotest)
 		// s/w trigger interrupt
 		iowrite32(0x1 << num, SOCLE_INTC_IRQ_ISCR(INTC_REG_BASE));
 
-		if (socle_wait_for_int(&event, 1)) {
+		if (sq_wait_for_int(&event, 1)) {
 			printf(" --- Error Termination\n");
 			
 			// s/w trigger interrupt clear
@@ -130,7 +130,7 @@ fiq_test_mode_test(int autotest)
 		// s/w trigger interrupt
 		iowrite32(0x1 << num, SOCLE_INTC_FIQ_ISCR(INTC_REG_BASE));
 
-		if (socle_wait_for_int(&event, 1)) {
+		if (sq_wait_for_int(&event, 1)) {
 			printf(" --- Error Termination\n");
 			
 			// s/w trigger interrupt clear

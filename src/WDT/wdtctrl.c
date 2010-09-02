@@ -23,7 +23,7 @@ wdt_test(int autotest)
 	WDT_RST_EN();
 	WDT_EN();
 
-	if (socle_wait_for_int(&pseudo_flag, 5)) {
+	if (sq_wait_for_int(&pseudo_flag, 5)) {
 		printf("Timeout!! The system does not reset!!\n");
 		ret = -1;
 	}

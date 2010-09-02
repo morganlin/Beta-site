@@ -430,7 +430,7 @@ socle_spi_slave_write(void)
 	socle_spi_rx_complete_flag=0;
 	count=0;
 	socle_spi_write(socle_spi_read(SOCLE_SPI_IER) | SOCLE_SPI_IER_RXAVAIL_INT_EN , SOCLE_SPI_IER);
-	if (socle_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
+	if (sq_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
 		printf("Rx Timeout\n");
 	}
 	if(SOCLE_SPI_RXFIFO_DATA_AVAIL == (ioread32(socle_spi_base+SOCLE_SPI_FCR) & SOCLE_SPI_RXFIFO_DATA_AVAIL))
@@ -461,7 +461,7 @@ socle_spi_slave_dma_write(void)
 	socle_enable_dma(socle_spi_rx_dma_ch_num);
 	
 	socle_spi_write(socle_spi_read(SOCLE_SPI_FWCR) | SOCLE_SPI_DMA_REQ, SOCLE_SPI_FWCR);
-	if (socle_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
+	if (sq_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
 		printf("DMA Rx Timeout\n");
 	}
 	socle_disable_dma(socle_spi_rx_dma_ch_num);
@@ -500,7 +500,7 @@ socle_spi_slave_read(void)
 						SOCLE_SPI_IER_TXFIFO_EMPTY_INT_EN,
 						SOCLE_SPI_IER);
 						
-	if(socle_wait_for_int(&socle_spi_tx_finish_flag, 30)) {
+	if(sq_wait_for_int(&socle_spi_tx_finish_flag, 30)) {
 		printf("Tx Timeout\n");
 	}
 	if(SOCLE_SPI_RXFIFO_DATA_AVAIL == (socle_spi_read(SOCLE_SPI_FCR) & SOCLE_SPI_RXFIFO_DATA_AVAIL))
@@ -534,7 +534,7 @@ socle_spi_slave_dma_read(void)
 	socle_enable_dma(socle_spi_tx_dma_ch_num);
 	
 	socle_spi_write(socle_spi_read(SOCLE_SPI_FWCR)| SOCLE_SPI_DMA_REQ, SOCLE_SPI_FWCR);
-	if (socle_wait_for_int(&socle_spi_tx_complete_flag, 30)) {
+	if (sq_wait_for_int(&socle_spi_tx_complete_flag, 30)) {
 		printf("DMA Tx Timeout\n");
 	}
 	socle_spi_write(socle_spi_read(SOCLE_SPI_FWCR) & ~SOCLE_SPI_DMA_REQ, SOCLE_SPI_FWCR);
@@ -544,7 +544,7 @@ socle_spi_slave_dma_read(void)
 						SOCLE_SPI_IER_TXFIFO_EMPTY_INT_EN,
 						SOCLE_SPI_IER);
 	
-	if (socle_wait_for_int(&socle_spi_tx_finish_flag, 10)) {
+	if (sq_wait_for_int(&socle_spi_tx_finish_flag, 10)) {
 		printf("Tx Timeout\n");
 	}
 						
@@ -654,7 +654,7 @@ socle_spi_slave_pure_normal_run(int autotest)
 			SOCLE_SPI_FWCR);
 	printf("Wait data\n");
 	
-	if (socle_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
+	if (sq_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
 		printf("Rx Timeout\n");
 	}
 	printf("Rx Finish\n");
@@ -664,13 +664,13 @@ socle_spi_slave_pure_normal_run(int autotest)
 			SOCLE_SPI_IER_TXFIFO_INT_EN,
 			SOCLE_SPI_IER);
 			
-	if (socle_wait_for_int(&socle_spi_tx_complete_flag, 10)) {
+	if (sq_wait_for_int(&socle_spi_tx_complete_flag, 10)) {
 		printf("Tx Timeout\n");
 	}
 	socle_spi_write(socle_spi_read(SOCLE_SPI_IER) |
 						SOCLE_SPI_IER_TXFIFO_EMPTY_INT_EN,
 						SOCLE_SPI_IER);
-	if (socle_wait_for_int(&socle_spi_tx_finish_flag, 10)) {
+	if (sq_wait_for_int(&socle_spi_tx_finish_flag, 10)) {
 		printf("Tx Timeout\n");
 	}
 	printf("Tx Finish\n");
@@ -768,7 +768,7 @@ socle_spi_slave_pure_hdma_run(u32 socle_spi_slave_dma_burst)
 	socle_spi_write(socle_spi_read(SOCLE_SPI_FWCR)| SOCLE_SPI_DMA_REQ, SOCLE_SPI_FWCR);
 	
 	printf("Wait data\n");
-	if (socle_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
+	if (sq_wait_for_int(&socle_spi_rx_complete_flag, 30)) {
 		printf("DMA Rx Timeout\n");
 		return -1;
 	}
@@ -778,7 +778,7 @@ socle_spi_slave_pure_hdma_run(u32 socle_spi_slave_dma_burst)
 	
 	socle_enable_dma(socle_spi_tx_dma_ch_num);
 	
-	if (socle_wait_for_int(&socle_spi_tx_complete_flag, 10)) {
+	if (sq_wait_for_int(&socle_spi_tx_complete_flag, 10)) {
 		printf("DMA Tx Timeout\n");
 	}
 	socle_disable_dma(socle_spi_tx_dma_ch_num);
@@ -787,7 +787,7 @@ socle_spi_slave_pure_hdma_run(u32 socle_spi_slave_dma_burst)
 	socle_spi_write(socle_spi_read(SOCLE_SPI_IER) |
 						SOCLE_SPI_IER_TXFIFO_EMPTY_INT_EN,
 						SOCLE_SPI_IER);
-	if (socle_wait_for_int(&socle_spi_tx_finish_flag, 10)) {
+	if (sq_wait_for_int(&socle_spi_tx_finish_flag, 10)) {
 		printf("Tx Timeout\n");
 		return -1;
 	}

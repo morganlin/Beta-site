@@ -151,7 +151,7 @@ socle_init_service(void)
 	socle_init_dma();
 
 #ifdef CONFIG_GPIO
-        socle_init_gpio_irq();
+        sq_init_gpio_irq();
 #endif
 
 #ifdef CONFIG_MP_GPIO

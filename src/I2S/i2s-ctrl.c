@@ -481,7 +481,7 @@ socle_i2s_normal_internal_loopback(autotest)
 				SOCLE_I2S_OPR);
 
 	/* Wait for the transimission to be complete */
-	if (socle_wait_for_int(&socle_i2s_rx_complete_flag, 30)) {
+	if (sq_wait_for_int(&socle_i2s_rx_complete_flag, 30)) {
 		printf("Socle I2S host: transimission is timeout\n");
 		return -1;
 	}
@@ -645,7 +645,7 @@ socle_i2s_hwdma_panther7_hdma_direct(int autotest)
 
 	/* Wait for the transimission to be complete */
 	/*20080114 JS Modify 30s to 60s */
-	if (socle_wait_for_int(&socle_i2s_rx_complete_flag, 60)) {
+	if (sq_wait_for_int(&socle_i2s_rx_complete_flag, 60)) {
 		printf("Socle I2S host: transimission is timeout\n");
 		return -1;
 	}
@@ -812,7 +812,7 @@ socle_i2s_hwdma_panther7_hdma_ring_buffer(int autotest)
 	}
 
 	/* Wait for the transimission to be complete */
-	if (socle_wait_for_int(&socle_i2s_rx_complete_flag, 30)) {
+	if (sq_wait_for_int(&socle_i2s_rx_complete_flag, 30)) {
 		printf("Socle I2S host: transimission is timeout\n");
 		return -1;
 	}
