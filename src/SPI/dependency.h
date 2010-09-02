@@ -1,23 +1,23 @@
 #include <platform.h>
 #include <irqs.h>
 
-#ifndef SOCLE_SPI0
+#ifndef SQ_SPI0
 #error "SPI IP base is not defined"
 #endif
 
-#ifndef SOCLE_SPI1
-#define SOCLE_SPI1 SOCLE_SPI0
+#ifndef SQ_SPI1
+#define SQ_SPI1 SQ_SPI0
 #define SOCLE_SPI_IP_1_TEST 0
 #else
 #define SOCLE_SPI_IP_1_TEST 1
 #endif
 
-#ifndef SOCLE_INTC_SPI0
+#ifndef SQ_INTC_SPI0
 #error "SPI IRQ is not defined"
 #endif
 
-#ifndef SOCLE_INTC_SPI1
-#define SOCLE_INTC_SPI1 SOCLE_INTC_SPI0
+#ifndef SQ_INTC_SPI1
+#define SQ_INTC_SPI1 SQ_INTC_SPI0
 #endif
 
 //20080201 jsho modify, for menu control

@@ -1,24 +1,3 @@
-ifeq "y" "$(CONFIG_PC9220)"
-platform_arch   = PDK_PC9220
-endif
-
 ifeq "y" "$(CONFIG_PC9223)"
 platform_arch   = PDK_PC9223
 endif
-
-ifeq "y" "$(CONFIG_SCDK)"
-platform_arch   = SCDK
-endif
-
-ifeq "y" "$(CONFIG_MSMV)"
-platform_arch   = MSMV
-endif
-
-ifeq "y" "$(CONFIG_MDK3D)"
-platform_arch   = MDK3D
-endif
-
-ifeq "y" "$(CONFIG_MDKFHD)"
-platform_arch   = MDKFHD
-endif
-

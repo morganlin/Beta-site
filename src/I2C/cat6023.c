@@ -50,7 +50,7 @@ cat6023_read(u8 reg)
 
 extern int cat6023_init(u8 format)
 {
-	i2c_master_initialize(SOCLE_I2C0, SOCLE_INTC_I2C0);
+	i2c_master_initialize(SQ_I2C0, SQ_INTC_I2C0);
 	cat6023_client.addr = 0x48;
 	
 	printf("devid=%x%x\n",cat6023_read(0x03),cat6023_read(0x02));

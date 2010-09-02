@@ -1,13 +1,13 @@
 #include <platform.h>
 
-#ifdef SOCLE_VIP0
-#define SOCLE_VIP_BASE SOCLE_VIP0
+#ifdef SQ_VIP0
+#define SOCLE_VIP_BASE SQ_VIP0
 #else 
 #define SOCLE_VIP_BASE 0xB8060000
 #endif
 
-#ifndef SOCLE_INTC_VIP0
-#define SOCLE_INTC_VIP0 18
+#ifndef SQ_INTC_VIP0
+#define SQ_INTC_VIP0 18
 #endif
 
 #define FRAMESIZE_QCIF 0   //176x144

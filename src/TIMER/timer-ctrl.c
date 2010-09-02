@@ -4,10 +4,6 @@
 #include "timer-regs.h"
 #include <platform.h>
 #include "dependency.h"
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
-
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -49,11 +45,11 @@ timer_test(int autotest)
 {
 	int ret = 0;
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_TMR);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_TMR);
 #endif
 
-	socle_timer_base = SOCLE_TIMER0;
+	socle_timer_base = SQ_TIMER0;
 	socle_timer_apb_clk = sq_scu_apb_clock_get();
 	printf("Socle Timer: current apb clock is %d\n", socle_timer_apb_clk);
 
@@ -63,19 +59,19 @@ timer_test(int autotest)
 	socle_timer_write(SOCLE_TMR2CON, SOCLE_TIMER_DIS, socle_timer_base);
 
 	/* Register the interrupt service routines */
-	request_irq(SOCLE_INTC_TMR0, socle_timer_isr_0, NULL);
-	request_irq(SOCLE_INTC_TMR1, socle_timer_isr_1, NULL);
-	request_irq(SOCLE_INTC_TMR2, socle_timer_isr_2, NULL);
+	request_irq(SQ_INTC_TMR0, socle_timer_isr_0, NULL);
+	request_irq(SQ_INTC_TMR1, socle_timer_isr_1, NULL);
+	request_irq(SQ_INTC_TMR2, socle_timer_isr_2, NULL);
 
 	ret = test_item_ctrl(&socle_timer_main_test_container, autotest);
 
 	/* Unregister the interrupt service routines */
-	free_irq(SOCLE_INTC_TMR0);
-	free_irq(SOCLE_INTC_TMR1);
-	free_irq(SOCLE_INTC_TMR2);
+	free_irq(SQ_INTC_TMR0);
+	free_irq(SQ_INTC_TMR1);
+	free_irq(SQ_INTC_TMR2);
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_TMR);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_TMR);
 #endif
 
 	return ret;

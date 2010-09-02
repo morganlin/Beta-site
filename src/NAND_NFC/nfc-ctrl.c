@@ -1502,7 +1502,7 @@ int nfc_ctrl_test (int autotest)
 		"This block storage U-boot Environment information.\n"
 		"You must re-enter `saveenv` in U-boot.\n");
 #if defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_NFC);
+	sq_scu_dev_enable(SQ_DEVCON_NFC);
 #endif
 
 #ifndef SKIP_AUTO_BOOT_TEST

@@ -283,9 +283,7 @@ socle_gpio_kpd_test(int autotest)
 {
 	int ret = 0, count = 0, irq;
 
-#if defined (CONFIG_PC9220)
-	irq = socle_gpio_get_irq(PJ);
-#elif defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 	irq = socle_gpio_get_irq(PN);
 #else
 	irq = socle_gpio_get_irq(PA);

@@ -29,8 +29,8 @@ static u32 mem_pattern[]=
     MEM_PATTERN7,
 };
 
-static u32  addr_start[SOCLE_MEMORY_BANKS];
-static u32  bank_size[SOCLE_MEMORY_BANKS];
+static u32  addr_start[SQ_MEMORY_BANKS];
+static u32  bank_size[SQ_MEMORY_BANKS];
 static u32  mem_start = 0;
 static u32  mem_end = 0;
 static u32  mem_size = 0;
@@ -274,14 +274,8 @@ int itcm_test0(int autotest)
     Module = ITCM_Module;
 
 #ifdef CONFIG_ITCM
-	itcm_mem_start = SOCLE_ITCM_ADDR_START_0;
-	
-#ifdef CONFIG_ARM11
-	itcm_mem_size = SOCLE_ITCM_ADDR_SIZE_ARM11;
-#else
-	itcm_mem_size = SOCLE_ITCM_ADDR_SIZE_ARM9;
-#endif
-
+	itcm_mem_start = SQ_ITCM_ADDR_START_0;
+	itcm_mem_size = SQ_ITCM_ADDR_SIZE_ARM9;
 #endif
 
     ret = MemoryAddrSetting();
@@ -302,15 +296,10 @@ int itcm_test1(int autotest)
     Module = ITCM_Module;
 
 #ifdef CONFIG_ITCM
-	itcm_mem_start = SOCLE_ITCM_ADDR_START_1;
-	
-#ifdef CONFIG_ARM11
-	itcm_mem_size = SOCLE_ITCM_ADDR_SIZE_ARM11;
-#else
-	itcm_mem_size = SOCLE_ITCM_ADDR_SIZE_ARM9;
+	itcm_mem_start = SQ_ITCM_ADDR_START_1;
+	itcm_mem_size = SQ_ITCM_ADDR_SIZE_ARM9;
 #endif
 
-#endif
     ret = MemoryAddrSetting();
     if (ret != 0)
     {
@@ -329,14 +318,8 @@ int dtcm_test0(int autotest)
     Module = DTCM_Module;
 
 #ifdef CONFIG_DTCM
-	dtcm_mem_start = SOCLE_DTCM_ADDR_START_0;
-	
-#ifdef CONFIG_ARM11
-	dtcm_mem_size = SOCLE_DTCM_ADDR_SIZE_ARM11;
-#else
-	dtcm_mem_size = SOCLE_DTCM_ADDR_SIZE_ARM9;
-#endif
-
+	dtcm_mem_start = SQ_DTCM_ADDR_START_0;
+	dtcm_mem_size = SQ_DTCM_ADDR_SIZE_ARM9;
 #endif
 
     ret = MemoryAddrSetting();
@@ -357,14 +340,8 @@ int dtcm_test1(int autotest)
     Module = DTCM_Module;
 
 #ifdef CONFIG_DTCM
-	dtcm_mem_start = SOCLE_DTCM_ADDR_START_1;
-	
-#ifdef CONFIG_ARM11
-	dtcm_mem_size = SOCLE_DTCM_ADDR_SIZE_ARM11;
-#else
-	dtcm_mem_size = SOCLE_DTCM_ADDR_SIZE_ARM9;
-#endif
-
+	dtcm_mem_start = SQ_DTCM_ADDR_START_1;
+	dtcm_mem_size = SQ_DTCM_ADDR_SIZE_ARM9;
 #endif
     ret = MemoryAddrSetting();
     if (ret != 0)
@@ -406,7 +383,7 @@ int fpga_sram_test(int autotest)
     {
         return ret;	
     }
-    if (!(ioread32(SOCLE_SCU0 + 0x28) & SCU_AHB_MODE))
+    if (!(ioread32(SQ_SCU0 + 0x28) & SCU_AHB_MODE))
     {
         printf("\n Error!! Don't support AMBA mode \n");
         ret = -1;
@@ -512,7 +489,7 @@ static int MemoryAddrSetting(void)
 		if ((bus_mode == fpga_axi) || (bus_mode == fpga_ahb))
 			size = 0x8000000;
 		else
-			size = SOCLE_MEMORY_ADDR_SIZE;
+			size = SQ_MEMORY_ADDR_SIZE;
 
 		if (bus_mode == fpga_axi) {
 			mem_start = 0x37000000;
@@ -521,8 +498,8 @@ static int MemoryAddrSetting(void)
 			mem_start = 0x27000000;
 			mem_end = 0x27000000 + size;
 		}else {
-			mem_start = (u32)SOCLE_MEMORY_ADDR_START | (u32)_end;
-			mem_end = (u32)SOCLE_MEMORY_ADDR_START + size;
+			mem_start = (u32)SQ_MEMORY_ADDR_START | (u32)_end;
+			mem_end = (u32)SQ_MEMORY_ADDR_START + size;
 		}
             mem_size = (u32)mem_end - (u32)mem_start;
             break;
@@ -543,23 +520,23 @@ static int MemoryAddrSetting(void)
         }
         case ANOTHER_DTCM_Module:
         {
-            mem_start = SOCLE_ANOTHER_DTCM_ADDR;
-            mem_size = SOCLE_ANOTHER_DTCM_SIZE;
+            mem_start = SQ_ANOTHER_DTCM_ADDR;
+            mem_size = SQ_ANOTHER_DTCM_SIZE;
             mem_end = mem_start + mem_size;
             break;
         }
         case FPGA_SRAM_Module:
         {
-            mem_start = SOCLE_FPGA_SRAM_STAR;
-            mem_size = SOCLE_FPGA_SRAM_SIZE;
+            mem_start = SQ_FPGA_SRAM_STAR;
+            mem_size = SQ_FPGA_SRAM_SIZE;
             mem_end = mem_start + mem_size;
             break;
         }
         case MDDR_Module:
         {
             
-            mem_start = (u32)SOCLE_MM_DDR_SDR_ADDR_START;
-            mem_size =(u32) SOCLE_MM_DDR_SDR_ADDR_SIZE;
+            mem_start = (u32)SQ_MM_DDR_SDR_ADDR_START;
+            mem_size =(u32) SQ_MM_DDR_SDR_ADDR_SIZE;
 
             mem_end = mem_start + mem_size;
             return ret;
@@ -582,8 +559,8 @@ static int MemoryAddrSetting(void)
         }
         case DP_SRAM_Module:
         {
-            mem_start = SOCLE_INT_DP_SRAM_ADDR;
-            mem_size = SOCLE_INT_DP_SRAM_SIZE;
+            mem_start = SQ_INT_DP_SRAM_ADDR;
+            mem_size = SQ_INT_DP_SRAM_SIZE;
             mem_end = mem_start + mem_size;
             break;
         }
@@ -844,7 +821,7 @@ int mem_bank_test(int autotest)
     {
         case SDRAM_Module:
         {
-            BankNumber = (int) SOCLE_MEMORY_BANKS;
+            BankNumber = (int) SQ_MEMORY_BANKS;
             for(count=0;count<BankNumber;count++)
             {
                 addr_start[count] = BANK_ADDRESS[count] + 0x200000;
@@ -1135,7 +1112,7 @@ static void socle_mDDR_reg_wr(u32 val, u32 reg)
 #ifdef CONFIG_SLAVE
 
 #else
-    iowrite32(val, reg + SOCLE_MM_DDR_SDR_CONFIG_ADDR);
+    iowrite32(val, reg + SQ_MM_DDR_SDR_CONFIG_ADDR);
 #endif
 }
 static u32 socle_mDDR_reg_rd(u32 reg)
@@ -1143,18 +1120,18 @@ static u32 socle_mDDR_reg_rd(u32 reg)
 #ifdef CONFIG_SLAVE
     return 0;     
 #else
-    return ioread32(reg + SOCLE_MM_DDR_SDR_CONFIG_ADDR);
+    return ioread32(reg + SQ_MM_DDR_SDR_CONFIG_ADDR);
 #endif
 }
 
 static void socle_mDDR_mem_wr(u32 val, u32 reg)
 {
-    iowrite32(val, reg + SOCLE_MM_DDR_SDR_ADDR_START);
+    iowrite32(val, reg + SQ_MM_DDR_SDR_ADDR_START);
 }
 
 static u32 socle_mDDR_mem_rd(u32 reg)
 {
-    return ioread32(reg + SOCLE_MM_DDR_SDR_ADDR_START);
+    return ioread32(reg + SQ_MM_DDR_SDR_ADDR_START);
 }
 
 
@@ -1162,8 +1139,8 @@ static int ConfigMDDRModule(void)
 {
     int ret = 0;
     
-    mem_start = (u32)SOCLE_MM_DDR_SDR_ADDR_START;
-    mem_size =(u32) SOCLE_MM_DDR_SDR_ADDR_SIZE;
+    mem_start = (u32)SQ_MM_DDR_SDR_ADDR_START;
+    mem_size =(u32) SQ_MM_DDR_SDR_ADDR_SIZE;
     printf("\naamem_start = 0x%8x,  mem_size =0x%8x\n",mem_start,mem_size); 
     mem_end = mem_start + mem_size;
 

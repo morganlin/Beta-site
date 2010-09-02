@@ -89,7 +89,7 @@ extern int mt9v125_init(void)
 {
 	int ret=0;
 	printf("mt9v125_init\n");
-	i2c_master_initialize(SOCLE_I2C0, SOCLE_INTC_I2C0);
+	i2c_master_initialize(SQ_I2C0, SQ_INTC_I2C0);
 	mt9v125_client.addr = 0x5d;
 	printf("chip id= %x\n",mt9v125_read(0));
 

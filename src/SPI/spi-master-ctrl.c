@@ -2,9 +2,6 @@
 #include <global.h>
 #include <dma/dma.h>
 #include "spi-master.h"
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -77,16 +74,16 @@ extern int socle_spi_master0_test(int autotest)
 #endif		
                 socle_spi_transfer_test_items[5].enable = SOCLE_SPI_MAX1110_0_TEST;
 	}	
-	socle_spi_base = SOCLE_SPI0;
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-		socle_scu_dev_enable(SOCLE_DEVCON_SPI0);
-		socle_scu_hdma_req45_spi0();
+	socle_spi_base = SQ_SPI0;
+#if defined(CONFIG_PC9223)
+		sq_scu_dev_enable(SQ_DEVCON_SPI0);
+		sq_scu_hdma_req45_spi0();
 #endif
-	socle_spi_master_init(socle_spi_base,SOCLE_INTC_SPI0);
+	socle_spi_master_init(socle_spi_base,SQ_INTC_SPI0);
 		
 	ret = test_item_ctrl(&socle_spi_transfer_test_container, autotest);
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_SPI0);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_SPI0);
 #endif
 	socle_spi_master_free();
 	return ret;
@@ -107,16 +104,16 @@ extern int socle_spi_master1_test(int autotest)
 #endif
                 socle_spi_transfer_test_items[5].enable = SOCLE_SPI_MAX1110_1_TEST;
 	}
-	socle_spi_base = SOCLE_SPI1;
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-		socle_scu_dev_enable(SOCLE_DEVCON_SPI1);
-		socle_scu_hdma_req45_spi1();
+	socle_spi_base = SQ_SPI1;
+#if defined(CONFIG_PC9223)
+		sq_scu_dev_enable(SQ_DEVCON_SPI1);
+		sq_scu_hdma_req45_spi1();
 #endif
-	socle_spi_master_init(socle_spi_base,SOCLE_INTC_SPI1);
+	socle_spi_master_init(socle_spi_base,SQ_INTC_SPI1);
 
 	ret = test_item_ctrl(&socle_spi_transfer_test_container, autotest);
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_SPI1);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_SPI1);
 #endif
 	socle_spi_master_free();	
 	return ret;
@@ -138,24 +135,12 @@ extern int
 socle_spi_internal_hdma_test(int autotest)
 {
 	int ret = 0;	
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-#if 1	//for SPI0
-	socle_spi_tx_dma_ext_hdreq = 0;
-	socle_spi_rx_dma_ext_hdreq = 0;
-#else
-	socle_spi_tx_dma_ext_hdreq = 1;
-	socle_spi_rx_dma_ext_hdreq = 1;
-#endif
-	socle_spi_tx_dma_ch_num = PANTHER7_HDMA_CH_2;
-	socle_spi_rx_dma_ch_num = PANTHER7_HDMA_CH_0;
 
-#else
 	socle_spi_tx_dma_ext_hdreq = 5;
 	socle_spi_rx_dma_ext_hdreq = 4;
 
 	socle_spi_tx_dma_ch_num = PANTHER7_HDMA_CH_1;
 	socle_spi_rx_dma_ch_num = PANTHER7_HDMA_CH_0;
-#endif
 	
 	socle_request_dma(socle_spi_tx_dma_ch_num, &socle_spi_tx_dma_notifier);
 	socle_request_dma(socle_spi_rx_dma_ch_num, &socle_spi_rx_dma_notifier);
@@ -311,7 +296,7 @@ socle_spi_master_ch8_test(int autotest)
 	
 		/* Configure SPI controller */
 	socle_spi_write(
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 		SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
 		SOCLE_SPI_MASTER_SIGNAL_ACT_NO |	
 		SOCLE_SPI_MODE_MASTER |
@@ -347,7 +332,7 @@ socle_spi_master_ch16_test(int autotest)
 	
 		/* Configure SPI controller */
 	socle_spi_write(
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 		SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
 		SOCLE_SPI_MASTER_SIGNAL_ACT_NO |	
 		SOCLE_SPI_MODE_MASTER |
@@ -381,7 +366,7 @@ socle_spi_slave_normal_test(int autotest)
 	int type=SLAVE_NORMAL;
 	
 	socle_spi_write(
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 		SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
 		SOCLE_SPI_MASTER_SIGNAL_ACT_NO |		
 		SOCLE_SPI_MODE_MASTER |
@@ -405,7 +390,7 @@ socle_spi_slave_hdma_test(int autotest)
 	int type=SLAVE_HDMA;
 	
 		socle_spi_write(
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 		SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
 		SOCLE_SPI_MASTER_SIGNAL_ACT_NO |		
 		SOCLE_SPI_MODE_MASTER |
@@ -428,7 +413,7 @@ extern int socle_spi_slave_reset_test(int autotest)
 	int type=SLAVE_RESET;
 	
 		socle_spi_write(
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 		SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
 		SOCLE_SPI_MASTER_SIGNAL_ACT_NO |		
 		SOCLE_SPI_MODE_MASTER |
@@ -459,7 +444,7 @@ socle_spi_internal_normal_run(int autotest)
     
     /* Configure SPI controller */
 	socle_spi_write(
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 		SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
 		SOCLE_SPI_MASTER_SIGNAL_ACT_NO |		
 		SOCLE_SPI_MODE_MASTER |
@@ -599,7 +584,7 @@ socle_spi_master_internal_hdma_run(int autotest)
 	socle_enable_dma(socle_spi_rx_dma_ch_num);
 			
 	socle_spi_write(
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 		SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
 		SOCLE_SPI_MASTER_SIGNAL_ACT_NO |		
 		SOCLE_SPI_MODE_MASTER |

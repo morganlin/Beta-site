@@ -21,13 +21,6 @@ nor_mxic_test (int autotest)
 {
 	int ret=0;
 
-// 20080714 cyli add for INR
-#ifdef CONFIG_INR_PC7230
-#include <GPIO/gpio.h>
-	// set CS0 chip selection to NOR
-	socle_gpio_set_value_with_mask(PA, SHIFT_MASK(5), SHIFT_MASK(5));				// PA5 = 1
-#endif
-
 	mode=ioread32(MODE_BASE)&0x1;
 	if(mode==1) {
 		printf("\n Flash run in word mode \n");

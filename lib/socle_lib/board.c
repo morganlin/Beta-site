@@ -16,10 +16,6 @@ socle_wait_for_int(volatile int *flag, int sec)
 {
 	int t = 0, threshold = sq_scu_cpu_clock_get() / 95 * sec;
 
-#if defined(CONFIG_ARM7) || (CONFIG_ARM7_HI)
-	threshold /= 2;
-#endif
-
 	WAIT_DBG("flag = %d, sec = %d, threshold = 0x%08x\n", *flag, sec, threshold);
         /* added by morganlin */
        // printf("flag = %d, sec = %d, threshold = 0x%08x\n", *flag, sec, threshold);
@@ -45,10 +41,6 @@ extern int
 socle_wait_by_poll(int addr, int mask, int exp_val, int sec)
 {
 	int t = 0, val, threshold = sq_scu_cpu_clock_get() / 170 * sec;
-
-#if defined(CONFIG_ARM7) || (CONFIG_ARM7_HI)
-	threshold /= 2;
-#endif
 
 	exp_val &= mask;
 	WAIT_DBG("addr = 0x%08x, mask = 0x%08x, exp_val = 0x%08x, sec = %d, threshold = 0x%08x\n", addr, mask, exp_val, sec, threshold);

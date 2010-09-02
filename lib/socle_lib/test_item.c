@@ -10,7 +10,7 @@ static char *test_item_name[20];
 
 static void test_item_get_act_items(struct test_item_container *container, int act_test_item[], int *item_num);
 static void test_item_show_menu(struct test_item_container *container, int act_test_item[], int item_num);
-static void socle_development_board_information(void);
+static void sq_development_board_information(void);
 static void test_item_shell(struct test_item_container *container, char **item_name, u32 layer);
 
 extern int
@@ -50,7 +50,7 @@ test_item_ctrl(struct test_item_container *container, int autotest)
 
 		case 'i':
 		case 'I':
-			socle_development_board_information();
+			sq_development_board_information();
 			break;
 
 		case 'z':
@@ -147,13 +147,13 @@ test_item_show_menu(struct test_item_container *container, int act_test_item[], 
 }
 
 static void
-socle_development_board_information(void)
+sq_development_board_information(void)
 {
 	printf("CPU Type --- %s\n", cpu_type);
 	printf("CPU     Clock Frequency : %4dM Hz\n", sq_scu_cpu_clock_get() / (1000 * 1000));
 	printf("AHB Bus Clock Frequency : %4dM Hz\n", sq_scu_ahb_clock_get() / (1000 * 1000));
 	printf("APB Bus Clock Frequency : %4dM Hz\n", sq_scu_apb_clock_get() / (1000 * 1000));
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223) || defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined(CONFIG_PC9223)
 	{
 		int i;
 		for (i = 0; i < 4; i++)

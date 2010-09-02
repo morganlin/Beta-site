@@ -9,40 +9,10 @@
  *  Socle Platforms
  */
 
-#undef CONFIG_PC9220
-#define ENABLE_PC9220 0
-#define USE_PC9220(...)
-#define SKIP_PC9220(...)  __VA_ARGS__
-
 #define CONFIG_PC9223 1
 #define ENABLE_PC9223 1
 #define USE_PC9223(...)  __VA_ARGS__
 #define SKIP_PC9223(...)
-
-#undef CONFIG_SCDK
-#define ENABLE_SCDK 0
-#define USE_SCDK(...)
-#define SKIP_SCDK(...)  __VA_ARGS__
-
-#undef CONFIG_MSMV
-#define ENABLE_MSMV 0
-#define USE_MSMV(...)
-#define SKIP_MSMV(...)  __VA_ARGS__
-
-#undef CONFIG_MDK3D
-#define ENABLE_MDK3D 0
-#define USE_MDK3D(...)
-#define SKIP_MDK3D(...)  __VA_ARGS__
-
-#undef CONFIG_MDKFHD
-#define ENABLE_MDKFHD 0
-#define USE_MDKFHD(...)
-#define SKIP_MDKFHD(...)  __VA_ARGS__
-
-#undef CONFIG_INR_PC7230
-#define ENABLE_INR_PC7230 0
-#define USE_INR_PC7230(...)
-#define SKIP_INR_PC7230(...)  __VA_ARGS__
 
 
 
@@ -50,40 +20,10 @@
  *  Socle CPUs
  */
 
-#undef CONFIG_MIPS
-#define ENABLE_MIPS 0
-#define USE_MIPS(...)
-#define SKIP_MIPS(...)  __VA_ARGS__
-
-#undef CONFIG_ARM7
-#define ENABLE_ARM7 0
-#define USE_ARM7(...)
-#define SKIP_ARM7(...)  __VA_ARGS__
-
-#undef CONFIG_ARM7_HI
-#define ENABLE_ARM7_HI 0
-#define USE_ARM7_HI(...)
-#define SKIP_ARM7_HI(...)  __VA_ARGS__
-
 #define CONFIG_ARM9 1
 #define ENABLE_ARM9 1
 #define USE_ARM9(...)  __VA_ARGS__
 #define SKIP_ARM9(...)
-
-#undef CONFIG_ARM9_HI
-#define ENABLE_ARM9_HI 0
-#define USE_ARM9_HI(...)
-#define SKIP_ARM9_HI(...)  __VA_ARGS__
-
-#undef CONFIG_ARM11
-#define ENABLE_ARM11 0
-#define USE_ARM11(...)
-#define SKIP_ARM11(...)  __VA_ARGS__
-
-#undef CONFIG_VFP
-#define ENABLE_VFP 0
-#define USE_VFP(...)
-#define SKIP_VFP(...)  __VA_ARGS__
 
 
 

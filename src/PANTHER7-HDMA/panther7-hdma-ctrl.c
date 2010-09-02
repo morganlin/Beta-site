@@ -4,8 +4,8 @@
 #include <test_item.h>
 #include <dma/dma.h>
 
-#define PATTERN_ADDR (SOCLE_MEMORY_ADDR_START + 0xa00000)
-#define COMPARE_ADDR (SOCLE_MEMORY_ADDR_START + 0xa00800)
+#define PATTERN_ADDR (SQ_MEMORY_ADDR_START + 0xa00000)
+#define COMPARE_ADDR (SQ_MEMORY_ADDR_START + 0xa00800)
 #define PATTERN_SIZE 2048
 #define BURN_IN_SIZE 512
 #define SCU_AHB_MODE (0x1<<6)
@@ -47,21 +47,7 @@ extern int
 panther7_hdma_test(int autotest)
 {
 	int ret=0;
-#ifdef CONFIG_SCDK
-	{
-		extern struct test_item panther7_hdma_main_test_items[];
-		//read scu to get amba mode
-		if(ioread32(SOCLE_SCU0 + 0x28) & SCU_AHB_MODE) {
-			panther7_hdma_main_test_items[0].enable=0;
-			panther7_hdma_main_test_items[1].enable=1;
-		}
-		else {
-			panther7_hdma_main_test_items[0].enable=1;
-			panther7_hdma_main_test_items[1].enable=0;
-		}
-			
-	}
-#endif	    
+    
 	ret = test_item_ctrl(&panther7_hdma_main_test_container, autotest);
 	return ret;
 }
@@ -74,11 +60,6 @@ panther7_hdma_onboard_test(int autotest)
 	int ret=0;
 	socle_set_dma_base_irq(PANTHER7_HDMA_CH_0, PANTHER7_HDMA0, PANTHER7_INTC_HDMA0);
 	socle_set_dma_base_irq(PANTHER7_HDMA_CH_1, PANTHER7_HDMA0, PANTHER7_INTC_HDMA0);
-	
-#ifdef CONFIG_MDK3D
-	socle_set_dma_base_irq(PANTHER7_HDMA_CH_2, PANTHER7_HDMA1, PANTHER7_INTC_HDMA1);
-	socle_set_dma_base_irq(PANTHER7_HDMA_CH_3, PANTHER7_HDMA1, PANTHER7_INTC_HDMA1);
-#endif
 	ret = test_item_ctrl(&panther7_hdma_ch_test_container, autotest);
 	return ret;
 }
@@ -87,10 +68,7 @@ extern int
 panther7_hdma_fpga_test(int autotest)
 {
 	int ret=0;
-#ifdef CONFIG_SCDK
-	socle_set_dma_base_irq(PANTHER7_HDMA_CH_0, SOCLE_MP1, SOCLE_INTC_MPS1);
-	socle_set_dma_base_irq(PANTHER7_HDMA_CH_1, SOCLE_MP1, SOCLE_INTC_MPS1);
-#endif
+        
 	ret = test_item_ctrl(&panther7_hdma_ch_test_container, autotest);
 	
 	return ret;
@@ -188,20 +166,8 @@ extern int panther7_hdma_destination_direction_increment(int autotest)
 {
 	int ret = 0;
 
-#ifdef CONFIG_MDK3D
-	if(panther7_hdma_src_dir == SOCLE_DMA_DIR_FIXED) {
-		panther7_hdma_data_items[0].enable = 0;
-		panther7_hdma_data_items[1].enable = 0;
-	}
-#endif
-
 	panther7_hdma_dst_dir = SOCLE_DMA_DIR_INCR;
 	ret = test_item_ctrl(&panther7_hdma_burst_test_container, autotest);
-	
-#ifdef CONFIG_MDK3D
-	panther7_hdma_data_items[0].enable = 1;
-	panther7_hdma_data_items[1].enable = 1;
-#endif
 
 	return ret;
 }

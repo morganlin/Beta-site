@@ -27,23 +27,23 @@ struct socle_dma_ops socle_hdma_ops = {
 
 struct socle_dma socle_hdma_channel_0 = {
 	.dma_name = "SOCLE HDMA Channel 0",
-	.base_addr = SOCLE_HDMA0,
-	.irq = SOCLE_INTC_HDMA0,
+	.base_addr = SQ_HDMA0,
+	.irq = SQ_INTC_HDMA0,
 	.private_data = &socle_hdma_channel[0],
 	.ops = &socle_hdma_ops,
 };
 
 struct socle_dma socle_hdma_channel_1 = {
 	.dma_name = "SOCLE HDMA Channel 1",
-	.base_addr = SOCLE_HDMA0,
-	.irq = SOCLE_INTC_HDMA0,
+	.base_addr = SQ_HDMA0,
+	.irq = SQ_INTC_HDMA0,
 	.private_data = &socle_hdma_channel[1],
 	.ops = &socle_hdma_ops,
 };
 
 struct socle_dma socle_hdma_channel_2 = {
 	.dma_name = "SOCLE HDMA Channel 2",
-	.base_addr = SOCLE_HDMA0,
+	.base_addr = SQ_HDMA0,
 	.irq = SOCLE_INTC_HDMA1,
 	.private_data = &socle_hdma_channel[2],
 	.ops = &socle_hdma_ops,
@@ -51,7 +51,7 @@ struct socle_dma socle_hdma_channel_2 = {
 
 struct socle_dma socle_hdma_channel_3 = {
 	.dma_name = "SOCLE HDMA Channel 3",
-	.base_addr = SOCLE_HDMA0,
+	.base_addr = SQ_HDMA0,
 	.irq = SOCLE_INTC_HDMA1,
 	.private_data = &socle_hdma_channel[3],
 	.ops = &socle_hdma_ops,

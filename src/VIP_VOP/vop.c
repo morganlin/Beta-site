@@ -44,7 +44,7 @@ vopStop ()
 {  
   socle_vop_write(VOP_INT_DISABLE, SOCLE_VOP_INTE);
   socle_vop_write(VOP_CTRL_DISPLAY_DIS, SOCLE_VOP_CTRL);
-  free_irq(SOCLE_INTC_VOP0);
+  free_irq(SQ_INTC_VOP0);
 }
 
 extern int
@@ -117,9 +117,9 @@ extern int
 vopSetFrameMode(int frame_mode)
 {
 	if(frame_mode==ONE_FRAME)
-		request_irq(SOCLE_INTC_VOP0, vopOneFrameIsr, NULL);
+		request_irq(SQ_INTC_VOP0, vopOneFrameIsr, NULL);
 	else if(frame_mode==TWO_FRAME)
-		request_irq(SOCLE_INTC_VOP0, vopTwoFrameIsr, NULL);
+		request_irq(SQ_INTC_VOP0, vopTwoFrameIsr, NULL);
 	else {
 		printf("Error Frame Mode!!\n");
     return -1;

@@ -61,11 +61,7 @@ int printf (char *fmt, ...)
 static void	semi_puts(char *s)
 {
 	volatile char* p;
-#if defined CONFIG_ARM9_HI
-	p = (unsigned long *) SOCLE_UART2;
-#else 
-	p = (unsigned long *) SOCLE_UART0;
-#endif
+	p = (unsigned long *) SQ_UART0;
 	while(*s!=0)
 	{
 		while ((*(p+0x14) & 0x20) == 0);

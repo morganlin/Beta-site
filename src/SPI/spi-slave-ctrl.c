@@ -3,10 +3,6 @@
 #include <dma/dma.h>
 #include "spi-regs.h"
 #include "dependency.h"
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
-
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -97,13 +93,13 @@ extern struct test_item_container socle_spi_slave_model_test_container;
 int socle_spi_slave0_test(int autotest)
 {
 	int ret = 0;
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_SPI0);
-	socle_scu_hdma_req45_spi0();
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_SPI0);
+	sq_scu_hdma_req45_spi0();
 #endif
 	
-	socle_spi_base = SOCLE_SPI0;
-	socle_spi_irq = SOCLE_INTC_SPI0;
+	socle_spi_base = SQ_SPI0;
+	socle_spi_irq = SQ_INTC_SPI0;
 	socle_spi_tx_dma_ext_hdreq = 5;
 	socle_spi_rx_dma_ext_hdreq = 4;
 
@@ -112,8 +108,8 @@ int socle_spi_slave0_test(int autotest)
 	socle_spi_write(SOCLE_SPI_SOFT_RST, SOCLE_SPI_FWCR);
 	ret = test_item_ctrl(&socle_spi_slave_model_test_container, autotest);
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_SPI0);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_SPI0);
 #endif
 	
 	return ret;
@@ -123,12 +119,12 @@ int socle_spi_slave0_test(int autotest)
 int socle_spi_slave1_test(int autotest)
 {
 	int ret = 0;
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_SPI1);
-	socle_scu_hdma_req45_spi1();
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_SPI1);
+	sq_scu_hdma_req45_spi1();
 #endif	
-	socle_spi_base = SOCLE_SPI1;
-	socle_spi_irq = SOCLE_INTC_SPI1;
+	socle_spi_base = SQ_SPI1;
+	socle_spi_irq = SQ_INTC_SPI1;
 	socle_spi_tx_dma_ext_hdreq = 5;
 	socle_spi_rx_dma_ext_hdreq = 4;
 
@@ -136,8 +132,8 @@ int socle_spi_slave1_test(int autotest)
 	socle_spi_rx_dma_ch_num = PANTHER7_HDMA_CH_0;
 	socle_spi_write(SOCLE_SPI_SOFT_RST, SOCLE_SPI_FWCR);
 	ret = test_item_ctrl(&socle_spi_slave_model_test_container, autotest);
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_SPI1);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_SPI1);
 #endif
 	
 	return ret;

@@ -55,27 +55,13 @@ extern int gmac_test(int autotest);
 extern int dmac_test(int autotest);
 extern int ac97_test(int autotest);
 
-struct test_item main_test_items [] = {
-
-#ifdef CONFIG_VFP
-	{
-		"VFP Coprocessor Testing",
-		vfp_test,
-		1,
-		1
-	},
-#endif
-	
+struct test_item main_test_items [] = {	
 #ifdef	CONFIG_GPIO
 	{
 		"GPIO Testing",
 		gpio_test,
 		1,
-#ifdef	CONFIG_INR_PC7230
-		0
-#else
 		1
-#endif
 	},
 #endif
 
@@ -342,16 +328,9 @@ struct test_item main_test_items [] = {
 
 #ifdef CONFIG_NAND_NFC
 	{
-	
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-		"NAND-FLASH FOR FPGA Testing",
-		nfc_ctrl_fpga_test,
-		0,
-#else
 		"NAND-FLASH NFC Testing",
 		nfc_ctrl_test,
 		1,
-#endif
 		1
 	},
 #endif

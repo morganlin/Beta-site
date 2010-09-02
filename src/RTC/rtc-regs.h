@@ -6,11 +6,11 @@
 
 
 #ifndef RTC_REG_BASE
-#define RTC_REG_BASE		SOCLE_RTC0
+#define RTC_REG_BASE		SQ_RTC0
 #endif
 
 #ifndef RTC_INT
-#define RTC_INT			SOCLE_INTC_RTC0
+#define RTC_INT			SQ_INTC_RTC0
 #endif
 
 

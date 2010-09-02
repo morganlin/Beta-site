@@ -2,7 +2,7 @@
 #define _interrupt_regs_H_
 
 #ifndef INTC_REG_BASE
-#define INTC_REG_BASE		SOCLE_INTC0
+#define INTC_REG_BASE		SQ_INTC0
 #endif
 
 //IRQ

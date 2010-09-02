@@ -4,7 +4,7 @@
 #include "platform.h"
 
 #ifndef WDT_REG_BASE
-#define WDT_REG_BASE		SOCLE_WDT0
+#define WDT_REG_BASE		SQ_WDT0
 #endif
 
 

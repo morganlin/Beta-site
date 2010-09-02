@@ -65,14 +65,13 @@ struct test_item mem_device_select_items[] =
         1,
         DP_SRAM_Enable_Disable
     },
-#ifdef CONFIG_MDK3D
-	{
-		"MDK3D-FPGA Test",
-		mdk3d_fpga_test,
-		0,
-		1
-	},
-#endif
+    {
+        "MDK3D-FPGA Test",
+        mdk3d_fpga_test,
+        0,
+	0	
+    },
+
 };
 
 struct test_item_container mem_device_select_container =

@@ -2,8 +2,8 @@
 #include <irqs.h>
 #include <type.h>
 
-#ifdef SOCLE_NOR_FLASH_BANK0
-#define SOCLE_NOR_BASE0	SOCLE_NOR_FLASH_BANK0;
+#ifdef SQ_NOR_FLASH_BANK0
+#define SOCLE_NOR_BASE0	SQ_NOR_FLASH_BANK0;
 #else 
 #error we dont define IP address 
 #endif
@@ -28,7 +28,7 @@
 #define FLASH_SECTOR_SIZE  0x20000 
 
 #if defined(CONFIG_PC9223)
- 	#define MODE_BASE (SOCLE_SDRSTMC0+0x8020)
+ 	#define MODE_BASE (SQ_SDRSTMC0+0x8020)
 #endif
 
 /*define errror code*/

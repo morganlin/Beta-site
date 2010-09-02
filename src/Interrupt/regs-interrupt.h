@@ -1,15 +1,15 @@
 #ifndef _regs_interrupt_H_
 #define _regs_interrupt_H_
 
-#define	INTC0_SCR(x) ((addr_t)(SOCLE_INTC0 + 4 * (x)))
-#define	INTC0_SVR(x) ((addr_t)(SOCLE_INTC0 + 0x80	+ 4 * (x)))
-#define	INTC0_ISR    ((addr_t)(SOCLE_INTC0 + 0x104))
-#define	INTC0_IPR    ((addr_t)(SOCLE_INTC0 + 0x108))
-#define	INTC0_IMR    ((addr_t)(SOCLE_INTC0 + 0x10C))
-#define	INTC0_IECR   ((addr_t)(SOCLE_INTC0 + 0x114))
-#define	INTC0_ICCR   ((addr_t)(SOCLE_INTC0 + 0x118))
-#define	INTC0_ISCR   ((addr_t)(SOCLE_INTC0 + 0x11C))
-#define	INTC0_TEST   ((addr_t)(SOCLE_INTC0 + 0x124))
+#define	INTC0_SCR(x) ((addr_t)(SQ_INTC0 + 4 * (x)))
+#define	INTC0_SVR(x) ((addr_t)(SQ_INTC0 + 0x80	+ 4 * (x)))
+#define	INTC0_ISR    ((addr_t)(SQ_INTC0 + 0x104))
+#define	INTC0_IPR    ((addr_t)(SQ_INTC0 + 0x108))
+#define	INTC0_IMR    ((addr_t)(SQ_INTC0 + 0x10C))
+#define	INTC0_IECR   ((addr_t)(SQ_INTC0 + 0x114))
+#define	INTC0_ICCR   ((addr_t)(SQ_INTC0 + 0x118))
+#define	INTC0_ISCR   ((addr_t)(SQ_INTC0 + 0x11C))
+#define	INTC0_TEST   ((addr_t)(SQ_INTC0 + 0x124))
 
 // define Macro	Lib
 #define	INT0_SET_TYPE(i,type)		writew((readw(INTC0_SCR(i)) & ~SRCTYPE_MASK) | type , INTC0_SCR(i))

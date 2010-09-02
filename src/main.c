@@ -31,18 +31,10 @@ TestEntry(void)
 #include <PWM/pwmt-regs.h>
 #endif
 
-#ifdef CONFIG_MIPS
-#include <mips.h>
-#include <ArchDefs.h>
-#endif
-
 #ifdef SEMI_HOST_FUNCTION
 #include <epios.h>	//For EPI SemiHost HIF Function
 #endif
 
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -56,7 +48,7 @@ TestEntry(void)
 extern struct test_item_container main_test_item_container;
 int cpu_clk_mhz;
 char cpu_type[] = CPU_TYPE;
-int socle_memory_addr_start = SOCLE_MEMORY_ADDR_START;
+int sq_memory_addr_start = SQ_MEMORY_ADDR_START;
 
 /*============================================*/
 
@@ -137,11 +129,7 @@ ns16550_init(int baud_rate)
 
 	volatile unsigned long *p;
 
-#if defined CONFIG_ARM9_HI
-	p = (unsigned long *) SOCLE_UART2;
-#else 
-	p = (unsigned long *) SOCLE_UART0;
-#endif
+	p = (unsigned long *) SQ_UART0;
 
 	*(p + 1) = 0x0;
 	*(p + 3) = LCR_BKSE | LCRVAL;
@@ -154,52 +142,6 @@ ns16550_init(int baud_rate)
 }
 #endif
 
-static void
-socle_init_platform(void)
-{
-#ifdef CONFIG_INR_PC7230
-// 20080714 cyli add for INR
-#ifndef CONFIG_GPIO
-#error Does not select CONFIG_GPIO
-#endif
-#define DEVICES_POWER_ON()		socle_gpio_set_value_with_mask(PA, SHIFT_MASK(0), SHIFT_MASK(0))	// PA0 = 1
-#define DEVICES_POWER_OFF()	socle_gpio_set_value_with_mask(PA, 0, SHIFT_MASK(0))				// PA0 = 0
-
-#define STANDBY_LED_ON()		socle_gpio_set_value_with_mask(PA, SHIFT_MASK(3), SHIFT_MASK(3))	// PA3 = 1
-#define STANDBY_LED_OFF()		socle_gpio_set_value_with_mask(PA, 0, SHIFT_MASK(3))				// PA3 = 0
-
-#define OSC_ENABLE()			socle_gpio_set_value_with_mask(PA, SHIFT_MASK(2), SHIFT_MASK(2))	// PA2 = 1
-#define OSC_DISABLE()			socle_gpio_set_value_with_mask(PA, 0, SHIFT_MASK(2))				// PA2 = 0
-
-#define DEVICES_RESET_ON()		socle_gpio_set_value_with_mask(PA, 0, SHIFT_MASK(1))				// PA1 = 0
-#define DEVICES_RESET_OFF()		socle_gpio_set_value_with_mask(PA, SHIFT_MASK(1), SHIFT_MASK(1))	// PA1 = 1
-
-#define FM_VIO_POWER_ON()		socle_gpio_set_value_with_mask(PE, SHIFT_MASK(3), SHIFT_MASK(3))	// PE3 = 1
-#define FM_VIO_POWER_OFF()		socle_gpio_set_value_with_mask(PE, 0, SHIFT_MASK(3))				// PE3 = 0
-
-#define FM_RESET_ON()			socle_gpio_set_value_with_mask(PE, 0x08, 0x08)						// PE4 = 0
-#define FM_RESET_OFF()			socle_gpio_set_value_with_mask(PE, 0x18, 0x18)						// PE4 = 1
-//#define FM_RESET_ON()			socle_gpio_set_value_with_mask(PE, 0, SHIFT_MASK(4))				// PE4 = 0
-//#define FM_RESET_OFF()			socle_gpio_set_value_with_mask(PE, SHIFT_MASK(4), SHIFT_MASK(4))	// PE4 = 1
-
-	DEVICES_POWER_ON();
-	STANDBY_LED_OFF();
-	OSC_ENABLE();
-
-	MSDELAY(5);
-	FM_VIO_POWER_ON();
-
-	DEVICES_RESET_OFF();
-	DEVICES_RESET_ON();
-	MSDELAY(100);
-	DEVICES_RESET_OFF();
-
-	FM_RESET_OFF();
-	FM_RESET_ON();
-	MSDELAY(150);
-	FM_RESET_OFF();
-#endif
-}
 
 static void
 socle_init_service(void)
@@ -209,18 +151,11 @@ socle_init_service(void)
 	socle_init_dma();
 
 #ifdef CONFIG_GPIO
-	#ifndef CONFIG_SCDK   //if not scdk then request irq
-		socle_init_gpio_irq();
-	#endif
+        socle_init_gpio_irq();
 #endif
 
 #ifdef CONFIG_MP_GPIO
-	#ifdef CONFIG_SCDK
-		if(!(ioread32(SOCLE_SCU0 + 0x28) & SCU_AHB_MODE)) //not amba mode
-			socle_mp_gpio_init_irq();
-	#else
-		socle_mp_gpio_init_irq();
-	#endif
+        socle_mp_gpio_init_irq();
 #endif
 
 #ifdef CONFIG_PWM
@@ -237,14 +172,13 @@ TestEntry(void)
 #if defined(SEMI_HOST_FUNCTION_ARM) && defined(UART_DEBUG)
 
 #if defined(CONFIG_PC9223)
-        	socle_scu_dev_enable(SOCLE_DEVCON_UART0);
+        	sq_scu_dev_enable(SQ_DEVCON_UART0);
 #endif
 
-	ns16550_init(SOCLE_CONSOLE_BAUD_RATE);		// initiate UART console
+	ns16550_init(SQ_CONSOLE_BAUD_RATE);		// initiate UART console
 #endif
 
 	socle_init_service();
-	socle_init_platform();
 
 #ifdef SEMI_HOST_FUNCTION
 	HIF_debug_print_init();

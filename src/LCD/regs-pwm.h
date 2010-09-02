@@ -4,7 +4,7 @@
 #include <platform.h>
 #include <irqs.h>
 
-#define PWM_BASE_ADDR	(SOCLE_TIMER_PWM0)
+#define PWM_BASE_ADDR	(SQ_TIMER_PWM0)
 
 #define PWM_BASE		PWM_BASE_ADDR
 

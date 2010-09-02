@@ -2,7 +2,7 @@
 #define _regs_timer_H_
 
 #ifndef TIMER_REG_BASE
-#define TIMER_REG_BASE		SOCLE_TIMER0
+#define TIMER_REG_BASE		SQ_TIMER0
 #endif
 
 #define SOCLE_TMR0LR		(addr_t)(TIMER_REG_BASE + 0x0000)

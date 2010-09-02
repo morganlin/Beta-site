@@ -6,11 +6,6 @@
 #include <dma/dma.h>
 #include "uart-regs.h"
 #include "dependency.h"
-
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
-
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -81,12 +76,12 @@ socle_uart_0_test(int autotest)
 {
 	int ret = 0;
 
-	socle_uart_base = SOCLE_UART0;
+	socle_uart_base = SQ_UART0;
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_UART0);
-	socle_scu_hdma_req01_uart(0);
-	socle_scu_hdma_req23_uart(0);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_UART0);
+	sq_scu_hdma_req01_uart(0);
+	sq_scu_hdma_req23_uart(0);
 #endif
 
 	{
@@ -111,24 +106,17 @@ socle_uart_0_test(int autotest)
 	socle_uart_read(SOCLE_UART_IIR, socle_uart_base);
 	socle_uart_read(SOCLE_UART_LSR, socle_uart_base);
 
-	request_irq(SOCLE_INTC_UART0, socle_uart_isr, NULL);
+	request_irq(SQ_INTC_UART0, socle_uart_isr, NULL);
 
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-	socle_uart_tx_dma_ext_hdreq = 2; 
-	socle_uart_rx_dma_ext_hdreq = 2;
-#else
 	socle_uart_tx_dma_ext_hdreq = 1; 
 	socle_uart_rx_dma_ext_hdreq = 0;
-	//socle_uart_tx_dma_ext_hdreq = 3; 
-	//socle_uart_rx_dma_ext_hdreq = 2;
-#endif
 
 	ret = test_item_ctrl(&socle_uart_type_test_container, autotest);
 
-	free_irq(SOCLE_INTC_UART0);
+	free_irq(SQ_INTC_UART0);
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_UART0);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_UART0);
 #endif
 	return ret;
 }
@@ -138,12 +126,11 @@ socle_uart_1_test(int autotest)
 {
 	int ret = 0;
 
-	socle_uart_base = SOCLE_UART1;
+	socle_uart_base = SQ_UART1;
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_UART1);
-	//socle_scu_hdma_req01_uart(1);
-	socle_scu_hdma_req23_uart(1);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_UART1);
+	sq_scu_hdma_req23_uart(1);
 #endif
 
 	{
@@ -168,24 +155,18 @@ socle_uart_1_test(int autotest)
 	socle_uart_read(SOCLE_UART_IIR, socle_uart_base);
 	socle_uart_read(SOCLE_UART_LSR, socle_uart_base);
 
-	request_irq(SOCLE_INTC_UART1, socle_uart_isr, NULL);
+	request_irq(SQ_INTC_UART1, socle_uart_isr, NULL);
 
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-	socle_uart_tx_dma_ext_hdreq = 3; 
-	socle_uart_rx_dma_ext_hdreq = 3;
-#else
+
 	socle_uart_tx_dma_ext_hdreq = 3; 
 	socle_uart_rx_dma_ext_hdreq = 2;
-	//socle_uart_tx_dma_ext_hdreq = 1; 
-	//socle_uart_rx_dma_ext_hdreq = 0;
-#endif
 
 	ret = test_item_ctrl(&socle_uart_type_test_container, autotest);
 
-	free_irq(SOCLE_INTC_UART1);
+	free_irq(SQ_INTC_UART1);
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-        socle_scu_dev_disable(SOCLE_DEVCON_UART1);
+#if defined(CONFIG_PC9223)
+        sq_scu_dev_disable(SQ_DEVCON_UART1);
 #endif
 
 	return ret;
@@ -196,12 +177,11 @@ socle_uart_2_test(int autotest)
 {
 	int ret = 0;
 
-	socle_uart_base = SOCLE_UART2;
+	socle_uart_base = SQ_UART2;
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-        socle_scu_dev_enable(SOCLE_DEVCON_UART2);
-       //socle_scu_hdma_req01_uart(2);
-        socle_scu_hdma_req23_uart(2);
+#if defined(CONFIG_PC9223)
+        sq_scu_dev_enable(SQ_DEVCON_UART2);
+        sq_scu_hdma_req23_uart(2);
 #endif
 
 	{
@@ -226,22 +206,17 @@ socle_uart_2_test(int autotest)
 	socle_uart_read(SOCLE_UART_IIR, socle_uart_base);
 	socle_uart_read(SOCLE_UART_LSR, socle_uart_base);
 
-	request_irq(SOCLE_INTC_UART2, socle_uart_isr, NULL);
+	request_irq(SQ_INTC_UART2, socle_uart_isr, NULL);
 
-#if defined(CONFIG_MDKFHD)
-	socle_uart_tx_dma_ext_hdreq = 4; 
-	socle_uart_rx_dma_ext_hdreq = 4;
-#else
 	socle_uart_tx_dma_ext_hdreq = 3; 
-	socle_uart_rx_dma_ext_hdreq = 2;
-#endif	
+	socle_uart_rx_dma_ext_hdreq = 2;	
 
 	ret = test_item_ctrl(&socle_uart_type_test_container, autotest);
 
-	free_irq(SOCLE_INTC_UART2);
+	free_irq(SQ_INTC_UART2);
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-        socle_scu_dev_disable(SOCLE_DEVCON_UART2);
+#if defined(CONFIG_PC9223)
+        sq_scu_dev_disable(SQ_DEVCON_UART2);
 #endif
 
 	return ret;
@@ -276,14 +251,14 @@ socle_uart_3_test(int autotest)
 	socle_uart_read(SOCLE_UART_IIR, socle_uart_base);
 	socle_uart_read(SOCLE_UART_LSR, socle_uart_base);
 
-	request_irq(SOCLE_INTC_UART3, socle_uart_isr, NULL);
+	request_irq(SQ_INTC_UART3, socle_uart_isr, NULL);
 
 	socle_uart_tx_dma_ext_hdreq = 3; 
 	socle_uart_rx_dma_ext_hdreq = 2;
 
 	ret = test_item_ctrl(&socle_uart_type_test_container, autotest);
 
-	free_irq(SOCLE_INTC_UART3);
+	free_irq(SQ_INTC_UART3);
 
 	return ret;
 }
@@ -308,13 +283,9 @@ socle_uart_hwdma_panther7_hdma_test(int autotest)
 	int ret = 0;
 
 	uart_test = socle_uart_hwdma_panther7_hdma_bursttype_test;
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-	socle_uart_tx_dma_ch_num = PANTHER7_HDMA_CH_3;
-	socle_uart_rx_dma_ch_num = PANTHER7_HDMA_CH_0;
-#else
         socle_uart_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
         socle_uart_rx_dma_ch_num = PANTHER7_HDMA_CH_1;
-#endif
+
 	socle_request_dma(socle_uart_tx_dma_ch_num, &socle_uart_tx_dma_notifier);
 	socle_request_dma(socle_uart_rx_dma_ch_num, &socle_uart_rx_dma_notifier);
 	ret = test_item_ctrl(&socle_uart_transfer_test_container, autotest);

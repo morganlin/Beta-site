@@ -238,12 +238,12 @@ static void socle_i2s_access_ring_buffer(u32 buf_pos, int dir);
 
 #define PATTERN_BUF_ADDR 0x00a00000
 #define PATTERN_BUF_SIZE 2048
-#define PCM_BUF_ADDR (SOCLE_MEMORY_ADDR_START + 0x00800000)
+#define PCM_BUF_ADDR (SQ_MEMORY_ADDR_START + 0x00800000)
 //#define PCM_BUF_SIZE (5 * 1024 * 1024) /* 5MB */
 #define PCM_BUF_SIZE (2 * 1024 * 1024) /* 5MB */
 //#define DMA_BUF_SIZE (320 * 1024) /* 320K */
 #define DMA_BUF_SIZE (1 * 1024) /* 320K */
-#define RING_BUF_ADDR (SOCLE_MEMORY_ADDR_START + 0x00700000)
+#define RING_BUF_ADDR (SQ_MEMORY_ADDR_START + 0x00700000)
 #define RING_BUF_SIZE (64 * 1024) /* 64K */
 #define PERIOD_SIZE (8* 1024)	/* 16k */
 #define PERIODS 8
@@ -514,13 +514,9 @@ socle_i2s_hwdma_panther7_hdma_direct(int autotest)
 {
 	u32 tmp;
 
-#ifdef CONFIG_MDK3D
-        socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
-        socle_i2s_rx_dma_ch_num = PANTHER7_HDMA_CH_3;
-#else
         socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
         socle_i2s_rx_dma_ch_num = PANTHER7_HDMA_CH_1;
-#endif
+
         socle_i2s_tx_dma_ext_hdreq = TX_DMA_EXT_HDREQ;
         socle_i2s_rx_dma_ext_hdreq = RX_DMA_EXT_HDREQ;
 
@@ -675,13 +671,8 @@ socle_i2s_hwdma_panther7_hdma_ring_buffer(int autotest)
 {
 	u32 tmp;
 
-#ifdef CONFIG_MDK3D
-        socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
-        socle_i2s_rx_dma_ch_num = PANTHER7_HDMA_CH_3;
-#else
         socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
         socle_i2s_rx_dma_ch_num = PANTHER7_HDMA_CH_1;
-#endif
         socle_i2s_tx_dma_ext_hdreq = TX_DMA_EXT_HDREQ;
         socle_i2s_rx_dma_ext_hdreq = RX_DMA_EXT_HDREQ;
 
@@ -951,11 +942,8 @@ extern int
 socle_i2s_play_pcm_hwdma_panther7_hdma(int autotest)
 {
 	printf("\nPlaying PCM data from memory 0x%x for 0x%x bytes. \n", PCM_BUF_ADDR, PCM_BUF_SIZE);	
-#ifdef CONFIG_MDK3D
 	socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
-#else
-	socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
-#endif
+
 	socle_i2s_tx_dma_ext_hdreq = TX_DMA_EXT_HDREQ;
 	socle_request_dma(socle_i2s_tx_dma_ch_num, &socle_i2s_tx_dma_play_notifier);
 
@@ -1181,11 +1169,8 @@ socle_i2s_capture_pcm_normal(int autotest)
 extern int 
 socle_i2s_capture_pcm_hwdma_panther7_hdma(int autotest)
 {
-#ifdef CONFIG_MDK3D
-	socle_i2s_rx_dma_ch_num = PANTHER7_HDMA_CH_3;
-#else
 	socle_i2s_rx_dma_ch_num = PANTHER7_HDMA_CH_1;
-#endif
+
 	socle_i2s_rx_dma_ext_hdreq = RX_DMA_EXT_HDREQ;
 	socle_request_dma(socle_i2s_rx_dma_ch_num, &socle_i2s_rx_dma_capture_notifier);
 
@@ -1622,13 +1607,9 @@ socle_i2s_hwdma_panther7_hdma_test(int autotest)
 {
 	int ret = 0;
 
-#ifdef CONFIG_MDK3D
-	socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
-	socle_i2s_rx_dma_ch_num = PANTHER7_HDMA_CH_3;
-#else
 	socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
         socle_i2s_rx_dma_ch_num = PANTHER7_HDMA_CH_1;
-#endif
+
 	socle_i2s_tx_dma_ext_hdreq = TX_DMA_EXT_HDREQ;
 	socle_i2s_rx_dma_ext_hdreq = RX_DMA_EXT_HDREQ;
 	ret = test_item_ctrl(&socle_i2s_tx_hwdma_panther7_hdma_test_container, autotest);
@@ -1907,71 +1888,24 @@ socle_i2s_internal_loopback_test(int autotest)
 
 /* Level 1 Menu End */
 
-// 20080714 cyli add for INR
-#ifdef CONFIG_INR_PC7230
-#include <GPIO/gpio.h>
-static void
-volume_tuner_isr (void *pparam)
-{
-	int clockwise = socle_gpio_get_value_with_mask(PF, 0x20);
-
-	if (clockwise)
-		vol++;
-	else
-		vol--;
-
-	if (vol > MAX_VOLUME)
-		vol = MAX_VOLUME;
-	if (vol < 0)
-		vol = 0;
-
-	vol_change = 1;
-	printf("volume_tuner_isr(): vol = %d\n", vol);
-}
-#endif
-
 extern struct test_item_container socle_i2s_main_test_container;
 
 extern int 
 i2s_test(int autotest)
 {
 	int ret = 0;
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_I2C);
-	socle_scu_dev_enable(SOCLE_DEVCON_I2S_TX_RX);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_I2C);
+	sq_scu_dev_enable(SQ_DEVCON_I2S_TX_RX);
 #endif
 	ret |= audio_dac_initialize();
 	ret |= audio_adc_initialize();
 
-// 20080714 cyli add for INR
-#ifdef CONFIG_INR_PC7230
-	// set audio source selection to I2S
-	socle_gpio_set_value_with_mask(PE, 0x1b, 0x3f);				// PE[1:0] = [11]
-
-	// set PF4 as low level triggle interrupt for volume_tuner_isr
-	if (socle_request_gpio_irq(SET_GPIO_PIN_NUM(PF, 4), volume_tuner_isr, GPIO_INT_SENSE_EDGE | GPIO_INT_SINGLE_EDGE | GPIO_INT_EVENT_HI, NULL)) {
-		printf("i2s_test(): GPIO pin[%d] is busy!\n", SET_GPIO_PIN_NUM(PF, 4));
-		return -1;
-	}
-#endif
-#if 0
-	//scu setting          CPU:240MHz  ;  AHB:80MHz  ;  APB:40Mhz
-        iowrite32(0x000008f1, 0x1d1a0000);        
-        iowrite32(0x00000003, 0x1d1a0018);
-        iowrite32(0x00000001, 0x1d1a001c);
-	MSDELAY(100);
-                                             
-#endif
 	ret |= test_item_ctrl(&socle_i2s_main_test_container, autotest);
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-socle_scu_dev_disable(SOCLE_DEVCON_I2C);
-socle_scu_dev_disable(SOCLE_DEVCON_I2S_TX_RX);
-#endif
-
-#ifdef CONFIG_INR_PC7230
-	// free PF4
-	socle_free_gpio_irq(SET_GPIO_PIN_NUM(PF, 4));
+#if defined(CONFIG_PC9223)
+sq_scu_dev_disable(SQ_DEVCON_I2C);
+sq_scu_dev_disable(SQ_DEVCON_I2S_TX_RX);
 #endif
 
 	return ret;

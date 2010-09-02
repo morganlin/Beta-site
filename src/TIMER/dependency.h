@@ -1,19 +1,19 @@
 #include <platform.h>
 #include <irqs.h>
 
-#ifndef SOCLE_TIMER0
+#ifndef SQ_TIMER0
 #error "Timer IP base address is not defined"
 #endif
 
-#ifndef SOCLE_INTC_TMR0
+#ifndef SQ_INTC_TMR0
 #error "Tiimer IRQ0 is not defined"
 #endif
 
-#ifndef SOCLE_INTC_TMR1
+#ifndef SQ_INTC_TMR1
 #error "Tiimer IRQ1 is not defined"
 #endif
 
-#ifndef SOCLE_INTC_TMR2
+#ifndef SQ_INTC_TMR2
 #error "Tiimer IRQ2 is not defined"
 #endif
 

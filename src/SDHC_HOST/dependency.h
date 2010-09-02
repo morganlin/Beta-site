@@ -48,30 +48,30 @@
 #define SOCLE_SDHC_HOST_SLOT3		0
 #endif
 
-#ifndef SOCLE_SDHC0
+#ifndef SQ_SDHC0
 #error "SDHC Host IP base address is not defined"
 #endif
 
-#ifndef SOCLE_SDHC0
-#define SOCLE_SDHC0	SOCLE_SDHC0
+#ifndef SQ_SDHC0
+#define SQ_SDHC0	SOCLE_SDHC0
 #define SOCLE_SDHC_HOST_0_TEST	0
 #else
 #define SOCLE_SDHC_HOST_0_TEST	1
 #endif
 
 #ifndef SOCLE_SDHC1
-#define SOCLE_SDHC1	SOCLE_SDHC0
+#define SOCLE_SDHC1	SQ_SDHC0
 #define SOCLE_SDHC_HOST_1_TEST	0
 #else
 #define SOCLE_SDHC_HOST_1_TEST	1
 #endif
 
-#ifndef SOCLE_INTC_SDHC0
+#ifndef SQ_INTC_SDHC0
 #error "SDHC Host IRQ is not defined"
 #endif
 
 #ifndef SOCLE_INTC_SDHC1
-#define SOCLE_INTC_SDHC1	SOCLE_INTC_SDHC0
+#define SOCLE_INTC_SDHC1	SQ_INTC_SDHC0
 #endif
 
 #endif // CONFIG_SDHC

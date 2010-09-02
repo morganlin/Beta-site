@@ -5,9 +5,6 @@
 #include "LCD/fb.h"
 #include "LCD/dependency.h"
 #include "LCD/pwm-ctrl.h"
-#ifdef CONFIG_PC9220	
-#include <pc9220-scu.h>
-#endif
 
 #ifdef CONFIG_PC9223	
 #include <pc9223-scu.h>
@@ -112,10 +109,8 @@ static int lcdc_regs_set(struct soclefb_info *sfb)
 			break;
 	}
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
+#if defined(CONFIG_PC9223)
 	in_clk=sq_scu_apb_clock_get()/1000000;  //get_apb_clk
-#elif defined(CONFIG_MDK3D)
-	in_clk=54;
 #else
 	in_clk=sq_scu_ahb_clock_get()/1000000;
 #endif
@@ -188,10 +183,10 @@ static int lcdc_regs_set(struct soclefb_info *sfb)
 int fb_init(int mode)
 {
 	
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_PWM0);
-	socle_scu_dev_enable(SOCLE_DEVCON_LCDC);
-	socle_scu_lcdc_clk_input_mpll_outpput();
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_PWM0);
+	sq_scu_dev_enable(SQ_DEVCON_LCDC);
+	sq_scu_lcdc_clk_input_mpll_outpput();
 #endif
 	
 	sfb_info.reg_base=SOCLE_LCD_BASE;
@@ -235,9 +230,9 @@ int fb_enable(void)
 int fb_disable(void)
 {
 	socle_lcd_write(&sfb_info, socle_lcd_read(&sfb_info, SOCLE_LCD_CTRL0)& ~SOCLE_LCD_CTRL0_ENABLE, SOCLE_LCD_CTRL0);
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_PWM0);
-	socle_scu_dev_disable(SOCLE_DEVCON_LCDC);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_PWM0);
+	sq_scu_dev_disable(SQ_DEVCON_LCDC);
 #endif
 	return 0;
 }
@@ -256,16 +251,16 @@ int lcd_test (int autotest)
 	int ret = 0;
 
 	// for i2c controller
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_I2C);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_I2C);
 #endif
 
 	fb_init(NONE);
 	ret = test_item_ctrl(&socle_lcd_output_container, autotest);
 	fb_disable();
 	
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_I2C);	
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_I2C);	
 #endif
 	return ret;
 }

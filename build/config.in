@@ -4,45 +4,12 @@ comment "Socle Platforms"
 choice
 	prompt "Platform Type"
 	default CONFIG_PC9223
-		
-config CONFIG_PC9220
-	bool "PDK-PC9220"
-	help
-		PDK-PC9220
 
 config CONFIG_PC9223
         bool "PDK-PC9223"
         help
                 PDK-PC9223
-		
-config CONFIG_SCDK
-	bool "SCDK"
-	help
-		SCDK
-
-config CONFIG_MSMV
-        bool "MSMV"
-        help
-                MSMV
-
-config CONFIG_MDK3D
-        bool "MDK3D"
-        help
-                MDK3D
-
-config CONFIG_MDKFHD
-        bool "MDKFHD"
-        help
-                MDKFHD
 endchoice
-
-#	INR-PC7230
-config CONFIG_INR_PC7230
-	bool "INR-PC7230"
-	depends on CONFIG_PC7210
-	help
-		Socle Internet Radio
-
 
 comment "Socle CPUs"
 
@@ -50,42 +17,11 @@ choice
 	prompt "CPU Type"
 	default CONFIG_ARM9
 
-config CONFIG_MIPS
-	bool "MIPS"
-	help
-		MIPS
-
-config CONFIG_ARM7
-	bool "ARM7"
-	help
-		ARM726ejs
-
-config CONFIG_ARM7_HI
-	bool "ARM7_HI"
-	help
-		ARM726ejs High Vector
-
 config CONFIG_ARM9
 	bool "ARM9"
 	help
 		ARM926ejs
-
-config CONFIG_ARM9_HI
-	bool "ARM9_HI"
-	help
-		ARM926ejs High Vector
-
-config CONFIG_ARM11
-	bool "ARM11"
-	help
-		ARM1176jz
-
 endchoice
-
-config CONFIG_VFP
-	bool "VFP"
-	help
-		VFP Coprocessor
 
 comment "Socle CPU Endians"
 

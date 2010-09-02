@@ -74,7 +74,7 @@ socle_spi_ads7846_touch(int autotest)
 
 	/* Configure SPI controller */
 	socle_spi_write(
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined (CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 			SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
 			SOCLE_SPI_MASTER_SIGNAL_ACT_NO |		
 			SOCLE_SPI_MODE_MASTER |
@@ -110,11 +110,7 @@ socle_spi_ads7846_touch(int autotest)
 
 	socle_spi_write(
 			SOCLE_SPI_CHAR_LEN_8 |
-#if defined(CONFIG_MDK3D) || defined (CONFIG_MDKFHD)
-			SOCLE_SPI_SLAVE_SEL_1 |
-#else
 			SOCLE_SPI_SLAVE_SEL_0 |
-#endif
 			SOCLE_SPI_CLK_DIV(divisor),
 			SOCLE_SPI_SSCR);
 
@@ -130,7 +126,7 @@ socle_spi_ads7846_touch(int autotest)
 
 	// enable interrupt
 #if defined (CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_EXT_INT0);
+	sq_scu_dev_enable(SQ_DEVCON_EXT_INT0);
 #endif
 	request_irq(ADS7846_INTR, ads7846_isr, null);
 
@@ -175,7 +171,7 @@ socle_spi_ads7846_touch(int autotest)
 	
 	// enable interrupt
 #if defined (CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_EXT_INT0);
+	sq_scu_dev_disable(SQ_DEVCON_EXT_INT0);
 #endif
 	free_irq(ADS7846_INTR);
 

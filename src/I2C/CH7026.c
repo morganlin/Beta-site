@@ -56,7 +56,7 @@ extern int ch7026_init(int out)
 	struct screen_info screen;
 	
 	printf("ch7026_init\n");
-	i2c_master_initialize(SOCLE_I2C0, SOCLE_INTC_I2C0);
+	i2c_master_initialize(SQ_I2C0, SQ_INTC_I2C0);
 	ch7026_client.addr = 0x76;
 	did=ch7026_read(0x00);
 	rid=ch7026_read(0x01);	

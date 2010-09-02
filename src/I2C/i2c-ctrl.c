@@ -5,10 +5,6 @@
 #include "i2c-regs.h"
 #include "dependency.h"
 #include "i2c.h"
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
-
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -38,14 +34,14 @@ i2c_test(int autotest)
 {
 	int ret = 0;
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_I2C);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_I2C);
 #endif
 
 	ret = test_item_ctrl(&socle_i2c_pre_test_container, autotest);
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_I2C);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_I2C);
 #endif
 	
 	return ret;
@@ -60,26 +56,12 @@ socle_i2c0_test(int autotest)
 {
 	int ret = 0;
 
-	socle_i2c_base = SOCLE_I2C0;
-	socle_i2c_irq = SOCLE_INTC_I2C0;
+	socle_i2c_base = SQ_I2C0;
+	socle_i2c_irq = SQ_INTC_I2C0;
 	i2c_master_initialize(socle_i2c_base, socle_i2c_irq);
 	
-#ifdef CONFIG_MSMV
-	tps62353_set_type(TPS62353_TYPE0);
-#endif
-
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-	socle_i2c_main_test_items[4].enable = 0;
-	socle_i2c_main_test_items[6].enable = 0;
-#endif
-	
 	ret = test_item_ctrl(&socle_i2c_main_test_container, autotest);
-
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-	socle_i2c_main_test_items[4].enable = 1;
-	socle_i2c_main_test_items[6].enable = 1;
-#endif
-
+        
 	return ret;
 }
 
@@ -91,20 +73,8 @@ socle_i2c1_test(int autotest)
        socle_i2c_base = SOCLE_I2C1;		
 	socle_i2c_irq = SOCLE_INTC_I2C1;
         i2c_master_initialize(socle_i2c_base, socle_i2c_irq);
-			
-#ifdef CONFIG_MSMV
-	tps62353_set_type(TPS62353_TYPE1);
-#endif
-
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-	socle_i2c_main_test_items[7].enable = 0;
-#endif
 
         ret = test_item_ctrl(&socle_i2c_main_test_container, autotest);
-
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-	socle_i2c_main_test_items[7].enable = 1;
-#endif
 
 	return ret;
 }
@@ -117,28 +87,8 @@ socle_i2c2_test(int autotest)
 	socle_i2c_base = SOCLE_I2C2;
 	socle_i2c_irq = SOCLE_INTC_I2C2;
         i2c_master_initialize(socle_i2c_base, socle_i2c_irq);
-			
-#ifdef CONFIG_MSMV
-	tps62353_set_type(TPS62353_TYPE2);
-#endif
-
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-	socle_i2c_main_test_items[3].enable = 0;
-	socle_i2c_main_test_items[4].enable = 0;
-	socle_i2c_main_test_items[6].enable = 0;
-	socle_i2c_main_test_items[5].enable = 0;
-	socle_i2c_main_test_items[7].enable = 0;
-#endif
 
         ret = test_item_ctrl(&socle_i2c_main_test_container, autotest);
-
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-	socle_i2c_main_test_items[3].enable = 1;
-	socle_i2c_main_test_items[4].enable = 1;
-	socle_i2c_main_test_items[6].enable = 1;
-	socle_i2c_main_test_items[5].enable = 1;
-	socle_i2c_main_test_items[7].enable = 1;
-#endif
 
 	return ret;
 }

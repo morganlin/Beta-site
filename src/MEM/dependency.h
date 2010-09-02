@@ -1,9 +1,6 @@
 
-#ifdef CONFIG_SCDK
-    #define FPGA_Enable_Disable 1
-#else
-    #define FPGA_Enable_Disable 0
-#endif
+#define FPGA_Enable_Disable 0
+
 
 #ifdef CONFIG_ITCM
     #define ITCM_Enable_Disable 1
@@ -41,17 +38,10 @@
 #define ANOTHER_DTCM_Enable_Disable 0 
 #endif
 
-#if defined(CONFIG_ARM11) && defined(CONFIG_ITCM)
-#define ITCM1_ENABLE		1
-#else
 #define ITCM1_ENABLE		0
-#endif
 
-#if defined(CONFIG_ARM11) && defined(CONFIG_DTCM)
-#define DTCM1_ENABLE		1
-#else
 #define DTCM1_ENABLE		0
-#endif
+
 
 
 

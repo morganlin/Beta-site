@@ -15,10 +15,8 @@
 #define	ASIC_1_1		3
 #define	ASIC_2_1		4
 
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-#else
 #define	BOARD			FPGA_1_1	//For FPGA & LII_A...arthur
-#endif
+
 /*#define	BOARD			ASIC_1_1 //For ASIC inverse MAC MDIO*/
 
 #if ((BOARD == FPGA_1_1) || (BOARD == FPGA_2_1))
@@ -37,26 +35,16 @@
 #endif
 
 // CPU type
-#if defined (CPU_ARCH_MIPS)
-#define CPU_TYPE	"MIPS4Kc"
-#elif defined (CONFIG_ARM9)
+#if defined (CONFIG_ARM9)
 #define CPU_TYPE	"ARM926EJ-S"
-#elif defined (CONFIG_ARM9_HI)
-#define CPU_TYPE	"ARM926EJ-S High Vector"
-#elif defined (CONFIG_ARM7)
-#define CPU_TYPE	"ARM726EJ-S"
-#elif defined (CONFIG_ARM7_HI)
-#define CPU_TYPE	"ARM726EJ-S High Vector"
-#elif defined (CONFIG_ARM11)
-#define CPU_TYPE	"ARM1176JZ"
 #else
 #error "CPU_ARCH is not well defined!"
 #endif
 
 
 // Mega Alignment
-extern int socle_memory_addr_start;
-#define TEST_PATTERN_START		((((((u32_t)_end) >> 20 )+ 1) << 20) | socle_memory_addr_start)
+extern int sq_memory_addr_start;
+#define TEST_PATTERN_START		((((((u32_t)_end) >> 20 )+ 1) << 20) | sq_memory_addr_start)
 
 
 #define	CLKnS(freqH)			(1000*1000*1000/(freqH))

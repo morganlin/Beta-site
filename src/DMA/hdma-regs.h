@@ -8,30 +8,30 @@
 
 /*	HDMA dependence	*/
 
-#ifndef SOCLE_HDMA0
-#define SOCLE_HDMA0 -1
+#ifndef SQ_HDMA0
+#define SQ_HDMA0 -1
 #endif
 #ifndef SOCLE_HDMA1
-#define SOCLE_HDMA1 SOCLE_HDMA0
+#define SOCLE_HDMA1 SQ_HDMA0
 #endif
 #ifndef SOCLE_HDMA2
-#define SOCLE_HDMA2 SOCLE_HDMA0
+#define SOCLE_HDMA2 SQ_HDMA0
 #endif
 #ifndef SOCLE_HDMA3
-#define SOCLE_HDMA3 SOCLE_HDMA0
+#define SOCLE_HDMA3 SQ_HDMA0
 #endif
 
-#ifndef SOCLE_INTC_HDMA0
-#define SOCLE_INTC_HDMA0 -1
+#ifndef SQ_INTC_HDMA0
+#define SQ_INTC_HDMA0 -1
 #endif
 #ifndef SOCLE_INTC_HDMA1
-#define SOCLE_INTC_HDMA1 SOCLE_INTC_HDMA0
+#define SOCLE_INTC_HDMA1 SQ_INTC_HDMA0
 #endif
 #ifndef SOCLE_INTC_HDMA2
-#define SOCLE_INTC_HDMA2 SOCLE_INTC_HDMA0
+#define SOCLE_INTC_HDMA2 SQ_INTC_HDMA0
 #endif
 #ifndef SOCLE_INTC_HDMA3
-#define SOCLE_INTC_HDMA3 SOCLE_INTC_HDMA0
+#define SOCLE_INTC_HDMA3 SQ_INTC_HDMA0
 #endif
 
 /*

@@ -1,10 +1,6 @@
 #include <global.h>
 #include <irqs.h>
 #include "pwmt-regs.h"
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
-
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -291,13 +287,13 @@ socle_init_pwmt(void)
 
 	PWMT_DBG("pwmt init\n");
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_PWM0);
-	socle_scu_dev_enable(SOCLE_DEVCON_PWM1);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_PWM0);
+	sq_scu_dev_enable(SQ_DEVCON_PWM1);
 #endif
 
-	base = SOCLE_TIMER_PWM0;
-	irq = SOCLE_INTC_PWM0;
+	base = SQ_TIMER_PWM0;
+	irq = SQ_INTC_PWM0;
 
 	for (i = 0; i < SOCLE_PWM_NUM; i++) {
 		if (i) {

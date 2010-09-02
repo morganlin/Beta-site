@@ -8,10 +8,6 @@
 #include "macif.h"
 #include "macctrl.h"
 #include <test_item.h>
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
-
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -234,8 +230,7 @@ const char	MAC_Auto_Test_Item[] =
 , '}', '=', '4'
 , '}', '=', '4'
 , '}', '=', '4'
-
-, '@'	//Beacause the bus speed we only could test TR at 10M
+, '@'
 , '+', '=', '4'
 , '+', '=', '4'
 , '+', '=', '4'
@@ -374,8 +369,8 @@ int mac_normal_test(int autotest)
 	char 	cmd_buf[20] = {DEFAULT_MAC_TESTING_ITEM};
         char    cmd_description_buf[50]; /* added by morganlin */
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_MAC);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_enable(SQ_DEVCON_MAC);
 #endif
 
 	MAC_Auto_Test_ItemNum=0;
@@ -559,7 +554,7 @@ MacMain_break:
 						break;
 					}
 					
-					MSDELAY(10000);		//leonid+ for mdk-3d	10M
+					MSDELAY(10000);	
 					
 				//Initial Filter
 					result=sMacFltrFrmXmit(Testing_DevicePt,(char *)Test_FilterAddr,Test_FilterSize);
@@ -2199,8 +2194,8 @@ case_v_break:
 
 	}
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_MAC);
+#if defined(CONFIG_PC9223)
+	sq_scu_dev_disable(SQ_DEVCON_MAC);
 #endif
 	
 	return(result);

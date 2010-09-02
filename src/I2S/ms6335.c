@@ -50,11 +50,9 @@ ms6335_dac_initialize(void)
 	int ret = 0;
 
 	printf("ms6335_dac_initialize Line Out initialize\n");
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-        i2c_master_initialize(SOCLE_I2C1, SOCLE_INTC_I2C1);
-#else
-	i2c_master_initialize(SOCLE_I2C0, SOCLE_INTC_I2C0);
-#endif
+
+	i2c_master_initialize(SQ_I2C0, SQ_INTC_I2C0);
+
 	ms6335_client.addr = MS6335_SLAVE_ADDR_DAC;
 	MSDELAY(5);
 printf("@@--%s--MS6335_AUDIO_I2S_MODE\n", __func__);

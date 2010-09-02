@@ -66,7 +66,7 @@ extern int sam48_lcd_init(void)
 	u8 divisor,i,count; 
 	u8 tx_buf[2];
 	
-	socle_spi_master_init(SOCLE_SPI0,SOCLE_INTC_SPI0);
+	socle_spi_master_init(SQ_SPI0,SQ_INTC_SPI0);
 	
 	/* Reset SPI controller */
 	socle_spi_write(
@@ -76,7 +76,7 @@ extern int sam48_lcd_init(void)
 
 	/* Configure SPI controller */
 		socle_spi_write(
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223) || defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined(CONFIG_PC9223)
 			SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
 			SOCLE_SPI_MASTER_SIGNAL_ACT_NO |		
 			SOCLE_SPI_MODE_MASTER |

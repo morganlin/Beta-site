@@ -12,10 +12,6 @@ ifeq "y" "$(CONFIG_DMAC)"
 sinclude src/DMAC/IP.mk
 endif
 
-ifeq "y" "$(CONFIG_VFP)"
-sinclude src/VFP/IP.mk
-endif
-
 ifeq "y" "$(CONFIG_GPIO)"
 sinclude src/GPIO/IP.mk
 endif

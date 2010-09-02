@@ -1,11 +1,11 @@
 #ifndef _regs_MEMCTRL_H_
 #define _regs_MEMCTRL_H_
 
-static UINT BANK_ADDRESS[SOCLE_MEMORY_BANKS] = 
+static UINT BANK_ADDRESS[SQ_MEMORY_BANKS] = 
 { 
-    SOCLE_MM_DDR_SDR_BANK0,
-    #ifdef  SOCLE_MM_DDR_SDR_BANK1
-        SOCLE_MM_DDR_SDR_BANK1,
+    SQ_MM_DDR_SDR_BANK0,
+    #ifdef  SQ_MM_DDR_SDR_BANK1
+        SQ_MM_DDR_SDR_BANK1,
     #endif
     #ifdef  SOCLE_MM_DDR_SDR_BANK2
         SOCLE_MM_DDR_SDR_BANK2,

@@ -1,13 +1,13 @@
 #include <platform.h>
 
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-#define SOCLE_VOP_BASE SOCLE_VOP0
+#if defined(CONFIG_PC9223)
+#define SOCLE_VOP_BASE SQ_VOP0
 #else
 #define SOCLE_VOP_BASE 0xB8080000
 #endif
 
-#ifndef SOCLE_INTC_VOP0
-#define SOCLE_INTC_VOP0 29
+#ifndef SQ_INTC_VOP0
+#define SQ_INTC_VOP0 29
 #endif
 
 #define FRAMESIZE_QCIF 0   //176x144

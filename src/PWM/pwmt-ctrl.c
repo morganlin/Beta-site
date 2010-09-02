@@ -48,7 +48,7 @@ socle_buzzer_pwm_test(int autotest)
 
 #ifdef CONFIG_PC9223
 	// the PWM1 share pin defined PWM1
-	socle_scu_dev_enable(SOCLE_DEVCON_PWM1);
+	sq_scu_dev_enable(SQ_DEVCON_PWM1);
 #endif
 
 	hrc = 0x250;
@@ -112,7 +112,7 @@ socle_buzzer_gpio_test(int autotest)
 
 #ifdef CONFIG_PC9223
 	// the PWM1 share pin defined GPIO_PK[5]
-	socle_scu_dev_disable(SOCLE_DEVCON_PWM1);
+	sq_scu_dev_disable(SQ_DEVCON_PWM1);
 #endif
 
 	socle_gpio_test_mode_en(PK, 0);
@@ -385,11 +385,7 @@ socle_pwmt_capture_mode_init(struct socle_pwmt *p_pwmt, int enable, int hrc, int
 
 	pwmt_drv->reset(p_pwmt);
 	//pwmt_drv->write_prescale_factor(p_pwmt, DEFAULT_PRE_SCL);
-#ifdef CONFIG_MSMV
-	pwmt_drv->write_prescale_factor(p_pwmt, 4);
-#else
 	pwmt_drv->write_prescale_factor(p_pwmt, 16);
-#endif
 	
 	if (enable) {
 		pwmt_drv->write_hrc(p_pwmt, 0);

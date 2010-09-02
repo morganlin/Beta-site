@@ -52,7 +52,7 @@ uda1342ts_dac_initialize(void)
 	u16 val;
 
 	printf("UDA1342TS Line Out initialize\n");
-	i2c_master_initialize(SOCLE_I2C0, SOCLE_INTC_I2C0);
+	i2c_master_initialize(SQ_I2C0, SQ_INTC_I2C0);
 	uda1342ts_client.addr = UDA1342TS_SLAVE_ADDR_DAC;
 	
 	/* Reset the audio codec first */
@@ -146,7 +146,7 @@ uda1342ts_adc_initialize(void)
 	u16 val;
 
 	printf("UDA1342TS Line In initialize\n");
-	i2c_master_initialize(SOCLE_I2C0, SOCLE_INTC_I2C0);
+	i2c_master_initialize(SQ_I2C0, SQ_INTC_I2C0);
 	uda1342ts_client.addr = UDA1342TS_SLAVE_ADDR_ADC;
 /* 	ret = uda1342ts_write(UDA1342TS_FUNC_SYSTEM, 0x0000); */
 /* 	if (-1 == ret) { */

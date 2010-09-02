@@ -32,13 +32,13 @@
 #define USE_PWM_NUM_1		1
 
 
-#ifdef SOCLE_INTC_PWM0
+#ifdef SQ_INTC_PWM0
 #define SOCLE_PWMT_0_ENABLE		1
 #else
 #define SOCLE_PWMT_0_ENABLE		0
 #endif
 
-#ifdef SOCLE_INTC_PWM1
+#ifdef SQ_INTC_PWM1
 #define SOCLE_PWMT_1_ENABLE		1
 #else
 #define SOCLE_PWMT_1_ENABLE		0
@@ -56,15 +56,9 @@
 #define SOCLE_PWMT_3_ENABLE		0
 #endif
 
-#ifdef CONFIG_MSMV
-#define	SOCLE_ADC0	0
-#define SOCLE_INTC_ADC0	0
-#define SOCLE_PWMT_CURRENT_SENSE_TEST 1
-#define	SOCLE_PWMT_CAPTURE_LOOP	0
-#else
 #define SOCLE_PWMT_CURRENT_SENSE_TEST 0
 #define SOCLE_PWMT_CAPTURE_LOOP 1
-#endif
+
 
 
 

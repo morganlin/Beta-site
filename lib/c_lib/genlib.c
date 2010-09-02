@@ -63,14 +63,8 @@ extern "C" {
 #endif
 
 char *BSDCRN = "Copyright (c) 1988, 1993 The Regents of the University of California.  All rights reserved.";
-
-#if defined(CONFIG_ARM7)
-char* _mem_chunk = (char*)0x42000000;
-#elif defined(CONFIG_ARM7_HI)
-char* _mem_chunk = (char*)0x52000000;
-#else
 char* _mem_chunk = (char*)0x40f00000;
-#endif
+
 
 /* If an application is using this source code, then the printf() calls
  * might want to be redirected to mon_printf...

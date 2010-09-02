@@ -102,11 +102,7 @@ char getchar(void)
 {
 	volatile unsigned long *p;
 	
-#if defined CONFIG_ARM9_HI
-	p = (unsigned long *) SOCLE_UART2;
-#else 
-	p = (unsigned long *) SOCLE_UART0;
-#endif
+	p = (unsigned long *) SQ_UART0;
 	while((*(p+5)&(1<<0))!=1);	//wait for data
 	return(*p);
 }

@@ -110,11 +110,11 @@ vipSetFrameMode(int frame_mode)
 	switch(frame_mode) {
 		case ONE_FRAME:
 			socle_vip_write(socle_vip_read(SOCLE_VIP_CTRL) | VIP_CTRL_ONE_FRAME_STOP, SOCLE_VIP_CTRL);
-			request_irq(SOCLE_INTC_VIP0,vipOneFrameIsr,NULL);
+			request_irq(SQ_INTC_VIP0,vipOneFrameIsr,NULL);
 			break;
 		case TWO_FRAME:
 			socle_vip_write((socle_vip_read(SOCLE_VIP_CTRL) & ~VIP_CTRL_ONE_FRAME_STOP) | VIP_CTRL_PING_PONG_MODE, SOCLE_VIP_CTRL);
-			request_irq(SOCLE_INTC_VIP0,vipTwoFrameIsr,NULL);
+			request_irq(SQ_INTC_VIP0,vipTwoFrameIsr,NULL);
 			break;
 		case CONTINUOUS:
 			socle_vip_write(socle_vip_read(SOCLE_VIP_CTRL) & ~(VIP_CTRL_ONE_FRAME_STOP | VIP_CTRL_PING_PONG_MODE), SOCLE_VIP_CTRL);
@@ -129,7 +129,7 @@ vipSetFrameMode(int frame_mode)
 extern void
 vipReset(void)
 {
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 	socle_vip_write(VIP_RESET, SOCLE_VIP_RESET);
 #else
 	socle_vip_write(VIP_CTRL_RESET, SOCLE_VIP_CTRL);
@@ -154,7 +154,7 @@ vipStop (void)
 {  
   socle_vip_write(VIP_INT_MASK_DISABLE, SOCLE_VIP_INT_MASK);
   socle_vip_write(VIP_CTRL_CAPTURE_DIS, SOCLE_VIP_CTRL);
-  free_irq(SOCLE_INTC_VIP0);
+  free_irq(SQ_INTC_VIP0);
 }
 
 static void

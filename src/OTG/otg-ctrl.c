@@ -49,8 +49,8 @@ otg0_device_test(int autotest)
 {
 	int ret = 0;
 	
-	otg_base = SOCLE_OTG0;
-	otg_irq = SOCLE_INTC_OTG0;
+	otg_base = SQ_OTG0;
+	otg_irq = SQ_INTC_OTG0;
 
 	printf("otg0_device_test\n");
 	ret = otg_device_start(autotest);
@@ -63,8 +63,8 @@ otg1_device_test(int autotest)
 {
 	int ret = 0;
 	
-	otg_base = SOCLE_OTG1;
-	otg_irq = SOCLE_INTC_OTG1;
+	otg_base = SQ_OTG1;
+	otg_irq = SQ_INTC_OTG1;
 
 	printf("otg1_device_test\n");
         ret = otg_device_start(autotest);

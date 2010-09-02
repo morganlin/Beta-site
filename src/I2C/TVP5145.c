@@ -106,7 +106,7 @@ tvp5145I2C_init(void)
 {
 	int ret=0;
 	printf("init tvp5145\n");
-	i2c_master_initialize(SOCLE_I2C0, SOCLE_INTC_I2C0);
+	i2c_master_initialize(SQ_I2C0, SQ_INTC_I2C0);
 	tvp5145_client.addr = TVP5145FPF_I2C_CLIENT_ADDR;
 	/*
 	int i;

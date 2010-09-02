@@ -5,15 +5,15 @@
 #include <irqs.h>
 #include <dma/dma.h>
 
-#ifdef SOCLE_I2S0
-#define SOCLE_I2S_BASE SOCLE_I2S0
+#ifdef SQ_I2S0
+#define SOCLE_I2S_BASE SQ_I2S0
 #else
 #error "I2S IP base address is not defined"
 #endif
 
-#ifdef SOCLE_INTC_I2S0 
+#ifdef SQ_INTC_I2S0 
 #if 1
-#define SOCLE_I2S_IRQ SOCLE_INTC_I2S0
+#define SOCLE_I2S_IRQ SQ_INTC_I2S0
 #else
 #define SOCLE_I2S_IRQ SOCLE_INTC_MPS1
 #endif

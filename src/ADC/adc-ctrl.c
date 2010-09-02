@@ -4,8 +4,8 @@
 #include <platform.h>
 #include "adc-regs.h"
 
-#ifndef SOCLE_INTC_EXTERNAL0
-#define SOCLE_INTC_EXTERNAL0 0
+#ifndef SQ_INTC_EXTERNAL0
+#define SQ_INTC_EXTERNAL0 0
 #endif
 
 #define CHANNEL_MAX	8
@@ -63,8 +63,8 @@ adc_test(int autotest)
 {
 	int ret = 0;
 
-	adc_base = SOCLE_ADC0;
-	adc_irq = SOCLE_INTC_ADC0;
+	adc_base = SQ_ADC0;
+	adc_irq = SQ_INTC_ADC0;
 
 	adc_initial();
 		
@@ -104,7 +104,7 @@ adc_touch_screen_test(int autotest)
 {
 	int ret = 0;
 
-	request_irq(SOCLE_INTC_EXTERNAL0, touch_screen_isr, NULL);
+	request_irq(SQ_INTC_EXTERNAL0, touch_screen_isr, NULL);
 	
 	adc_test_item = TOUCH_SCREEN;
 

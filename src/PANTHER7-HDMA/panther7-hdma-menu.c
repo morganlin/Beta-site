@@ -1,10 +1,7 @@
 #include <test_item.h>
 
-#ifdef CONFIG_MDK3D
-#define PANTHER7_HDMA1_TEST	1
-#else
 #define PANTHER7_HDMA1_TEST	0
-#endif
+
 
 extern int panther7_hdma_onboard_test(int autotest);
 extern int panther7_hdma_fpga_test(int autotest);

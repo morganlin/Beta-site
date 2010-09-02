@@ -2,13 +2,6 @@
 
 #include "zlib.h"
 
-//#define CONFIG_ARM11_DBG
-
-#ifdef CONFIG_ARM11_DBG
-        #define ARM11BUG(fmt, args ...)   printf("%s: " fmt, __FUNCTION__ , ## args)
-#else
-        #define ARM11BUG(fmt, args ...)
-#endif
 
 
 

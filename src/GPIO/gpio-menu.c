@@ -57,7 +57,7 @@ struct test_item socle_gpio_normal_test_items[] = {
 		"Flash LEDs Test",
 		socle_gpio_flash_leds,
 		1,
-		SOCLE_GPIO_FLASH_LED_TEST
+		SQ_GPIO_FLASH_LED_TEST
 	},
 	{
 		"KeyPad Test",

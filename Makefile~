@@ -122,11 +122,20 @@ endif
 
 ifeq "$(CPU_ARCH)" "CPU_ARCH_ARM"
 CFLAGS		+= -mapcs-frame -mpoke-function-name -mlong-calls -Wall -O0  -fno-builtin -D$(SYS_ENDIAN) -D$(CPU_ARCH) -D$(SEMI_HOST) $(INCLUDE) #-Wstrict-prototypes
+
+ifeq "y" "$(CONFIG_VFP)"
+EXTRA_CFLAGS 	+= -s $(call cc-option,-mapcs-32,-mabi=apcs-gnu) $(call cc-option,-mfpu=vfp,) $(call cc-option,-mfloat-abi=softfp,)
+else
 EXTRA_CFLAGS 	+= $(call cc-option,-mapcs-32,-mabi=apcs-gnu) $(call cc-option,-mfpu=fpa,) $(call cc-option,-mfloat-abi=softfp,)
+endif
+
 LDFLAGS		+= -N -n -EL
 CFLAGS		+= -march=armv5te
+
+
 CFLAGS		+= -DTEXT_BASE=$(text_base)
 LDFLAGS		+= -Ttext $(text_base)
+
 endif # endif "$(CPU_ARCH)" "CPU_ARCH_ARM"
 
 # Debuger

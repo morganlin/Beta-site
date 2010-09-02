@@ -42,7 +42,7 @@
 /* default value for TSC2000 ADC register for use with touch functions */
 #define DEFAULT_ADC		(TC_PV1 | TC_AV0 | TC_AV1 | TC_RS0)
 
-#define TSC2000_INTR		SOCLE_INTC_EXTERNAL0
+#define TSC2000_INTR		SQ_INTC_EXTERNAL0
 
 #define IS_PEN_DOWN(x)	( x & (1<<15) )
 

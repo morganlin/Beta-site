@@ -9,10 +9,6 @@
 #include "LCD/pwm-ctrl.h"
 #include "LCD/fb.h"
 #include "LCD/color_fill.h"
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
-
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -22,8 +18,8 @@
 #define VIP_TO_LCD 2
 #define VOP_COLOR_DISPLAY 3
 
-#define FRAME1_ADDR		(SOCLE_MEMORY_ADDR_START + 0x1800000)
-#define FRAME2_ADDR		(SOCLE_MEMORY_ADDR_START + 0x1900000)
+#define FRAME1_ADDR		(SQ_MEMORY_ADDR_START + 0x1800000)
+#define FRAME2_ADDR		(SQ_MEMORY_ADDR_START + 0x1900000)
 
 #define CCIR656 3
 //.................................
@@ -44,20 +40,16 @@ extern int
 vip_vop_test(int autotest)
 {
 	int ret = 0;
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_I2C);
-	socle_scu_dev_enable(SOCLE_DEVCON_LCDC_VOP);
 #if defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_VIP);
-#endif
+	sq_scu_dev_enable(SQ_DEVCON_I2C);
+	sq_scu_dev_enable(SQ_DEVCON_LCDC_VOP);
+	sq_scu_dev_enable(SQ_DEVCON_VIP);
 #endif
 	ret = test_item_ctrl(&socle_vip_vop_main_container, autotest);
-#if defined(CONFIG_PC9220) || defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_I2C);
-	socle_scu_dev_disable(SOCLE_DEVCON_LCDC_VOP);
 #if defined(CONFIG_PC9223)
-	socle_scu_dev_disable(SOCLE_DEVCON_VIP);
-#endif
+	sq_scu_dev_disable(SQ_DEVCON_I2C);
+	sq_scu_dev_disable(SQ_DEVCON_LCDC_VOP);
+	sq_scu_dev_disable(SQ_DEVCON_VIP);
 #endif
 	return ret;
 }
@@ -224,10 +216,8 @@ socle_vip_to_lcd_run(void)
 	struct mem_info mem;
 	int vip_xres,vip_yres;
 	char *vip_y, *vip_u, *vip_v;
-#if defined(CONFIG_MDK3D)
-	u32 *fb_rgb;
-	int i,j;
-#elif defined(CONFIG_PC9223)
+
+#if defined(CONFIG_PC9223)
 	char *fb_y, *fb_u, *fb_v;
 	int i;
 #else
@@ -274,42 +264,8 @@ socle_vip_to_lcd_run(void)
 	while(vip_irq_flag==0)
 		ret=1;
 	ret=0;
-	vipStop();
-	
-#if defined(CONFIG_MDK3D)
-	fb_init(RGB888);
-	fb_get_screen_info(&screen);
-	fb_get_mem_info(&mem);
-	fb_rgb=(u32 *)mem.page0_addr;
-	
-	if(vip_xres>screen.xres || vip_yres > screen.yres) {
-		printf("input size is larger than screen\n");
-		return -1;
-	}
-		
-	for(i=0;i<(screen.xres*screen.yres);i++)
-			fb_rgb[i]=0;
-	
-	for(i=0;i<vip_yres;i++) {
-		for(j=0;j<vip_xres;j++) {
-			socle_yuv2rgb(*vip_y, *vip_u, *vip_v, fb_rgb++);
-			vip_y++;
-			if(output422) {
-				if(j&0x1) {
-					vip_u++;
-					vip_v++;
-				}
-			}
-			else {
-				if(!((j+1)%4)) {
-					vip_u++;
-					vip_v++;
-				}
-			}
-		}
-		fb_rgb+=(screen.xres-vip_xres);
-	}	
-#elif defined(CONFIG_PC9223)
+	vipStop();	
+#if defined(CONFIG_PC9223)
 	if(output422)
 		fb_init(YUV422);
 	else

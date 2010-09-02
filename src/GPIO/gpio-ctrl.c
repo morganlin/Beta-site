@@ -52,28 +52,9 @@ extern int
 gpio_test(int autotest)
 {
 	int ret = 0;
-#ifdef CONFIG_SCDK
-	{	
-  	extern struct test_item socle_gpio_main_test_items[];
-  	//read scu to get amba mode
-  	if(ioread32(SOCLE_SCU0 + 0x28) & SCU_AHB_MODE)
-			socle_gpio_main_test_items[1].enable=1;
-		else
-			socle_gpio_main_test_items[1].enable=0;
-	}
-#endif
-
-#ifdef CONFIG_MDK3D
-	printf("warning : Please check the JP27, JP28 on the platform board\n");
-	printf("------------JP27 & JP28 must 'ON' -------------------\n");
-#endif
 	
 	ret = test_item_ctrl(&socle_gpio_main_container, autotest);
 	
-#ifndef CONFIG_SCDK	
-	socle_init_gpio_irq();
-#endif
-
 	return ret;
 }
 
@@ -83,13 +64,7 @@ extern int
 socle_gpio_onboard_test(int autotest)
 {
 	int ret = 0;
-#ifdef CONFIG_SCDK
-	{	
-  	extern struct test_item socle_gpio_int_test_items[];
-		socle_gpio_int_test_items[1].enable=0;
-		socle_set_gpio_base(0, SQ_GPIO0);
-	}
-#endif
+
 	ret = test_item_ctrl(&socle_gpio_mode_container, autotest);
 	return ret;
 }
@@ -102,12 +77,7 @@ socle_gpio_fpga_test(int autotest)
   	extern struct test_item socle_gpio_int_test_items[];
 		socle_gpio_int_test_items[1].enable=1;  
 	}
-#ifdef CONFIG_SCDK
-	socle_set_gpio_base(0, SOCLE_MP_GPIO0);
-#ifdef SQ_GPIO_WITH_INT
-	socle_set_gpio_irq(0, SOCLE_INTC_MPS0);
-#endif
-#endif
+	
 	ret = test_item_ctrl(&socle_gpio_mode_container, autotest);
 	return ret;
 }
@@ -544,8 +514,6 @@ socle_gpio_port_test(void)
 		socle_gpio_test_mode_ctrl(pa, PA2PB);
 		ret |= socle_gpio_wo_int_rw_test(pa, pb);
 
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-#else
 		//Tmode2, loop back pd to pc
 		socle_gpio_test_mode_ctrl(pa, PD2PC);
 		ret |= socle_gpio_wo_int_rw_test(pd, pc);
@@ -553,7 +521,6 @@ socle_gpio_port_test(void)
 		//Tmode3, loop back pc to pd
 		socle_gpio_test_mode_ctrl(pa, PC2PD);
 		ret |= socle_gpio_wo_int_rw_test(pc, pd);
-#endif
 
 	} else if (WITH_INT == socle_gpio_test_env.interrupt) {
 		GPIO_DBG("with interrupt\n");
@@ -566,8 +533,6 @@ socle_gpio_port_test(void)
 		socle_gpio_test_mode_ctrl(pa, PA2PB);
 		ret |= socle_gpio_w_int_rw_test(pa, pb);
 
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
-#else
 		//Tmode2, loop back pd to pc
 		socle_gpio_test_mode_ctrl(pa, PD2PC);
 		ret |= socle_gpio_w_int_rw_test(pd, pc);
@@ -575,7 +540,6 @@ socle_gpio_port_test(void)
 		//Tmode3, loop back pc to pd
 		socle_gpio_test_mode_ctrl(pa, PC2PD);
 		ret |= socle_gpio_w_int_rw_test(pc, pd);
-#endif
 
 	}	//socle_gpio_test_env.interrupt
 

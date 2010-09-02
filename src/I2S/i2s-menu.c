@@ -163,11 +163,7 @@ struct test_item socle_i2s_input_ch_test_items[] = {
 	{"Microphone test",
 	 socle_i2s_input_ch2_test,
 	 0,
-#ifdef CONFIG_SCDK
-	 1
-#else
 	 0
-#endif
 	 },
 };
 

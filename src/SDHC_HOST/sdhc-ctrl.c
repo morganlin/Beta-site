@@ -1,9 +1,6 @@
 #include <test_item.h>
 #include <genlib.h>
 #include <dma/dma.h>
-#ifdef CONFIG_PC9220
-#include <pc9220-scu.h>
-#endif
 #ifdef CONFIG_PC9223
 #include <pc9223-scu.h>
 #endif
@@ -2548,8 +2545,8 @@ socle_sdhc_host_0_test(int autotest)
 	socle_sdhci_irq = SOCLE_INTC_SDMMC0;
 #elif defined (CONFIG_SDHC)
 	socle_sdhci = &socle_sdhc_host_ops;
-	socle_sdhc_base = SOCLE_SDHC0;
-	socle_sdhci_irq = SOCLE_INTC_SDHC0;
+	socle_sdhc_base = SQ_SDHC0;
+	socle_sdhci_irq = SQ_INTC_SDHC0;
 #else
 	#error not define SDHC Host IP
 #endif
@@ -2589,7 +2586,7 @@ sdhc_host_test(int autotest)
 	int ret;
 
 #if defined(CONFIG_PC9223)
-	socle_scu_dev_enable(SOCLE_DEVCON_SDMMC);	
+	sq_scu_dev_enable(SQ_DEVCON_SDMMC);	
 #endif
 
 	memset((char *) TEST_PATTERN_TX_ADDR, 0, TEST_PATTERN_BUF_SIZE);

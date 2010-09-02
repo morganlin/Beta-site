@@ -79,13 +79,11 @@ struct socle_nand_info {
  * and a Special Function Registers (SFR). 
  */
 
-#if defined(CONFIG_MDK3D) || defined(CONFIG_MDKFHD)		//For MDK3D platform FPGA test
-#define NAND_INT    SOCLE_INTC_EXTERNAL1
-#else
-#define NAND_INT    SOCLE_INTC_NAND0
-#endif
+
+#define NAND_INT    SQ_INTC_NAND0
+
 //#define NF_CONTROLLER_ADDRESS   0x1CB20000
-#define NF_CONTROLLER_ADDRESS   SOCLE_NAND0
+#define NF_CONTROLLER_ADDRESS   SQ_NAND0
 
 
 #define NF_INTERNAL_BUFF_ADDR   (NF_CONTROLLER_ADDRESS )    /** NAND flash buffer */
@@ -202,7 +200,7 @@ struct socle_nand_info {
 /** FSM Busy. 
   *	If at least one of these two flag(0x20 and 0x40)
   * is set it means that FSM executes instruction 
-  *	and can’t accept new one 
+  *	and canï¿½t accept new one 
   */
 #define NF_STATE_FSM_BUSY           0x0060ul
 

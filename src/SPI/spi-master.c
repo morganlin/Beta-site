@@ -32,7 +32,7 @@ socle_spi_master_init(u32 spi_base, u32 irq_num)
 {
 	socle_spi_base=spi_base;
 	socle_irq_num=irq_num;
-#if defined (CONFIG_PC9220) || defined (CONFIG_PC9223) || defined (CONFIG_MDK3D) || defined(CONFIG_MDKFHD)
+#if defined (CONFIG_PC9223)
 	socle_spi_write(
 		socle_spi_read(SOCLE_SPI_FWCR) |
 		SOCLE_SPI_MODE_MASTER,
