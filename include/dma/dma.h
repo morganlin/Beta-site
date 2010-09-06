@@ -18,7 +18,7 @@ enum socle_dma_channel_no{
     PANTHER7_HDMA_CH_3
 };
 
-struct socle_dma_notifier {
+struct sq_dma_notifier {
 	void (*complete)(void *data);
 	void (*error)(void *data);
 	void (*page_interrupt)(void *data);
@@ -56,34 +56,34 @@ struct socle_dma{
 	u32 irq;		/* controller IRQ */
 	void *private_data;	/* private data */
 	struct socle_dma_ops *ops;
-	struct socle_dma_notifier *notifier;
+	struct sq_dma_notifier *notifier;
 };
 
 /* DMA mode */
 enum SOCLE_DMA_MODE {
 	SOCLE_DMA_MODE_SW,
 	SOCLE_DMA_MODE_HW,
-	SOCLE_DMA_MODE_SLICE,
+	SQ_DMA_MODE_SLICE,
 };
 
 /* DMA burst type */
 enum SOCLE_DMA_BURST {
-	SOCLE_DMA_BURST_SINGLE,
-	SOCLE_DMA_BURST_INCR4,
-	SOCLE_DMA_BURST_INCR8,
+	SQ_DMA_BURST_SINGLE,
+	SQ_DMA_BURST_INCR4,
+	SQ_DMA_BURST_INCR8,
 	SOCLE_DMA_BURST_INCR16,
 };
 
 /* DMA source/destination direction */
 enum SOCLE_DMA_DIRECTION {
-	SOCLE_DMA_DIR_INCR,
-	SOCLE_DMA_DIR_FIXED,
+	SQ_DMA_DIR_INCR,
+	SQ_DMA_DIR_FIXED,
 };
 
 /* DMA data size */
 enum SOCLE_DMA_DATA_SIZE {
-	SOCLE_DMA_DATA_BYTE,
-	SOCLE_DMA_DATA_HALFWORD,
+	SQ_DMA_DATA_BYTE,
+	SQ_DMA_DATA_HALFWORD,
 	SOCLE_DMA_DATA_WORD,
 };
 
@@ -95,58 +95,58 @@ enum SOCLE_DMA_FLY {
 };
 
 /* Request a DMA channel */
-extern int socle_request_dma(u32 ch, struct socle_dma_notifier *notifier);
+extern int sq_request_dma(u32 ch, struct sq_dma_notifier *notifier);
 
 /* Free a DMA channel */
-extern void socle_free_dma(u32 ch);
+extern void sq_free_dma(u32 ch);
 
 /* Enable DMA channel */
-extern void socle_enable_dma(u32 ch);
+extern void sq_enable_dma(u32 ch);
 
 /* Disable DMA for this channel */
-extern void socle_disable_dma(u32 ch);
+extern void sq_disable_dma(u32 ch);
 
 /* Test whether the specified channel has an active DMA transfer */
 extern int socle_dma_channel_active(u32 ch);
 
 /* Set DMA transfer count */
-extern void socle_set_dma_transfer_count(u32 ch, u32 cnt);
+extern void sq_set_dma_transfer_count(u32 ch, u32 cnt);
 
 /* Set DMA source address */
-extern void socle_set_dma_source_address(u32 ch, u32 addr);
+extern void sq_set_dma_source_address(u32 ch, u32 addr);
 
 /* Set DMA destination address */
-extern void socle_set_dma_destination_address(u32 ch, u32 addr);
+extern void sq_set_dma_destination_address(u32 ch, u32 addr);
 
 /* Set DMA source direction */
-extern void socle_set_dma_source_direction(u32 ch, int dir);
+extern void sq_set_dma_source_direction(u32 ch, int dir);
 
 /* Set DMA destination direction */
-extern void socle_set_dma_destination_direction(u32 ch, int dir);
+extern void sq_set_dma_destination_direction(u32 ch, int dir);
 
 /* Set DMA burst type */
-extern void socle_set_dma_burst_type(u32 ch, int burst);
+extern void sq_set_dma_burst_type(u32 ch, int burst);
 
 /* Set DMA data size */
-extern void socle_set_dma_data_size(u32 ch, int size);
+extern void sq_set_dma_data_size(u32 ch, int size);
 
 /* Set DMA mode */
-extern void socle_set_dma_mode(u32 ch, int mode);
+extern void sq_set_dma_mode(u32 ch, int mode);
 
 /* Set DMA external hdreq source selection */
-extern void socle_set_dma_ext_hdreq_number(u32 ch, u32 num);
+extern void sq_set_dma_ext_hdreq_number(u32 ch, u32 num);
 
 /* Set DMA on the fly mode enable/disable */
 extern void socle_set_dma_fly_operation(u32 ch, u32 fly_op);
 
 /* Set DMA slice count */
-extern void socle_set_dma_slice_count(u32 ch, u32 cnt);
+extern void sq_set_dma_slice_count(u32 ch, u32 cnt);
 
 /* Set DMA page number */
-extern void socle_set_dma_page_number(u32 ch, u32 num);
+extern void sq_set_dma_page_number(u32 ch, u32 num);
 
 /* Set DMA buffer size */
-extern void socle_set_dma_buffer_size(u32 ch, u32 size);
+extern void sq_set_dma_buffer_size(u32 ch, u32 size);
 
 extern void socle_dump_dma_register(u32 ch, u32 size);
 

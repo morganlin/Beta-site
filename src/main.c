@@ -159,7 +159,7 @@ socle_init_service(void)
 #endif
 
 #ifdef CONFIG_PWM
-	socle_init_pwmt();
+	sq_init_pwmt();
 #endif
 }
 

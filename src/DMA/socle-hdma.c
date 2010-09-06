@@ -99,13 +99,13 @@ socle_hdma_enable(u32 ch, struct socle_dma *dma)
 		SOCLE_HDMA_HWDMA_TRIGGER_DIS;
 
 	switch (dma->burst_type) {
-	case SOCLE_DMA_BURST_SINGLE:
+	case SQ_DMA_BURST_SINGLE:
 		conf |= SOCLE_HDMA_TX_MODE_SINGLE;
 		break;
-	case SOCLE_DMA_BURST_INCR4:
+	case SQ_DMA_BURST_INCR4:
 		conf |= SOCLE_HDMA_TX_MODE_INCR4;
 		break;
-	case SOCLE_DMA_BURST_INCR8:
+	case SQ_DMA_BURST_INCR8:
 		conf |= SOCLE_HDMA_TX_MODE_INCR8;
 		break;
 	case SOCLE_DMA_BURST_INCR16:
@@ -113,19 +113,19 @@ socle_hdma_enable(u32 ch, struct socle_dma *dma)
 		break;
 	}
 	conf |= SOCLE_HDMA_HDREQ0(dma->ext_hdreq);
-	if (SOCLE_DMA_DIR_FIXED == dma->src_dir)
+	if (SQ_DMA_DIR_FIXED == dma->src_dir)
 		conf |= SOCLE_HDMA_DIR_SRC_FIXED;
-	if (SOCLE_DMA_DIR_FIXED == dma->dst_dir)
+	if (SQ_DMA_DIR_FIXED == dma->dst_dir)
 		conf |= SOCLE_HDMA_DIR_DST_FIXED;		
 	if (SOCLE_DMA_FLY_READ == dma->fly_op)
 		conf |= SOCLE_HDMA_FLY_READ;		
 	if (SOCLE_DMA_FLY_WRITE == dma->fly_op)
 		conf |= SOCLE_HDMA_FLY_WRITE;
 	switch (dma->data_size) {
-	case SOCLE_DMA_DATA_BYTE:
+	case SQ_DMA_DATA_BYTE:
 		conf |= SOCLE_HDMA_DATA_SIZE_BYTE;
 		break;
-	case SOCLE_DMA_DATA_HALFWORD:
+	case SQ_DMA_DATA_HALFWORD:
 		conf |= SOCLE_HDMA_DATA_SIZE_HALFWORD;
 		break;
 	case SOCLE_DMA_DATA_WORD:
@@ -317,13 +317,13 @@ socle_hdma_set_count(struct socle_dma *dma)
 	u32 inter_ch = *((u32 *)dma->private_data);
 
 	switch(dma->burst_type) {
-	case SOCLE_DMA_BURST_SINGLE:
+	case SQ_DMA_BURST_SINGLE:
 		burst_val = 1;
 		break;
-	case SOCLE_DMA_BURST_INCR4:
+	case SQ_DMA_BURST_INCR4:
 		burst_val = 4;
 		break;
-	case SOCLE_DMA_BURST_INCR8:
+	case SQ_DMA_BURST_INCR8:
 		burst_val = 8;
 		break;
 	case SOCLE_DMA_BURST_INCR16:
@@ -334,10 +334,10 @@ socle_hdma_set_count(struct socle_dma *dma)
 		return;
 	}
 	switch (dma->data_size) {
-	case SOCLE_DMA_DATA_BYTE:
+	case SQ_DMA_DATA_BYTE:
 		data_size_val = 1;
 		break;
-	case SOCLE_DMA_DATA_HALFWORD:
+	case SQ_DMA_DATA_HALFWORD:
 		data_size_val = 2;
 		break;
 	case SOCLE_DMA_DATA_WORD:

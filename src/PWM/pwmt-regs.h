@@ -1,5 +1,5 @@
-#ifndef __SOCLE_PWM_REG_H
-#define __SOCLE_PWM_REG_H
+#ifndef __SQ_PWM_REG_H
+#define __SQ_PWM_REG_H
 
 #include "dependency.h"
 
@@ -23,37 +23,37 @@
 #define PWMT_CTRL_OPT_EN		BIT_SHIHT(3)
 #define PWMT_CTRL_EN			BIT_SHIHT(0)
 
-struct socle_pwmt {
+struct sq_pwmt {
 	int busy;
 	unsigned int base;
 	int irq;
-	struct socle_pwmt_driver *drv;
+	struct sq_pwmt_driver *drv;
 };
 
-struct socle_pwmt_driver {
+struct sq_pwmt_driver {
 	void (*claim_pwm_lock)(void);
 	void (*release_pwm_lock)(void);
-	void (*reset)(struct socle_pwmt *);
-	void (*output_enable)(struct socle_pwmt *, int);		// 1:enable, 0:disable
-	void (*enable)(struct socle_pwmt *, int);				// 1:enable, 0:disable
-	void (*capture_mode_enable)(struct socle_pwmt *, int);				// 1:enable, 0:disable
-	void (*clear_interrupt)(struct socle_pwmt *);
-	void (*enable_interrupt)(struct socle_pwmt *, int);		// 1:enable, 0:disable
-	void (*single_counter_mode_enable)(struct socle_pwmt *, int);				// 1:enable, 0:disable
-	void (*set_counter)(struct socle_pwmt *, unsigned int);
-	unsigned int (*read_hrc)(struct socle_pwmt *);
-	unsigned int (*read_lrc)(struct socle_pwmt *);
-	void (*write_hrc)(struct socle_pwmt *, unsigned int);
-	void (*write_lrc)(struct socle_pwmt *, unsigned int);
-	unsigned int (*read_prescale_factor)(struct socle_pwmt *);
-	void (*write_prescale_factor)(struct socle_pwmt *, unsigned int);
-	void (*set_ctrl)(struct socle_pwmt *, unsigned int);
+	void (*reset)(struct sq_pwmt *);
+	void (*output_enable)(struct sq_pwmt *, int);		// 1:enable, 0:disable
+	void (*enable)(struct sq_pwmt *, int);				// 1:enable, 0:disable
+	void (*capture_mode_enable)(struct sq_pwmt *, int);				// 1:enable, 0:disable
+	void (*clear_interrupt)(struct sq_pwmt *);
+	void (*enable_interrupt)(struct sq_pwmt *, int);		// 1:enable, 0:disable
+	void (*single_counter_mode_enable)(struct sq_pwmt *, int);				// 1:enable, 0:disable
+	void (*set_counter)(struct sq_pwmt *, unsigned int);
+	unsigned int (*read_hrc)(struct sq_pwmt *);
+	unsigned int (*read_lrc)(struct sq_pwmt *);
+	void (*write_hrc)(struct sq_pwmt *, unsigned int);
+	void (*write_lrc)(struct sq_pwmt *, unsigned int);
+	unsigned int (*read_prescale_factor)(struct sq_pwmt *);
+	void (*write_prescale_factor)(struct sq_pwmt *, unsigned int);
+	void (*set_ctrl)(struct sq_pwmt *, unsigned int);
 };
 
 
-extern struct socle_pwmt * get_socle_pwmt_structure(int num);
-extern int release_socle_pwmt_structure(int num);
-extern void socle_init_pwmt(void);
+extern struct sq_pwmt * get_sq_pwmt_structure(int num);
+extern int release_sq_pwmt_structure(int num);
+extern void sq_init_pwmt(void);
 
 
-#endif	//__SOCLE_PWM_REG_H
+#endif	//__SQ_PWM_REG_H

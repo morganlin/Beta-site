@@ -15,13 +15,13 @@ volatile unsigned int touch_count;
 volatile unsigned int touch_flag;
 
 static int
-socle_spi_ads7846_read(u8 addr, u8 *buf, u32 len)
+sq_spi_ads7846_read(u8 addr, u8 *buf, u32 len)
 {
 	u8 tx_buf[1] = {0};
 
 	tx_buf[0] = addr;
 	
-	if (socle_spi_transfer(tx_buf, buf, SET_TX_RX_LEN(1, len)))
+	if (sq_spi_transfer(tx_buf, buf, SET_TX_RX_LEN(1, len)))
 		return -1;
 	return 0;
 }
@@ -49,8 +49,8 @@ ads7846_isr (void *pparam)
 	#ifdef CONFIG_INTC
 		iowrite32(ioread32(INTC0_IECR)&(~(1<<ADS7846_INTR)), INTC0_IECR);
 	#else
-		//iowrite32((0x1 << ADS7846_INTR), SOCLE_VICINTENCLEAR);
-		iowrite32((0x1 << ADS7846_INTR), SOCLE_VICINTENCLEAR);
+		//iowrite32((0x1 << ADS7846_INTR), SQ_VICINTENCLEAR);
+		iowrite32((0x1 << ADS7846_INTR), SQ_VICINTENCLEAR);
 		free_irq(ADS7846_INTR);
 	#endif
 	
@@ -58,7 +58,7 @@ ads7846_isr (void *pparam)
 }
 
 extern int
-socle_spi_ads7846_touch(int autotest)
+sq_spi_ads7846_touch(int autotest)
 {
 	u8 divisor;
 	u8 xy[4];	
@@ -67,62 +67,62 @@ socle_spi_ads7846_touch(int autotest)
 	int cmd;
 
 	/* Reset SPI controller */
-	socle_spi_write(
-			socle_spi_read(SOCLE_SPI_FWCR) | 
-			SOCLE_SPI_SOFT_RST,
-			SOCLE_SPI_FWCR);
+	sq_spi_write(
+			sq_spi_read(SQ_SPI_FWCR) | 
+			SQ_SPI_SOFT_RST,
+			SQ_SPI_FWCR);
 
 	/* Configure SPI controller */
-	socle_spi_write(
+	sq_spi_write(
 #if defined (CONFIG_PC9223)
-			SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
-			SOCLE_SPI_MASTER_SIGNAL_ACT_NO |		
-			SOCLE_SPI_MODE_MASTER |
+			SQ_SPI_MASTER_SIGNAL_CTL_HW |
+			SQ_SPI_MASTER_SIGNAL_ACT_NO |		
+			SQ_SPI_MODE_MASTER |
 #endif			
-			SOCLE_SPI_SOFT_N_RST |
-			SOCLE_SPI_TXRX_N_RUN |
-			SOCLE_SPI_CLK_IDLE_AST |
-			SOCLE_SPI_TXRX_SIMULT_DIS |
-			SOCLE_SPI_CPOL_0 |
-			SOCLE_SPI_CPHA_0 |
-			SOCLE_SPI_TX_MSB_FIRST |
-			SOCLE_SPI_OP_NORMAL,
-			SOCLE_SPI_FWCR);
+			SQ_SPI_SOFT_N_RST |
+			SQ_SPI_TXRX_N_RUN |
+			SQ_SPI_CLK_IDLE_AST |
+			SQ_SPI_TXRX_SIMULT_DIS |
+			SQ_SPI_CPOL_0 |
+			SQ_SPI_CPHA_0 |
+			SQ_SPI_TX_MSB_FIRST |
+			SQ_SPI_OP_NORMAL,
+			SQ_SPI_FWCR);
 
 
 	/* Enable SPI interrupt */
-	socle_spi_write(
-			SOCLE_SPI_IER_RXFIFO_INT_EN |
-			SOCLE_SPI_IER_RXFIFO_OVR_INT_EN |
-			SOCLE_SPI_IER_RX_COMPLETE_INT_EN,
-			SOCLE_SPI_IER);
+	sq_spi_write(
+			SQ_SPI_IER_RXFIFO_INT_EN |
+			SQ_SPI_IER_RXFIFO_OVR_INT_EN |
+			SQ_SPI_IER_RX_COMPLETE_INT_EN,
+			SQ_SPI_IER);
 
 	/* Configure FIFO and clear Tx & Rx FIFO */
-	socle_spi_write(
-			SOCLE_SPI_RXFIFO_INT_TRIGGER_LEVEL_4 |
-			SOCLE_SPI_TXFIFO_INT_TRIGGER_LEVEL_4 |
-			SOCLE_SPI_RXFIFO_CLR |
-			SOCLE_SPI_TXFIFO_CLR,
-			SOCLE_SPI_FCR);
+	sq_spi_write(
+			SQ_SPI_RXFIFO_INT_TRIGGER_LEVEL_4 |
+			SQ_SPI_TXFIFO_INT_TRIGGER_LEVEL_4 |
+			SQ_SPI_RXFIFO_CLR |
+			SQ_SPI_TXFIFO_CLR,
+			SQ_SPI_FCR);
      
 	/* Set the SPI slaves select and characteristic control register */
-	divisor = socle_spi_calculate_divisor(2000000); /* 2.0 MHz clock rate */
+	divisor = sq_spi_calculate_divisor(2000000); /* 2.0 MHz clock rate */
 
-	socle_spi_write(
-			SOCLE_SPI_CHAR_LEN_8 |
-			SOCLE_SPI_SLAVE_SEL_0 |
-			SOCLE_SPI_CLK_DIV(divisor),
-			SOCLE_SPI_SSCR);
+	sq_spi_write(
+			SQ_SPI_CHAR_LEN_8 |
+			SQ_SPI_SLAVE_SEL_0 |
+			SQ_SPI_CLK_DIV(divisor),
+			SQ_SPI_SSCR);
 
 	/* Config SPI clock delay */
-	socle_spi_write(
-			SOCLE_SPI_PBTXRX_DELAY_NONE |
-			SOCLE_SPI_PBCT_DELAY_NONE |
-			SOCLE_SPI_PBCA_DELAY_1_2,
-			SOCLE_SPI_DLYCR);
+	sq_spi_write(
+			SQ_SPI_PBTXRX_DELAY_NONE |
+			SQ_SPI_PBCT_DELAY_NONE |
+			SQ_SPI_PBCA_DELAY_1_2,
+			SQ_SPI_DLYCR);
 
 	/* Set per char length */
-	socle_spi_set_current_mode(MODE_CHAR_LEN_8);
+	sq_spi_set_current_mode(MODE_CHAR_LEN_8);
 
 	// enable interrupt
 #if defined (CONFIG_PC9223)
@@ -143,10 +143,10 @@ socle_spi_ads7846_touch(int autotest)
 		{
 
 			cmd = ADS7846_START | ADS7846_MODE_12BIT | ADS7846_DIFFERENTIAL | ADS7846_POWER_DOWN_CONVERSION;
-			socle_spi_ads7846_read((cmd | ADS7846_SINGLE_POS_Y), &xy[0],1);
-	                socle_spi_ads7846_read((cmd | ADS7846_SINGLE_POS_X), &xy[1],1);
-        	        socle_spi_ads7846_read((cmd | ADS7846_SINGLE_POS_Z1), &xy[2],1);
-                	socle_spi_ads7846_read((cmd | ADS7846_SINGLE_POS_Z2), &xy[3],1);
+			sq_spi_ads7846_read((cmd | ADS7846_SINGLE_POS_Y), &xy[0],1);
+	                sq_spi_ads7846_read((cmd | ADS7846_SINGLE_POS_X), &xy[1],1);
+        	        sq_spi_ads7846_read((cmd | ADS7846_SINGLE_POS_Z1), &xy[2],1);
+                	sq_spi_ads7846_read((cmd | ADS7846_SINGLE_POS_Z2), &xy[3],1);
 
 	                //printf("%6x%6x%6x%6x\n", xy[0], xy[1], xy[2], xy[3]);
 	                printf("%d %d %d %d\n", xy[0], xy[1], xy[2], xy[3]);
@@ -158,8 +158,8 @@ socle_spi_ads7846_touch(int autotest)
 			iowrite32(ioread32(INTC0_IECR)|(1<<ADS7846_INTR), INTC0_IECR);		
 		#else
 		#if 0
-			iowrite32(ioread32(SOCLE_VICINTSELECT) & ~(0x1 << ADS7846_INTR),
-                                SOCLE_VICINTSELECT);
+			iowrite32(ioread32(SQ_VICINTSELECT) & ~(0x1 << ADS7846_INTR),
+                                SQ_VICINTSELECT);
 		#else
 			request_irq(ADS7846_INTR, ads7846_isr, null);
 		#endif

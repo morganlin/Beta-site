@@ -66,71 +66,71 @@ extern int sam48_lcd_init(void)
 	u8 divisor,i,count; 
 	u8 tx_buf[2];
 	
-	socle_spi_master_init(SQ_SPI0,SQ_INTC_SPI0);
+	sq_spi_master_init(SQ_SPI0,SQ_INTC_SPI0);
 	
 	/* Reset SPI controller */
-	socle_spi_write(
-			socle_spi_read(SOCLE_SPI_FWCR) | 
-			SOCLE_SPI_SOFT_RST,
-			SOCLE_SPI_FWCR);
+	sq_spi_write(
+			sq_spi_read(SQ_SPI_FWCR) | 
+			SQ_SPI_SOFT_RST,
+			SQ_SPI_FWCR);
 
 	/* Configure SPI controller */
-		socle_spi_write(
+		sq_spi_write(
 #if defined(CONFIG_PC9223)
-			SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
-			SOCLE_SPI_MASTER_SIGNAL_ACT_NO |		
-			SOCLE_SPI_MODE_MASTER |
+			SQ_SPI_MASTER_SIGNAL_CTL_HW |
+			SQ_SPI_MASTER_SIGNAL_ACT_NO |		
+			SQ_SPI_MODE_MASTER |
 #endif
-			SOCLE_SPI_SOFT_N_RST |
-			SOCLE_SPI_TXRX_N_RUN |
-			SOCLE_SPI_CLK_IDLE_AST |
-			SOCLE_SPI_TXRX_SIMULT_DIS |
-			SOCLE_SPI_CPOL_1 |
-			SOCLE_SPI_CPHA_1 |
-			SOCLE_SPI_TX_MSB_FIRST |
-			SOCLE_SPI_OP_NORMAL,
-			SOCLE_SPI_FWCR);
+			SQ_SPI_SOFT_N_RST |
+			SQ_SPI_TXRX_N_RUN |
+			SQ_SPI_CLK_IDLE_AST |
+			SQ_SPI_TXRX_SIMULT_DIS |
+			SQ_SPI_CPOL_1 |
+			SQ_SPI_CPHA_1 |
+			SQ_SPI_TX_MSB_FIRST |
+			SQ_SPI_OP_NORMAL,
+			SQ_SPI_FWCR);
 			
 	/* Enable SPI interrupt */
 /*
-	socle_spi_write(
-			SOCLE_SPI_IER_RXFIFO_INT_EN |
-			SOCLE_SPI_IER_RXFIFO_OVR_INT_EN |
-			SOCLE_SPI_IER_RX_COMPLETE_INT_EN,
-			SOCLE_SPI_IER);
+	sq_spi_write(
+			SQ_SPI_IER_RXFIFO_INT_EN |
+			SQ_SPI_IER_RXFIFO_OVR_INT_EN |
+			SQ_SPI_IER_RX_COMPLETE_INT_EN,
+			SQ_SPI_IER);
 */
 	/* Configure FIFO and clear Tx & Rx FIFO */
-	socle_spi_write(
-			SOCLE_SPI_RXFIFO_INT_TRIGGER_LEVEL_4 |
-			SOCLE_SPI_TXFIFO_INT_TRIGGER_LEVEL_4 |
-			SOCLE_SPI_RXFIFO_CLR |
-			SOCLE_SPI_TXFIFO_CLR,
-			SOCLE_SPI_FCR);
+	sq_spi_write(
+			SQ_SPI_RXFIFO_INT_TRIGGER_LEVEL_4 |
+			SQ_SPI_TXFIFO_INT_TRIGGER_LEVEL_4 |
+			SQ_SPI_RXFIFO_CLR |
+			SQ_SPI_TXFIFO_CLR,
+			SQ_SPI_FCR);
      
 	
-	divisor = socle_spi_calculate_divisor(1000000); /* 1.0 MHz clock rate */
+	divisor = sq_spi_calculate_divisor(1000000); /* 1.0 MHz clock rate */
 	/* Set the SPI slaves select and characteristic control register */
-	socle_spi_write(
-			SOCLE_SPI_CHAR_LEN_8 |
-			SOCLE_SPI_SLAVE_SEL_0 |
-			SOCLE_SPI_CLK_DIV(divisor),
-			SOCLE_SPI_SSCR);
+	sq_spi_write(
+			SQ_SPI_CHAR_LEN_8 |
+			SQ_SPI_SLAVE_SEL_0 |
+			SQ_SPI_CLK_DIV(divisor),
+			SQ_SPI_SSCR);
 
 	/* Config SPI clock delay */
-	socle_spi_write(
-			SOCLE_SPI_PBTXRX_DELAY_NONE |
-			SOCLE_SPI_PBCT_DELAY_NONE |
-			SOCLE_SPI_PBCA_DELAY_1_2,
-			SOCLE_SPI_DLYCR);
+	sq_spi_write(
+			SQ_SPI_PBTXRX_DELAY_NONE |
+			SQ_SPI_PBCT_DELAY_NONE |
+			SQ_SPI_PBCA_DELAY_1_2,
+			SQ_SPI_DLYCR);
 
 	/* Set per char length */
-	socle_spi_set_current_mode(MODE_CHAR_LEN_8);
+	sq_spi_set_current_mode(MODE_CHAR_LEN_8);
 	
 	count=sizeof(init_array)/2;
 	for(i=0;i<count;i++) {
 			tx_buf[0]=init_array[2*i];
 			tx_buf[1]=init_array[2*i+1];
-			if(socle_spi_transfer(tx_buf, NULL, SET_TX_RX_LEN(2, 0))) {
+			if(sq_spi_transfer(tx_buf, NULL, SET_TX_RX_LEN(2, 0))) {
 				printf("EVB LCD init fail!\n");
 				return -1;
 			}

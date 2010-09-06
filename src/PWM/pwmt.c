@@ -5,9 +5,9 @@
 #include <pc9223-scu.h>
 #endif
 
-//#define CONFIG_SOCLE_PWMT_DEBUG
-#ifdef CONFIG_SOCLE_PWMT_DEBUG
-	#define PWMT_DBG(fmt, args...) printf("SOCLE_PWMT: " fmt, ## args)
+//#define CONFIG_SQ_PWMT_DEBUG
+#ifdef CONFIG_SQ_PWMT_DEBUG
+	#define PWMT_DBG(fmt, args...) printf("SQ_PWMT: " fmt, ## args)
 #else
 	#define PWMT_DBG(fmt, args...)
 #endif
@@ -15,47 +15,47 @@
 
 static int pwmt_lock = 0;
 
-/* socle_pwmt_driver */
-static void socle_pwmt_claim_lock(void);
-static void socle_pwmt_release_lock(void);
-static void socle_pwmt_reset(struct socle_pwmt *p_pwm_st);
-static void socle_pwmt_output_enable(struct socle_pwmt *p_pwm_st, int en);
-static void socle_pwmt_enable(struct socle_pwmt *p_pwm_st, int en);
-static void socle_pwmt_capture_mode_enable(struct socle_pwmt *p_pwm_st, int en);
-static void socle_pwmt_clear_interrupt(struct socle_pwmt *p_pwm_st);
-static void socle_pwmt_enable_interrupt(struct socle_pwmt *p_pwm_st, int en);
-static void socle_pwmt_single_counter_mode_enable(struct socle_pwmt *p_pwm_st, int en);
-static void socle_pwmt_set_counter(struct socle_pwmt *p_pwm_st, u32 data);
-static u32 socle_pwmt_read_hrc(struct socle_pwmt *p_pwm_st);
-static u32 socle_pwmt_read_lrc(struct socle_pwmt *p_pwm_st);
-static void socle_pwmt_write_hrc(struct socle_pwmt *p_pwm_st, u32 data);
-static void socle_pwmt_write_lrc(struct socle_pwmt *p_pwm_st, u32 data);
-static u32 socle_pwmt_read_prescale_factor(struct socle_pwmt *p_pwm_st);
-static void socle_pwmt_write_prescale_factor(struct socle_pwmt *p_pwm_st, u32 data);
-static void socle_pwmt_set_ctrl(struct socle_pwmt *p_pwm_st, u32 data);
+/* sq_pwmt_driver */
+static void sq_pwmt_claim_lock(void);
+static void sq_pwmt_release_lock(void);
+static void sq_pwmt_reset(struct sq_pwmt *p_pwm_st);
+static void sq_pwmt_output_enable(struct sq_pwmt *p_pwm_st, int en);
+static void sq_pwmt_enable(struct sq_pwmt *p_pwm_st, int en);
+static void sq_pwmt_capture_mode_enable(struct sq_pwmt *p_pwm_st, int en);
+static void sq_pwmt_clear_interrupt(struct sq_pwmt *p_pwm_st);
+static void sq_pwmt_enable_interrupt(struct sq_pwmt *p_pwm_st, int en);
+static void sq_pwmt_single_counter_mode_enable(struct sq_pwmt *p_pwm_st, int en);
+static void sq_pwmt_set_counter(struct sq_pwmt *p_pwm_st, u32 data);
+static u32 sq_pwmt_read_hrc(struct sq_pwmt *p_pwm_st);
+static u32 sq_pwmt_read_lrc(struct sq_pwmt *p_pwm_st);
+static void sq_pwmt_write_hrc(struct sq_pwmt *p_pwm_st, u32 data);
+static void sq_pwmt_write_lrc(struct sq_pwmt *p_pwm_st, u32 data);
+static u32 sq_pwmt_read_prescale_factor(struct sq_pwmt *p_pwm_st);
+static void sq_pwmt_write_prescale_factor(struct sq_pwmt *p_pwm_st, u32 data);
+static void sq_pwmt_set_ctrl(struct sq_pwmt *p_pwm_st, u32 data);
 
-static struct socle_pwmt_driver socle_pwm_drv = {
-	.claim_pwm_lock	= socle_pwmt_claim_lock,
-	.release_pwm_lock	= socle_pwmt_release_lock,
-	.reset	= socle_pwmt_reset,
-	.output_enable	= socle_pwmt_output_enable,
-	.enable	= socle_pwmt_enable,
-	.capture_mode_enable	= socle_pwmt_capture_mode_enable,
-	.clear_interrupt	= socle_pwmt_clear_interrupt,
-	.enable_interrupt	= socle_pwmt_enable_interrupt,
-	.single_counter_mode_enable	= socle_pwmt_single_counter_mode_enable,
-	.set_counter	= socle_pwmt_set_counter,
-	.read_hrc	= socle_pwmt_read_hrc,
-	.read_lrc	= socle_pwmt_read_lrc,
-	.write_hrc	= socle_pwmt_write_hrc,
-	.write_lrc	= socle_pwmt_write_lrc,
-	.read_prescale_factor	= socle_pwmt_read_prescale_factor,
-	.write_prescale_factor	= socle_pwmt_write_prescale_factor,
-	.set_ctrl	= socle_pwmt_set_ctrl,
+static struct sq_pwmt_driver sq_pwm_drv = {
+	.claim_pwm_lock	= sq_pwmt_claim_lock,
+	.release_pwm_lock	= sq_pwmt_release_lock,
+	.reset	= sq_pwmt_reset,
+	.output_enable	= sq_pwmt_output_enable,
+	.enable	= sq_pwmt_enable,
+	.capture_mode_enable	= sq_pwmt_capture_mode_enable,
+	.clear_interrupt	= sq_pwmt_clear_interrupt,
+	.enable_interrupt	= sq_pwmt_enable_interrupt,
+	.single_counter_mode_enable	= sq_pwmt_single_counter_mode_enable,
+	.set_counter	= sq_pwmt_set_counter,
+	.read_hrc	= sq_pwmt_read_hrc,
+	.read_lrc	= sq_pwmt_read_lrc,
+	.write_hrc	= sq_pwmt_write_hrc,
+	.write_lrc	= sq_pwmt_write_lrc,
+	.read_prescale_factor	= sq_pwmt_read_prescale_factor,
+	.write_prescale_factor	= sq_pwmt_write_prescale_factor,
+	.set_ctrl	= sq_pwmt_set_ctrl,
 };
 
-/* socle pwmt devie */
-static struct socle_pwmt socle_pwm[SOCLE_PWM_NUM];
+/* sq pwmt devie */
+static struct sq_pwmt sq_pwm[SQ_PWM_NUM];
 
 
 static inline void
@@ -75,25 +75,25 @@ pwmt_write(u32 offset, u32 data, u32 base)
 }
 
 static void
-socle_pwmt_claim_lock(void)
+sq_pwmt_claim_lock(void)
 {
 	pwmt_lock = 1;
 }
 
 static void
-socle_pwmt_release_lock(void)
+sq_pwmt_release_lock(void)
 {
 	pwmt_lock = 0;
 }
 
 static void
-socle_pwmt_reset(struct socle_pwmt *p_pwm_st)
+sq_pwmt_reset(struct sq_pwmt *p_pwm_st)
 {
 	pwmt_write(PWMT_CTRL, PWMT_CTRL_RST, p_pwm_st->base);
 }
 
 static void
-socle_pwmt_output_enable(struct socle_pwmt *p_pwm_st, int en)
+sq_pwmt_output_enable(struct sq_pwmt *p_pwm_st, int en)
 {
 	u32 tmp;
 
@@ -106,7 +106,7 @@ socle_pwmt_output_enable(struct socle_pwmt *p_pwm_st, int en)
 }
 
 static void
-socle_pwmt_enable(struct socle_pwmt *p_pwm_st, int en)
+sq_pwmt_enable(struct sq_pwmt *p_pwm_st, int en)
 {
 	u32 tmp;
 	
@@ -119,7 +119,7 @@ socle_pwmt_enable(struct socle_pwmt *p_pwm_st, int en)
 }
 
 static void
-socle_pwmt_capture_mode_enable(struct socle_pwmt *p_pwm_st, int en)
+sq_pwmt_capture_mode_enable(struct sq_pwmt *p_pwm_st, int en)
 {
 	u32 tmp;
 	
@@ -132,7 +132,7 @@ socle_pwmt_capture_mode_enable(struct socle_pwmt *p_pwm_st, int en)
 }
 
 static void
-socle_pwmt_clear_interrupt(struct socle_pwmt *p_pwm_st)
+sq_pwmt_clear_interrupt(struct sq_pwmt *p_pwm_st)
 {
 	u32 tmp;
 	
@@ -141,7 +141,7 @@ socle_pwmt_clear_interrupt(struct socle_pwmt *p_pwm_st)
 }
 
 static void
-socle_pwmt_enable_interrupt(struct socle_pwmt *p_pwm_st, int en)
+sq_pwmt_enable_interrupt(struct sq_pwmt *p_pwm_st, int en)
 {
 	u32 tmp;
 	
@@ -154,7 +154,7 @@ socle_pwmt_enable_interrupt(struct socle_pwmt *p_pwm_st, int en)
 }
 
 static void
-socle_pwmt_single_counter_mode_enable(struct socle_pwmt *p_pwm_st, int en)
+sq_pwmt_single_counter_mode_enable(struct sq_pwmt *p_pwm_st, int en)
 {
 	u32 tmp;
 	
@@ -167,13 +167,13 @@ socle_pwmt_single_counter_mode_enable(struct socle_pwmt *p_pwm_st, int en)
 }
 
 static void
-socle_pwmt_set_counter(struct socle_pwmt *p_pwm_st, u32 data)
+sq_pwmt_set_counter(struct sq_pwmt *p_pwm_st, u32 data)
 {
 	pwmt_write(PWMT_CNTR, data, p_pwm_st->base);
 }
 
 static u32
-socle_pwmt_read_hrc(struct socle_pwmt *p_pwm_st)
+sq_pwmt_read_hrc(struct sq_pwmt *p_pwm_st)
 {
 	u32 data;
 
@@ -183,7 +183,7 @@ socle_pwmt_read_hrc(struct socle_pwmt *p_pwm_st)
 }
 
 static u32
-socle_pwmt_read_lrc(struct socle_pwmt *p_pwm_st)
+sq_pwmt_read_lrc(struct sq_pwmt *p_pwm_st)
 {
 	u32 data;
 
@@ -193,19 +193,19 @@ socle_pwmt_read_lrc(struct socle_pwmt *p_pwm_st)
 }
 
 static void
-socle_pwmt_write_hrc(struct socle_pwmt *p_pwm_st, u32 data)
+sq_pwmt_write_hrc(struct sq_pwmt *p_pwm_st, u32 data)
 {
 	pwmt_write(PWMT_HRC, data, p_pwm_st->base);
 }
 
 static void
-socle_pwmt_write_lrc(struct socle_pwmt *p_pwm_st, u32 data)
+sq_pwmt_write_lrc(struct sq_pwmt *p_pwm_st, u32 data)
 {
 	pwmt_write(PWMT_LRC, data, p_pwm_st->base);
 }
 
 static u32
-socle_pwmt_read_prescale_factor(struct socle_pwmt *p_pwm_st)
+sq_pwmt_read_prescale_factor(struct sq_pwmt *p_pwm_st)
 {
 	u32 data;
 
@@ -216,7 +216,7 @@ socle_pwmt_read_prescale_factor(struct socle_pwmt *p_pwm_st)
 }
 
 static void
-socle_pwmt_write_prescale_factor(struct socle_pwmt *p_pwm_st, u32 data)
+sq_pwmt_write_prescale_factor(struct sq_pwmt *p_pwm_st, u32 data)
 {
 	u32 tmp;
 
@@ -225,62 +225,62 @@ socle_pwmt_write_prescale_factor(struct socle_pwmt *p_pwm_st, u32 data)
 }
 
 static void
-socle_pwmt_set_ctrl(struct socle_pwmt *p_pwm_st, u32 data)
+sq_pwmt_set_ctrl(struct sq_pwmt *p_pwm_st, u32 data)
 {
 	pwmt_write(PWMT_CTRL, data, p_pwm_st->base);
 }
 
 
-extern struct socle_pwmt *
-get_socle_pwmt_structure(int num)
+extern struct sq_pwmt *
+get_sq_pwmt_structure(int num)
 {
-	struct socle_pwmt *p = NULL;
+	struct sq_pwmt *p = NULL;
 
-	if (SOCLE_PWM_NUM <= num) {
-		printf("Error request PWMT num = %d!, max num = %d\n", num, SOCLE_PWM_NUM - 1);
+	if (SQ_PWM_NUM <= num) {
+		printf("Error request PWMT num = %d!, max num = %d\n", num, SQ_PWM_NUM - 1);
 		return p;
 	}
 
-	socle_pwmt_claim_lock();
+	sq_pwmt_claim_lock();
 
-	if (socle_pwm[num].busy) {
+	if (sq_pwm[num].busy) {
 		printf("PWMT[%d] is busy!\n", num);
 	} else {
-		socle_pwm[num].busy = 1;
-		p = &socle_pwm[num];
+		sq_pwm[num].busy = 1;
+		p = &sq_pwm[num];
 	}
 	
 	PWMT_DBG("PWMT[%d] base = 0x%08x, irq = %d\n", num, p->base, p->irq);
 
-	socle_pwmt_release_lock();
+	sq_pwmt_release_lock();
 
 	return p;
 }
 
 extern int
-release_socle_pwmt_structure(int num)
+release_sq_pwmt_structure(int num)
 {
 	int ret = 0;
 
-	if (SOCLE_PWM_NUM <= num) {
-		printf("Error request PWMT num = %d!, max num = %d\n", num, SOCLE_PWM_NUM - 1);
+	if (SQ_PWM_NUM <= num) {
+		printf("Error request PWMT num = %d!, max num = %d\n", num, SQ_PWM_NUM - 1);
 		return -1;
 	}
 
-	socle_pwmt_claim_lock();
+	sq_pwmt_claim_lock();
 
-	socle_pwm[num].busy = 0;
+	sq_pwm[num].busy = 0;
 	
 	PWMT_DBG("Release PWMT[%d]!\n", num);
 
-	socle_pwmt_release_lock();
+	sq_pwmt_release_lock();
 
 	return ret;
 }
 
 
 extern void
-socle_init_pwmt(void)
+sq_init_pwmt(void)
 {
 	int irq, i;
 	u32 base;
@@ -295,18 +295,18 @@ socle_init_pwmt(void)
 	base = SQ_TIMER_PWM0;
 	irq = SQ_INTC_PWM0;
 
-	for (i = 0; i < SOCLE_PWM_NUM; i++) {
+	for (i = 0; i < SQ_PWM_NUM; i++) {
 		if (i) {
 			base += PWMT_BASE_OFFSET;
 			irq++;
 		}
 
-		PWMT_DBG("socle_pwm[%d] base = 0x%08x, irq = %d\n", i, base, irq);
-		socle_pwm[i].base = base;
-		socle_pwm[i].irq = irq;
-		socle_pwm[i].drv = &socle_pwm_drv;
-		socle_pwm[i].busy = 0;
+		PWMT_DBG("sq_pwm[%d] base = 0x%08x, irq = %d\n", i, base, irq);
+		sq_pwm[i].base = base;
+		sq_pwm[i].irq = irq;
+		sq_pwm[i].drv = &sq_pwm_drv;
+		sq_pwm[i].busy = 0;
 
-		socle_pwmt_reset(&socle_pwm[i]);
+		sq_pwmt_reset(&sq_pwm[i]);
 	}
 }

@@ -64,20 +64,20 @@ static void socle_i2s_rx_dma_page_interrupt(void *data);
 static void socle_i2s_tx_dma_play_complete(void *data);
 static void socle_i2s_rx_dma_capture_complete(void *data);
 
-static struct socle_dma_notifier socle_i2s_tx_dma_notifier = {
+static struct sq_dma_notifier socle_i2s_tx_dma_notifier = {
 	.complete = socle_i2s_tx_dma_play_complete,
 	.page_interrupt = socle_i2s_tx_dma_page_interrupt,
 };
 
-static struct socle_dma_notifier socle_i2s_rx_dma_notifier = {
+static struct sq_dma_notifier socle_i2s_rx_dma_notifier = {
 	.page_interrupt = socle_i2s_rx_dma_page_interrupt,
 };
 
-static struct socle_dma_notifier socle_i2s_tx_dma_play_notifier = {
+static struct sq_dma_notifier socle_i2s_tx_dma_play_notifier = {
 	.complete = socle_i2s_tx_dma_play_complete,
 };
 
-static struct socle_dma_notifier socle_i2s_rx_dma_capture_notifier = {
+static struct sq_dma_notifier socle_i2s_rx_dma_capture_notifier = {
 	.complete = socle_i2s_rx_dma_capture_complete,
 };
 
@@ -150,7 +150,7 @@ socle_i2s_hwdma_panther7_hdma_burst_single(int autotest)
 {
 	int ret = 0;
 
-	socle_i2s_dma_burst = SOCLE_DMA_BURST_SINGLE;
+	socle_i2s_dma_burst = SQ_DMA_BURST_SINGLE;
 	ret = socle_i2s_hwdma_panther7_hdma_internal_loopback(autotest);
 	return ret;
 }
@@ -160,7 +160,7 @@ socle_i2s_hwdma_panther7_hdma_burst_incr4(int autotest)
 {
 	int ret = 0;
 
-	socle_i2s_dma_burst = SOCLE_DMA_BURST_INCR4;
+	socle_i2s_dma_burst = SQ_DMA_BURST_INCR4;
 	ret = socle_i2s_hwdma_panther7_hdma_internal_loopback(autotest);
 	return ret;
 }
@@ -170,7 +170,7 @@ socle_i2s_hwdma_panther7_hdma_burst_incr8(int autotest)
 {
 	int ret = 0;
 
-	socle_i2s_dma_burst = SOCLE_DMA_BURST_INCR8;
+	socle_i2s_dma_burst = SQ_DMA_BURST_INCR8;
 	ret = socle_i2s_hwdma_panther7_hdma_internal_loopback(autotest);
 	return ret;
 }
@@ -520,8 +520,8 @@ socle_i2s_hwdma_panther7_hdma_direct(int autotest)
         socle_i2s_tx_dma_ext_hdreq = TX_DMA_EXT_HDREQ;
         socle_i2s_rx_dma_ext_hdreq = RX_DMA_EXT_HDREQ;
 
-	socle_request_dma(socle_i2s_tx_dma_ch_num, &socle_i2s_tx_dma_notifier);
-	socle_request_dma(socle_i2s_rx_dma_ch_num, &socle_i2s_rx_dma_notifier);
+	sq_request_dma(socle_i2s_tx_dma_ch_num, &socle_i2s_tx_dma_notifier);
+	sq_request_dma(socle_i2s_rx_dma_ch_num, &socle_i2s_rx_dma_notifier);
 
 	/* Initialize the tx and rx operation configuration */
 	socle_i2s_conf = SOCLE_I2S_TX_N_RST |
@@ -598,36 +598,34 @@ socle_i2s_hwdma_panther7_hdma_direct(int autotest)
 	socle_i2s_rx_complete_flag = 0;	
 
 	/* Configure the hardware dma settng of HDMA for tx channels */
-	socle_disable_dma(socle_i2s_tx_dma_ch_num);
-	socle_set_dma_mode(socle_i2s_tx_dma_ch_num, SOCLE_DMA_MODE_SLICE);
-	socle_set_dma_ext_hdreq_number(socle_i2s_tx_dma_ch_num, socle_i2s_tx_dma_ext_hdreq);
-	socle_set_dma_burst_type(socle_i2s_tx_dma_ch_num, socle_i2s_dma_burst);
-	socle_set_dma_source_address(socle_i2s_tx_dma_ch_num, (u32)socle_i2s_pcm_buf);
-	socle_set_dma_destination_address(socle_i2s_tx_dma_ch_num, SOCLE_I2S_TXR+socle_i2s_base);
-	socle_set_dma_source_direction(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DIR_INCR);
-	socle_set_dma_destination_direction(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DIR_FIXED);
-	socle_set_dma_data_size(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DATA_WORD);
-	//socle_set_dma_transfer_count(socle_i2s_tx_dma_ch_num, PERIOD_SIZE);
-	socle_set_dma_transfer_count(socle_i2s_tx_dma_ch_num, DMA_BUF_SIZE);	//jerry fix 2011/06/30
-	socle_set_dma_slice_count(socle_i2s_tx_dma_ch_num, FIFO_DEPTH>>1);
-	socle_set_dma_page_number(socle_i2s_tx_dma_ch_num, 1);
-	socle_set_dma_buffer_size(socle_i2s_tx_dma_ch_num, DMA_BUF_SIZE);
+	sq_disable_dma(socle_i2s_tx_dma_ch_num);
+	sq_set_dma_mode(socle_i2s_tx_dma_ch_num, SQ_DMA_MODE_SLICE);
+	sq_set_dma_ext_hdreq_number(socle_i2s_tx_dma_ch_num, socle_i2s_tx_dma_ext_hdreq);
+	sq_set_dma_burst_type(socle_i2s_tx_dma_ch_num, socle_i2s_dma_burst);
+	sq_set_dma_source_address(socle_i2s_tx_dma_ch_num, (u32)socle_i2s_pcm_buf);
+	sq_set_dma_destination_address(socle_i2s_tx_dma_ch_num, SOCLE_I2S_TXR+socle_i2s_base);
+	sq_set_dma_source_direction(socle_i2s_tx_dma_ch_num, SQ_DMA_DIR_INCR);
+	sq_set_dma_destination_direction(socle_i2s_tx_dma_ch_num, SQ_DMA_DIR_FIXED);
+	sq_set_dma_data_size(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DATA_WORD);
+	sq_set_dma_transfer_count(socle_i2s_tx_dma_ch_num, DMA_BUF_SIZE);
+	sq_set_dma_slice_count(socle_i2s_tx_dma_ch_num, FIFO_DEPTH>>1);
+	sq_set_dma_page_number(socle_i2s_tx_dma_ch_num, 1);
+	sq_set_dma_buffer_size(socle_i2s_tx_dma_ch_num, DMA_BUF_SIZE);
 
 	/* Configure the hardware dma settng of HDMA for rx channels */
-	socle_disable_dma(socle_i2s_rx_dma_ch_num);
-	socle_set_dma_mode(socle_i2s_rx_dma_ch_num, SOCLE_DMA_MODE_SLICE);
-	socle_set_dma_ext_hdreq_number(socle_i2s_rx_dma_ch_num, socle_i2s_rx_dma_ext_hdreq);
-	socle_set_dma_burst_type(socle_i2s_rx_dma_ch_num, socle_i2s_dma_burst);
-	socle_set_dma_source_address(socle_i2s_rx_dma_ch_num, SOCLE_I2S_RXR+socle_i2s_base);
-	socle_set_dma_destination_address(socle_i2s_rx_dma_ch_num, (u32)socle_i2s_dma_buf);
-	socle_set_dma_source_direction(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DIR_FIXED);
-	socle_set_dma_destination_direction(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DIR_INCR);
-	socle_set_dma_data_size(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DATA_WORD);
-	//socle_set_dma_transfer_count(socle_i2s_rx_dma_ch_num, PERIOD_SIZE);
-	socle_set_dma_transfer_count(socle_i2s_rx_dma_ch_num, DMA_BUF_SIZE);	//jerry fix 2011/06/30
-	socle_set_dma_slice_count(socle_i2s_rx_dma_ch_num, FIFO_DEPTH>>1);
-	socle_set_dma_page_number(socle_i2s_rx_dma_ch_num, 1);
-	socle_set_dma_buffer_size(socle_i2s_rx_dma_ch_num, DMA_BUF_SIZE);
+	sq_disable_dma(socle_i2s_rx_dma_ch_num);
+	sq_set_dma_mode(socle_i2s_rx_dma_ch_num, SQ_DMA_MODE_SLICE);
+	sq_set_dma_ext_hdreq_number(socle_i2s_rx_dma_ch_num, socle_i2s_rx_dma_ext_hdreq);
+	sq_set_dma_burst_type(socle_i2s_rx_dma_ch_num, socle_i2s_dma_burst);
+	sq_set_dma_source_address(socle_i2s_rx_dma_ch_num, SOCLE_I2S_RXR+socle_i2s_base);
+	sq_set_dma_destination_address(socle_i2s_rx_dma_ch_num, (u32)socle_i2s_dma_buf);
+	sq_set_dma_source_direction(socle_i2s_rx_dma_ch_num, SQ_DMA_DIR_FIXED);
+	sq_set_dma_destination_direction(socle_i2s_rx_dma_ch_num, SQ_DMA_DIR_INCR);
+	sq_set_dma_data_size(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DATA_WORD);
+	sq_set_dma_transfer_count(socle_i2s_rx_dma_ch_num, DMA_BUF_SIZE);	//jerry fix 2011/06/30
+	sq_set_dma_slice_count(socle_i2s_rx_dma_ch_num, FIFO_DEPTH>>1);
+	sq_set_dma_page_number(socle_i2s_rx_dma_ch_num, 1);
+	sq_set_dma_buffer_size(socle_i2s_rx_dma_ch_num, DMA_BUF_SIZE);
 
 	/* Start to transfer */
 	if (SOCLE_I2S_MASTER == socle_i2s_tx_mode_sel)
@@ -640,8 +638,8 @@ socle_i2s_hwdma_panther7_hdma_direct(int autotest)
 				SOCLE_I2S_OPR);
 
 	/* Enable the dma to run*/
-	socle_enable_dma(socle_i2s_tx_dma_ch_num);
-	socle_enable_dma(socle_i2s_rx_dma_ch_num);
+	sq_enable_dma(socle_i2s_tx_dma_ch_num);
+	sq_enable_dma(socle_i2s_rx_dma_ch_num);
 
 	/* Wait for the transimission to be complete */
 	/*20080114 JS Modify 30s to 60s */
@@ -653,10 +651,10 @@ socle_i2s_hwdma_panther7_hdma_direct(int autotest)
 	/* Stop the tx and rx operation */
 	socle_i2s_write(socle_i2s_conf, SOCLE_I2S_OPR);
 
-	socle_disable_dma(socle_i2s_tx_dma_ch_num);
-	socle_disable_dma(socle_i2s_rx_dma_ch_num);
-	socle_free_dma(socle_i2s_tx_dma_ch_num);
-	socle_free_dma(socle_i2s_rx_dma_ch_num);
+	sq_disable_dma(socle_i2s_tx_dma_ch_num);
+	sq_disable_dma(socle_i2s_rx_dma_ch_num);
+	sq_free_dma(socle_i2s_tx_dma_ch_num);
+	sq_free_dma(socle_i2s_rx_dma_ch_num);
 
 	if ((-1 == socle_i2s_tx_complete_flag) ||
 	    (-1 == socle_i2s_rx_complete_flag)) {
@@ -676,8 +674,8 @@ socle_i2s_hwdma_panther7_hdma_ring_buffer(int autotest)
         socle_i2s_tx_dma_ext_hdreq = TX_DMA_EXT_HDREQ;
         socle_i2s_rx_dma_ext_hdreq = RX_DMA_EXT_HDREQ;
 
-	socle_request_dma(socle_i2s_tx_dma_ch_num, &socle_i2s_tx_dma_notifier);
-	socle_request_dma(socle_i2s_rx_dma_ch_num, &socle_i2s_rx_dma_notifier);
+	sq_request_dma(socle_i2s_tx_dma_ch_num, &socle_i2s_tx_dma_notifier);
+	sq_request_dma(socle_i2s_rx_dma_ch_num, &socle_i2s_rx_dma_notifier);
 
 	/* Initialize the tx and rx operation configuration */
 	socle_i2s_conf = SOCLE_I2S_TX_N_RST |
@@ -755,34 +753,34 @@ socle_i2s_hwdma_panther7_hdma_ring_buffer(int autotest)
 	socle_i2s_rx_complete_flag = 0;	
 
 	/* Configure the hardware dma settng of HDMA for tx channels */
-	socle_disable_dma(socle_i2s_tx_dma_ch_num);
-	socle_set_dma_mode(socle_i2s_tx_dma_ch_num, SOCLE_DMA_MODE_SLICE);
-	socle_set_dma_ext_hdreq_number(socle_i2s_tx_dma_ch_num, socle_i2s_tx_dma_ext_hdreq);
-	socle_set_dma_burst_type(socle_i2s_tx_dma_ch_num, socle_i2s_dma_burst);
-	socle_set_dma_source_address(socle_i2s_tx_dma_ch_num, (u32)socle_i2s_ring_buf);
-	socle_set_dma_destination_address(socle_i2s_tx_dma_ch_num, SOCLE_I2S_TXR+socle_i2s_base);
-	socle_set_dma_source_direction(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DIR_INCR);
-	socle_set_dma_destination_direction(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DIR_FIXED);
-	socle_set_dma_data_size(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DATA_WORD);
-	socle_set_dma_transfer_count(socle_i2s_tx_dma_ch_num, PERIOD_SIZE);
-	socle_set_dma_slice_count(socle_i2s_tx_dma_ch_num, FIFO_DEPTH>>1);
-	socle_set_dma_page_number(socle_i2s_tx_dma_ch_num, PERIODS);
-	socle_set_dma_buffer_size(socle_i2s_tx_dma_ch_num, RING_BUF_SIZE);
+	sq_disable_dma(socle_i2s_tx_dma_ch_num);
+	sq_set_dma_mode(socle_i2s_tx_dma_ch_num, SQ_DMA_MODE_SLICE);
+	sq_set_dma_ext_hdreq_number(socle_i2s_tx_dma_ch_num, socle_i2s_tx_dma_ext_hdreq);
+	sq_set_dma_burst_type(socle_i2s_tx_dma_ch_num, socle_i2s_dma_burst);
+	sq_set_dma_source_address(socle_i2s_tx_dma_ch_num, (u32)socle_i2s_ring_buf);
+	sq_set_dma_destination_address(socle_i2s_tx_dma_ch_num, SOCLE_I2S_TXR+socle_i2s_base);
+	sq_set_dma_source_direction(socle_i2s_tx_dma_ch_num, SQ_DMA_DIR_INCR);
+	sq_set_dma_destination_direction(socle_i2s_tx_dma_ch_num, SQ_DMA_DIR_FIXED);
+	sq_set_dma_data_size(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DATA_WORD);
+	sq_set_dma_transfer_count(socle_i2s_tx_dma_ch_num, PERIOD_SIZE);
+	sq_set_dma_slice_count(socle_i2s_tx_dma_ch_num, FIFO_DEPTH>>1);
+	sq_set_dma_page_number(socle_i2s_tx_dma_ch_num, PERIODS);
+	sq_set_dma_buffer_size(socle_i2s_tx_dma_ch_num, RING_BUF_SIZE);
 
 	/* Configure the hardware dma settng of HDMA for rx channels */
-	socle_disable_dma(socle_i2s_rx_dma_ch_num);
-	socle_set_dma_mode(socle_i2s_rx_dma_ch_num, SOCLE_DMA_MODE_SLICE);
-	socle_set_dma_ext_hdreq_number(socle_i2s_rx_dma_ch_num, socle_i2s_rx_dma_ext_hdreq);
-	socle_set_dma_burst_type(socle_i2s_rx_dma_ch_num, socle_i2s_dma_burst);
-	socle_set_dma_source_address(socle_i2s_rx_dma_ch_num, SOCLE_I2S_RXR+socle_i2s_base);
-	socle_set_dma_destination_address(socle_i2s_rx_dma_ch_num, (u32)socle_i2s_dma_buf);
-	socle_set_dma_source_direction(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DIR_FIXED);
-	socle_set_dma_destination_direction(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DIR_INCR);
-	socle_set_dma_data_size(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DATA_WORD);
-	socle_set_dma_transfer_count(socle_i2s_rx_dma_ch_num, PERIOD_SIZE);
-	socle_set_dma_slice_count(socle_i2s_rx_dma_ch_num, FIFO_DEPTH>>1);
-	socle_set_dma_page_number(socle_i2s_rx_dma_ch_num, 20);
-	socle_set_dma_buffer_size(socle_i2s_rx_dma_ch_num, DMA_BUF_SIZE);
+	sq_disable_dma(socle_i2s_rx_dma_ch_num);
+	sq_set_dma_mode(socle_i2s_rx_dma_ch_num, SQ_DMA_MODE_SLICE);
+	sq_set_dma_ext_hdreq_number(socle_i2s_rx_dma_ch_num, socle_i2s_rx_dma_ext_hdreq);
+	sq_set_dma_burst_type(socle_i2s_rx_dma_ch_num, socle_i2s_dma_burst);
+	sq_set_dma_source_address(socle_i2s_rx_dma_ch_num, SOCLE_I2S_RXR+socle_i2s_base);
+	sq_set_dma_destination_address(socle_i2s_rx_dma_ch_num, (u32)socle_i2s_dma_buf);
+	sq_set_dma_source_direction(socle_i2s_rx_dma_ch_num, SQ_DMA_DIR_FIXED);
+	sq_set_dma_destination_direction(socle_i2s_rx_dma_ch_num, SQ_DMA_DIR_INCR);
+	sq_set_dma_data_size(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DATA_WORD);
+	sq_set_dma_transfer_count(socle_i2s_rx_dma_ch_num, PERIOD_SIZE);
+	sq_set_dma_slice_count(socle_i2s_rx_dma_ch_num, FIFO_DEPTH>>1);
+	sq_set_dma_page_number(socle_i2s_rx_dma_ch_num, 20);
+	sq_set_dma_buffer_size(socle_i2s_rx_dma_ch_num, DMA_BUF_SIZE);
 
 	socle_i2s_pcm_buf_pos = 0;
 	socle_i2s_ring_buf_pos = 0;
@@ -800,8 +798,8 @@ socle_i2s_hwdma_panther7_hdma_ring_buffer(int autotest)
 				SOCLE_I2S_OPR);
 
 	/* Enable the dma to run*/
-	socle_enable_dma(socle_i2s_tx_dma_ch_num);
-	socle_enable_dma(socle_i2s_rx_dma_ch_num);
+	sq_enable_dma(socle_i2s_tx_dma_ch_num);
+	sq_enable_dma(socle_i2s_rx_dma_ch_num);
 
 	/* Wait for the transimission of pcm to be complete */
 	while (socle_i2s_pcm_buf_pos < DMA_BUF_SIZE) {
@@ -820,10 +818,10 @@ socle_i2s_hwdma_panther7_hdma_ring_buffer(int autotest)
 	/* Stop the tx and rx operation */
 	socle_i2s_write(socle_i2s_conf, SOCLE_I2S_OPR);
 
-	socle_disable_dma(socle_i2s_tx_dma_ch_num);
-	socle_disable_dma(socle_i2s_rx_dma_ch_num);
-	socle_free_dma(socle_i2s_tx_dma_ch_num);
-	socle_free_dma(socle_i2s_rx_dma_ch_num);
+	sq_disable_dma(socle_i2s_tx_dma_ch_num);
+	sq_disable_dma(socle_i2s_rx_dma_ch_num);
+	sq_free_dma(socle_i2s_tx_dma_ch_num);
+	sq_free_dma(socle_i2s_rx_dma_ch_num);
 
 	return socle_i2s_compare_memory(socle_i2s_pcm_buf, socle_i2s_dma_buf, DMA_BUF_SIZE,
 						autotest);
@@ -945,7 +943,7 @@ socle_i2s_play_pcm_hwdma_panther7_hdma(int autotest)
 	socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
 
 	socle_i2s_tx_dma_ext_hdreq = TX_DMA_EXT_HDREQ;
-	socle_request_dma(socle_i2s_tx_dma_ch_num, &socle_i2s_tx_dma_play_notifier);
+	sq_request_dma(socle_i2s_tx_dma_ch_num, &socle_i2s_tx_dma_play_notifier);
 
 	/* Initialize the operation start register */
 	socle_i2s_conf = SOCLE_I2S_TX_N_RST |
@@ -1000,19 +998,19 @@ socle_i2s_play_pcm_hwdma_panther7_hdma(int autotest)
 	socle_i2s_period_int_flag = 0;
 
 	/* Configure the hardware dma settng of HDMA for tx channels */
-	socle_disable_dma(socle_i2s_tx_dma_ch_num);
-	socle_set_dma_mode(socle_i2s_tx_dma_ch_num, SOCLE_DMA_MODE_SLICE);
-	socle_set_dma_ext_hdreq_number(socle_i2s_tx_dma_ch_num, socle_i2s_tx_dma_ext_hdreq);
-	socle_set_dma_burst_type(socle_i2s_tx_dma_ch_num, PCM_BURST_TYPE);
-	socle_set_dma_source_address(socle_i2s_tx_dma_ch_num, RING_BUF_ADDR);
-	socle_set_dma_destination_address(socle_i2s_tx_dma_ch_num, SOCLE_I2S_TXR+socle_i2s_base);
-	socle_set_dma_source_direction(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DIR_INCR);
-	socle_set_dma_destination_direction(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DIR_FIXED);
-	socle_set_dma_data_size(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DATA_WORD);
-	socle_set_dma_transfer_count(socle_i2s_tx_dma_ch_num, PERIOD_SIZE);
-	socle_set_dma_slice_count(socle_i2s_tx_dma_ch_num, FIFO_DEPTH>>1);
-	socle_set_dma_page_number(socle_i2s_tx_dma_ch_num, PERIODS);	/* repeat to play pcm again */
-	socle_set_dma_buffer_size(socle_i2s_tx_dma_ch_num, RING_BUF_SIZE);
+	sq_disable_dma(socle_i2s_tx_dma_ch_num);
+	sq_set_dma_mode(socle_i2s_tx_dma_ch_num, SQ_DMA_MODE_SLICE);
+	sq_set_dma_ext_hdreq_number(socle_i2s_tx_dma_ch_num, socle_i2s_tx_dma_ext_hdreq);
+	sq_set_dma_burst_type(socle_i2s_tx_dma_ch_num, PCM_BURST_TYPE);
+	sq_set_dma_source_address(socle_i2s_tx_dma_ch_num, RING_BUF_ADDR);
+	sq_set_dma_destination_address(socle_i2s_tx_dma_ch_num, SOCLE_I2S_TXR+socle_i2s_base);
+	sq_set_dma_source_direction(socle_i2s_tx_dma_ch_num, SQ_DMA_DIR_INCR);
+	sq_set_dma_destination_direction(socle_i2s_tx_dma_ch_num, SQ_DMA_DIR_FIXED);
+	sq_set_dma_data_size(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DATA_WORD);
+	sq_set_dma_transfer_count(socle_i2s_tx_dma_ch_num, PERIOD_SIZE);
+	sq_set_dma_slice_count(socle_i2s_tx_dma_ch_num, FIFO_DEPTH>>1);
+	sq_set_dma_page_number(socle_i2s_tx_dma_ch_num, PERIODS);	/* repeat to play pcm again */
+	sq_set_dma_buffer_size(socle_i2s_tx_dma_ch_num, RING_BUF_SIZE);
 
 	socle_i2s_pcm_buf_pos = 0;
 	socle_i2s_ring_buf_pos = 0;
@@ -1027,7 +1025,7 @@ socle_i2s_play_pcm_hwdma_panther7_hdma(int autotest)
 			SOCLE_I2S_OPR);
 
 	/* Enable the dma to run*/
-	socle_enable_dma(socle_i2s_tx_dma_ch_num);
+	sq_enable_dma(socle_i2s_tx_dma_ch_num);
 
 	/* Wait for the transimission of pcm to be complete */
 	while (socle_i2s_pcm_buf_pos < PCM_BUF_SIZE) {
@@ -1050,8 +1048,8 @@ socle_i2s_play_pcm_hwdma_panther7_hdma(int autotest)
 			(socle_i2s_read(SOCLE_I2S_OPR) & SOCLE_I2S_RX_OP_STR),
 			SOCLE_I2S_OPR);
 
-	socle_disable_dma(socle_i2s_tx_dma_ch_num);
-	socle_free_dma(socle_i2s_tx_dma_ch_num);
+	sq_disable_dma(socle_i2s_tx_dma_ch_num);
+	sq_free_dma(socle_i2s_tx_dma_ch_num);
 	return 0;
 }
 
@@ -1172,7 +1170,7 @@ socle_i2s_capture_pcm_hwdma_panther7_hdma(int autotest)
 	socle_i2s_rx_dma_ch_num = PANTHER7_HDMA_CH_1;
 
 	socle_i2s_rx_dma_ext_hdreq = RX_DMA_EXT_HDREQ;
-	socle_request_dma(socle_i2s_rx_dma_ch_num, &socle_i2s_rx_dma_capture_notifier);
+	sq_request_dma(socle_i2s_rx_dma_ch_num, &socle_i2s_rx_dma_capture_notifier);
 
 	/* Initialize the operation start register */
 	socle_i2s_conf = SOCLE_I2S_TX_N_RST |
@@ -1227,19 +1225,19 @@ socle_i2s_capture_pcm_hwdma_panther7_hdma(int autotest)
 	socle_i2s_period_int_flag = 0;
 
 	/* Configure the hardware dma settng of HDMA for tx channels */
-	socle_disable_dma(socle_i2s_rx_dma_ch_num);
-	socle_set_dma_mode(socle_i2s_rx_dma_ch_num, SOCLE_DMA_MODE_SLICE);
-	socle_set_dma_ext_hdreq_number(socle_i2s_rx_dma_ch_num, socle_i2s_rx_dma_ext_hdreq);
-	socle_set_dma_burst_type(socle_i2s_rx_dma_ch_num, PCM_BURST_TYPE);
-	socle_set_dma_source_address(socle_i2s_rx_dma_ch_num, SOCLE_I2S_RXR+socle_i2s_base);
-	socle_set_dma_destination_address(socle_i2s_rx_dma_ch_num, RING_BUF_ADDR);
-	socle_set_dma_source_direction(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DIR_FIXED);
-	socle_set_dma_destination_direction(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DIR_INCR);
-	socle_set_dma_data_size(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DATA_WORD);
-	socle_set_dma_transfer_count(socle_i2s_rx_dma_ch_num, PERIOD_SIZE);
-	socle_set_dma_slice_count(socle_i2s_rx_dma_ch_num, FIFO_DEPTH>>1);
-	socle_set_dma_page_number(socle_i2s_rx_dma_ch_num, PERIODS);	/* repeat to play pcm again */
-	socle_set_dma_buffer_size(socle_i2s_rx_dma_ch_num, RING_BUF_SIZE);
+	sq_disable_dma(socle_i2s_rx_dma_ch_num);
+	sq_set_dma_mode(socle_i2s_rx_dma_ch_num, SQ_DMA_MODE_SLICE);
+	sq_set_dma_ext_hdreq_number(socle_i2s_rx_dma_ch_num, socle_i2s_rx_dma_ext_hdreq);
+	sq_set_dma_burst_type(socle_i2s_rx_dma_ch_num, PCM_BURST_TYPE);
+	sq_set_dma_source_address(socle_i2s_rx_dma_ch_num, SOCLE_I2S_RXR+socle_i2s_base);
+	sq_set_dma_destination_address(socle_i2s_rx_dma_ch_num, RING_BUF_ADDR);
+	sq_set_dma_source_direction(socle_i2s_rx_dma_ch_num, SQ_DMA_DIR_FIXED);
+	sq_set_dma_destination_direction(socle_i2s_rx_dma_ch_num, SQ_DMA_DIR_INCR);
+	sq_set_dma_data_size(socle_i2s_rx_dma_ch_num, SOCLE_DMA_DATA_WORD);
+	sq_set_dma_transfer_count(socle_i2s_rx_dma_ch_num, PERIOD_SIZE);
+	sq_set_dma_slice_count(socle_i2s_rx_dma_ch_num, FIFO_DEPTH>>1);
+	sq_set_dma_page_number(socle_i2s_rx_dma_ch_num, PERIODS);	/* repeat to play pcm again */
+	sq_set_dma_buffer_size(socle_i2s_rx_dma_ch_num, RING_BUF_SIZE);
 
 	socle_i2s_pcm_buf_pos = 0;
 	socle_i2s_ring_buf_pos = 0;
@@ -1253,7 +1251,7 @@ socle_i2s_capture_pcm_hwdma_panther7_hdma(int autotest)
 			SOCLE_I2S_OPR);
 
 	/* Enable the dma to run*/
-	socle_enable_dma(socle_i2s_rx_dma_ch_num);
+	sq_enable_dma(socle_i2s_rx_dma_ch_num);
 
 	/* Wait for the transimission of pcm to be complete */
 	while (socle_i2s_pcm_buf_pos < PCM_BUF_SIZE) {
@@ -1272,8 +1270,8 @@ socle_i2s_capture_pcm_hwdma_panther7_hdma(int autotest)
 			(socle_i2s_read(SOCLE_I2S_OPR) & SOCLE_I2S_TX_OP_STR),
 			SOCLE_I2S_OPR);
 
-	socle_disable_dma(socle_i2s_rx_dma_ch_num);
-	socle_free_dma(socle_i2s_rx_dma_ch_num);
+	sq_disable_dma(socle_i2s_rx_dma_ch_num);
+	sq_free_dma(socle_i2s_rx_dma_ch_num);
 
 	return 0;
 }
@@ -1492,7 +1490,7 @@ socle_i2s_tx_dma_play_complete(void *data)
 	socle_i2s_dma_ring_buf_pos += PERIOD_SIZE;
 	socle_i2s_dma_ring_buf_pos %= RING_BUF_SIZE;
 	socle_i2s_period_int_flag = 1;
-	socle_set_dma_page_number(socle_i2s_tx_dma_ch_num, 1);	/* repeat to play pcm again */
+	sq_set_dma_page_number(socle_i2s_tx_dma_ch_num, 1);	/* repeat to play pcm again */
 }
 
 static void 
@@ -1505,7 +1503,7 @@ socle_i2s_rx_dma_capture_complete(void *data)
 	socle_i2s_dma_ring_buf_pos += PERIOD_SIZE;
 	socle_i2s_dma_ring_buf_pos %= RING_BUF_SIZE;
 	socle_i2s_period_int_flag = 1;
-	socle_set_dma_page_number(socle_i2s_rx_dma_ch_num, 1);	/* repeat to play pcm again */
+	sq_set_dma_page_number(socle_i2s_rx_dma_ch_num, 1);	/* repeat to play pcm again */
 }
 
 static void
@@ -1707,11 +1705,11 @@ socle_i2s_tx_dma_play_fun_complete(void *data)
 //	printf("socle_i2s_decode_dma_buf_pos = %x : socle_i2s_decode_pcm_buf_pos = %x  ",socle_i2s_decode_dma_buf_pos,socle_i2s_decode_pcm_buf_pos);
 	socle_copy_decode_to_dma_buffer(socle_i2s_decode_dma_buf_pos++,socle_i2s_decode_pcm_buf_pos++);
 	
-	socle_set_dma_page_number(socle_i2s_tx_dma_ch_num, 1);	/* repeat to play pcm again */	
+	sq_set_dma_page_number(socle_i2s_tx_dma_ch_num, 1);	/* repeat to play pcm again */	
 
 }
 
-static struct socle_dma_notifier socle_i2s_tx_dma_play_fun_notifier = {
+static struct sq_dma_notifier socle_i2s_tx_dma_play_fun_notifier = {
 	.complete = socle_i2s_tx_dma_play_fun_complete,
 };
 
@@ -1723,7 +1721,7 @@ socle_audio_codec_function_test(int autotest)
 	printf("\nPlaying PCM data from memory 0x%x for 0x%x bytes. \n", PCM_BUF_ADDR, PCM_BUF_SIZE);	
 	socle_i2s_tx_dma_ch_num = PANTHER7_HDMA_CH_0;
 	socle_i2s_tx_dma_ext_hdreq = TX_DMA_EXT_HDREQ;
-	socle_request_dma(socle_i2s_tx_dma_ch_num, &socle_i2s_tx_dma_play_fun_notifier);
+	sq_request_dma(socle_i2s_tx_dma_ch_num, &socle_i2s_tx_dma_play_fun_notifier);
 
 	/* Initialize the operation start register */
 	socle_i2s_conf = SOCLE_I2S_TX_N_RST |
@@ -1784,19 +1782,19 @@ socle_audio_codec_function_test(int autotest)
 
 
 	/* Configure the hardware dma settng of HDMA for tx channels */
-	socle_disable_dma(socle_i2s_tx_dma_ch_num);
-	socle_set_dma_mode(socle_i2s_tx_dma_ch_num, SOCLE_DMA_MODE_SLICE);
-	socle_set_dma_ext_hdreq_number(socle_i2s_tx_dma_ch_num, socle_i2s_tx_dma_ext_hdreq);
-	socle_set_dma_burst_type(socle_i2s_tx_dma_ch_num, PCM_BURST_TYPE);
-	socle_set_dma_source_address(socle_i2s_tx_dma_ch_num, RING_BUF_ADDR);
-	socle_set_dma_destination_address(socle_i2s_tx_dma_ch_num, SOCLE_I2S_TXR+socle_i2s_base);
-	socle_set_dma_source_direction(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DIR_INCR);
-	socle_set_dma_destination_direction(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DIR_FIXED);
-	socle_set_dma_data_size(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DATA_WORD);
-	socle_set_dma_transfer_count(socle_i2s_tx_dma_ch_num, PERIOD_SIZE);
-	socle_set_dma_slice_count(socle_i2s_tx_dma_ch_num, FIFO_DEPTH>>1);
-	socle_set_dma_page_number(socle_i2s_tx_dma_ch_num, PERIODS);	/* repeat to play pcm again */
-	socle_set_dma_buffer_size(socle_i2s_tx_dma_ch_num, RING_BUF_SIZE);
+	sq_disable_dma(socle_i2s_tx_dma_ch_num);
+	sq_set_dma_mode(socle_i2s_tx_dma_ch_num, SQ_DMA_MODE_SLICE);
+	sq_set_dma_ext_hdreq_number(socle_i2s_tx_dma_ch_num, socle_i2s_tx_dma_ext_hdreq);
+	sq_set_dma_burst_type(socle_i2s_tx_dma_ch_num, PCM_BURST_TYPE);
+	sq_set_dma_source_address(socle_i2s_tx_dma_ch_num, RING_BUF_ADDR);
+	sq_set_dma_destination_address(socle_i2s_tx_dma_ch_num, SOCLE_I2S_TXR+socle_i2s_base);
+	sq_set_dma_source_direction(socle_i2s_tx_dma_ch_num, SQ_DMA_DIR_INCR);
+	sq_set_dma_destination_direction(socle_i2s_tx_dma_ch_num, SQ_DMA_DIR_FIXED);
+	sq_set_dma_data_size(socle_i2s_tx_dma_ch_num, SOCLE_DMA_DATA_WORD);
+	sq_set_dma_transfer_count(socle_i2s_tx_dma_ch_num, PERIOD_SIZE);
+	sq_set_dma_slice_count(socle_i2s_tx_dma_ch_num, FIFO_DEPTH>>1);
+	sq_set_dma_page_number(socle_i2s_tx_dma_ch_num, PERIODS);	/* repeat to play pcm again */
+	sq_set_dma_buffer_size(socle_i2s_tx_dma_ch_num, RING_BUF_SIZE);
 
 
 	/* Start to transfer */
@@ -1808,7 +1806,7 @@ socle_audio_codec_function_test(int autotest)
 
 
 	/* Enable the dma to run*/
-	socle_enable_dma(socle_i2s_tx_dma_ch_num);
+	sq_enable_dma(socle_i2s_tx_dma_ch_num);
 
 	
 	/* Wait for the transimission of pcm to be complete */
@@ -1824,8 +1822,8 @@ socle_audio_codec_function_test(int autotest)
 			(socle_i2s_read(SOCLE_I2S_OPR) & SOCLE_I2S_RX_OP_STR),
 			SOCLE_I2S_OPR);
 
-	socle_disable_dma(socle_i2s_tx_dma_ch_num);
-	socle_free_dma(socle_i2s_tx_dma_ch_num);
+	sq_disable_dma(socle_i2s_tx_dma_ch_num);
+	sq_free_dma(socle_i2s_tx_dma_ch_num);
 
 
 	return 0;

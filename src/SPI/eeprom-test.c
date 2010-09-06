@@ -21,109 +21,109 @@
 
 #define RETRY_CNT_THRESHOLD 100
 
-static u8 *socle_spi_pattern_buf = (u8 *)PATTERN_BUF_ADDR;
-static u8 *socle_spi_cmpr_buf = (u8 *)(PATTERN_BUF_ADDR + PATTERN_BUF_SIZE);
+static u8 *sq_spi_pattern_buf = (u8 *)PATTERN_BUF_ADDR;
+static u8 *sq_spi_cmpr_buf = (u8 *)(PATTERN_BUF_ADDR + PATTERN_BUF_SIZE);
 
-static int socle_spi_at25040_wait_for_ready(void);
-static int socle_spi_at25040_set_write_enable(void);
-static int socle_spi_at25040_set_write_enable(void);
-static int socle_spi_at25040_wait_for_write_enable(void);
-static int socle_spi_at25040_page_write_data(u8 addr, u8 *buf);
-static int socle_spi_at25040_read_data(u8 addr, u8 *buf, u16 len);
+static int sq_spi_at25040_wait_for_ready(void);
+static int sq_spi_at25040_set_write_enable(void);
+static int sq_spi_at25040_set_write_enable(void);
+static int sq_spi_at25040_wait_for_write_enable(void);
+static int sq_spi_at25040_page_write_data(u8 addr, u8 *buf);
+static int sq_spi_at25040_read_data(u8 addr, u8 *buf, u16 len);
 
 
 
 extern int
-socle_spi_eeprom(int autotest)
+sq_spi_eeprom(int autotest)
 {
 	u8 divisor, addr, i;
 	
     /* Reset SPI controller */
-	socle_spi_write(
-  	socle_spi_read(SOCLE_SPI_FWCR) |
-    SOCLE_SPI_SOFT_RST, 
-    SOCLE_SPI_FWCR);
+	sq_spi_write(
+  	sq_spi_read(SQ_SPI_FWCR) |
+    SQ_SPI_SOFT_RST, 
+    SQ_SPI_FWCR);
             
 	/* Configure SPI controller */
-	socle_spi_write(
+	sq_spi_write(
 #if defined (CONFIG_PC9223)
-		SOCLE_SPI_MASTER_SIGNAL_CTL_HW |
-		SOCLE_SPI_MASTER_SIGNAL_ACT_NO |
-		SOCLE_SPI_MODE_MASTER |
+		SQ_SPI_MASTER_SIGNAL_CTL_HW |
+		SQ_SPI_MASTER_SIGNAL_ACT_NO |
+		SQ_SPI_MODE_MASTER |
 #endif
-		SOCLE_SPI_SOFT_N_RST |
-		SOCLE_SPI_TXRX_N_RUN |
-		SOCLE_SPI_CLK_IDLE_AST |
-		SOCLE_SPI_TXRX_SIMULT_DIS |
-		SOCLE_SPI_CPOL_0 |
-		SOCLE_SPI_CPHA_0 |
-		SOCLE_SPI_TX_MSB_FIRST |
-		SOCLE_SPI_OP_NORMAL,
-		SOCLE_SPI_FWCR);
+		SQ_SPI_SOFT_N_RST |
+		SQ_SPI_TXRX_N_RUN |
+		SQ_SPI_CLK_IDLE_AST |
+		SQ_SPI_TXRX_SIMULT_DIS |
+		SQ_SPI_CPOL_0 |
+		SQ_SPI_CPHA_0 |
+		SQ_SPI_TX_MSB_FIRST |
+		SQ_SPI_OP_NORMAL,
+		SQ_SPI_FWCR);
 			
 	/* Enable SPI interrupt */
-	socle_spi_write(
-		//SOCLE_SPI_IER_RXFIFO_OVR_INT_EN |
-		SOCLE_SPI_IER_RXFIFO_INT_EN |
-		SOCLE_SPI_IER_RX_COMPLETE_INT_EN,
-		SOCLE_SPI_IER);
+	sq_spi_write(
+		//SQ_SPI_IER_RXFIFO_OVR_INT_EN |
+		SQ_SPI_IER_RXFIFO_INT_EN |
+		SQ_SPI_IER_RX_COMPLETE_INT_EN,
+		SQ_SPI_IER);
 
 	/* Configure FIFO and clear Tx & Rx FIFO */
-	socle_spi_write(
-		SOCLE_SPI_RXFIFO_INT_TRIGGER_LEVEL_4 |
-		SOCLE_SPI_TXFIFO_INT_TRIGGER_LEVEL_4 |
-		SOCLE_SPI_RXFIFO_CLR |
-		SOCLE_SPI_TXFIFO_CLR,
-		SOCLE_SPI_FCR);
+	sq_spi_write(
+		SQ_SPI_RXFIFO_INT_TRIGGER_LEVEL_4 |
+		SQ_SPI_TXFIFO_INT_TRIGGER_LEVEL_4 |
+		SQ_SPI_RXFIFO_CLR |
+		SQ_SPI_TXFIFO_CLR,
+		SQ_SPI_FCR);
      
 	/* Set the SPI slaves select and characteristic control register */
-	divisor = socle_spi_calculate_divisor(3000000); /* 3.0 MHz clock rate */
+	divisor = sq_spi_calculate_divisor(3000000); /* 3.0 MHz clock rate */
 	
-	socle_spi_write(
-		SOCLE_SPI_CHAR_LEN_8 |
-		SOCLE_SPI_SLAVE_SEL_0 |
-		SOCLE_SPI_CLK_DIV(divisor),
-		SOCLE_SPI_SSCR);
+	sq_spi_write(
+		SQ_SPI_CHAR_LEN_8 |
+		SQ_SPI_SLAVE_SEL_0 |
+		SQ_SPI_CLK_DIV(divisor),
+		SQ_SPI_SSCR);
 
 	/* Config SPI clock delay */
-	socle_spi_write(
-		SOCLE_SPI_PBTXRX_DELAY_NONE |
-		SOCLE_SPI_PBCT_DELAY_NONE |
-		SOCLE_SPI_PBCA_DELAY_1_2,
-		SOCLE_SPI_DLYCR);
+	sq_spi_write(
+		SQ_SPI_PBTXRX_DELAY_NONE |
+		SQ_SPI_PBCT_DELAY_NONE |
+		SQ_SPI_PBCA_DELAY_1_2,
+		SQ_SPI_DLYCR);
 
 	/* Set per char length */
-	socle_spi_set_current_mode(MODE_CHAR_LEN_8);
+	sq_spi_set_current_mode(MODE_CHAR_LEN_8);
 	/* Clear pattern buffer and compare buffer */
-	memset((char *)socle_spi_pattern_buf, 0x0, AT25040_MAX_BYTE);
-	memset((char *)socle_spi_cmpr_buf, 0x0, AT25040_MAX_BYTE);
+	memset((char *)sq_spi_pattern_buf, 0x0, AT25040_MAX_BYTE);
+	memset((char *)sq_spi_cmpr_buf, 0x0, AT25040_MAX_BYTE);
 
 	/* Make test pattern */
-	socle_spi_make_test_pattern(socle_spi_pattern_buf, AT25040_MAX_BYTE);
+	sq_spi_make_test_pattern(sq_spi_pattern_buf, AT25040_MAX_BYTE);
 	
 	/* Write data into at25040 eeprom */
 	addr = 0;
 	for (i = 0; i < (AT25040_MAX_BYTE / AT25040_MAX_PKG_LEN); i++) {
-		if (socle_spi_at25040_page_write_data(addr, &socle_spi_pattern_buf[i*AT25040_MAX_PKG_LEN]))
+		if (sq_spi_at25040_page_write_data(addr, &sq_spi_pattern_buf[i*AT25040_MAX_PKG_LEN]))
 			return -1;
 		addr += AT25040_MAX_PKG_LEN;
 	}
 	
 	/* Read data from at25040 eeprom */
-	if (socle_spi_at25040_read_data(addr, socle_spi_cmpr_buf, AT25040_MAX_BYTE))
+	if (sq_spi_at25040_read_data(addr, sq_spi_cmpr_buf, AT25040_MAX_BYTE))
 		return -1;
-	return socle_spi_compare_memory(socle_spi_pattern_buf, socle_spi_cmpr_buf, AT25040_MAX_BYTE, autotest);	
+	return sq_spi_compare_memory(sq_spi_pattern_buf, sq_spi_cmpr_buf, AT25040_MAX_BYTE, autotest);	
 }
 
 static int
-socle_spi_at25040_wait_for_ready(void)
+sq_spi_at25040_wait_for_ready(void)
 {
 	u8 cmd, stat;
 	u32 retry_cnt = 0;
 
 	cmd = AT25040_CMD_RDSR;
 	while (1) {
-		if (socle_spi_transfer(&cmd, &stat, SET_TX_RX_LEN(1, 1)))
+		if (sq_spi_transfer(&cmd, &stat, SET_TX_RX_LEN(1, 1)))
 			return -1;
 		if (!(stat & AT25040_STAT_RDY))
 			break;
@@ -137,17 +137,17 @@ socle_spi_at25040_wait_for_ready(void)
 }
 
 static int
-socle_spi_at25040_set_write_enable(void)
+sq_spi_at25040_set_write_enable(void)
 {
 	u8 cmd;
 	cmd = AT25040_CMD_WREN;
-	if (socle_spi_transfer(&cmd, NULL,SET_TX_RX_LEN(1, 0)))
+	if (sq_spi_transfer(&cmd, NULL,SET_TX_RX_LEN(1, 0)))
 		return -1;
 	return 0;
 }
 
 static int 
-socle_spi_at25040_wait_for_write_enable(void)
+sq_spi_at25040_wait_for_write_enable(void)
 {
 	u8 cmd, stat;
 	u32 retry_cnt = 0;
@@ -155,7 +155,7 @@ socle_spi_at25040_wait_for_write_enable(void)
 	cmd = AT25040_CMD_RDSR;
 
 	while(1) {
-		if (socle_spi_transfer(&cmd, &stat, SET_TX_RX_LEN(1, 1)))
+		if (sq_spi_transfer(&cmd, &stat, SET_TX_RX_LEN(1, 1)))
 			return -1;
 		if (stat & AT25040_STAT_WEN)
 			break;
@@ -169,34 +169,34 @@ socle_spi_at25040_wait_for_write_enable(void)
 }
 
 static int
-socle_spi_at25040_page_write_data(u8 addr, u8 *buf)
+sq_spi_at25040_page_write_data(u8 addr, u8 *buf)
 {
 	u8 tx_buf[10] = {0};
 
-	if (socle_spi_at25040_set_write_enable())
+	if (sq_spi_at25040_set_write_enable())
 		return -1;
-	if (socle_spi_at25040_wait_for_write_enable())
+	if (sq_spi_at25040_wait_for_write_enable())
 		return -1;
 	tx_buf[0] = AT25040_CMD_WRITE;
 	tx_buf[1] = addr;
 	memcpy((char *)&tx_buf[2], (char *)buf, AT25040_MAX_PKG_LEN);
-	if(socle_spi_transfer(tx_buf, NULL, SET_TX_RX_LEN(AT25040_MAX_PKG_LEN+2,0)))
+	if(sq_spi_transfer(tx_buf, NULL, SET_TX_RX_LEN(AT25040_MAX_PKG_LEN+2,0)))
 		return -1;
 
 	/* Wait for the device to be ready */
-	if (socle_spi_at25040_wait_for_ready())
+	if (sq_spi_at25040_wait_for_ready())
 		return -1;
 	return 0;
 }
 
 static int
-socle_spi_at25040_read_data(u8 addr, u8 *buf, u16 len)
+sq_spi_at25040_read_data(u8 addr, u8 *buf, u16 len)
 {
 	u8 cmd[2] = {0};
 	
 	cmd[0] = AT25040_CMD_READ;
 	cmd[1] = addr;
-	if (socle_spi_transfer(cmd, buf, SET_TX_RX_LEN(2,len)))
+	if (sq_spi_transfer(cmd, buf, SET_TX_RX_LEN(2,len)))
 		return -1;
 	return 0;
 }

@@ -10,9 +10,9 @@
 #include "dependency.h"
 #include "../GPIO/gpio.h"
 
-static struct socle_pwmt *p_pwmt;
-static int socle_pwmt_count;
-static int socle_pwmt_isr_flag;
+static struct sq_pwmt *p_pwmt;
+static int sq_pwmt_count;
+static int sq_pwmt_isr_flag;
 
 extern struct test_item_container pwm_main_container;
 
@@ -29,7 +29,7 @@ pwm_test(int autotest)
 extern struct test_item_container buzzer_main_container;
 
 extern 
-int socle_buzzer_test(int autotest)
+int sq_buzzer_test(int autotest)
 {
 	int ret = 0;
 
@@ -39,23 +39,23 @@ int socle_buzzer_test(int autotest)
 }
 
 extern int
-socle_buzzer_pwm_test(int autotest)
+sq_buzzer_pwm_test(int autotest)
 {
 	int ret = 0;
 	int hrc, lrc, prescale;
 	char test_item = 0;
-	struct socle_pwmt_driver *pwmt_drv;
+	struct sq_pwmt_driver *pwmt_drv;
 
 #ifdef CONFIG_PC9223
 	// the PWM1 share pin defined PWM1
 	sq_scu_dev_enable(SQ_DEVCON_PWM1);
 #endif
 
-	hrc = 0x250;
+	hrc = 0x4ff;
 	lrc = 0x500;
 	prescale = 1;
 
-	p_pwmt = get_socle_pwmt_structure(1);
+	p_pwmt = get_sq_pwmt_structure(1);
 	if (NULL == p_pwmt) {
 		printf("can't get PWMT structure!!\n");
 		return -1;
@@ -98,14 +98,14 @@ socle_buzzer_pwm_test(int autotest)
 		}
 	}
 exit:
-	release_socle_pwmt_structure(1);
+	release_sq_pwmt_structure(1);
 		
 	return ret;
 }
 
 #ifdef CONFIG_GPIO
 extern int
-socle_buzzer_gpio_test(int autotest)
+sq_buzzer_gpio_test(int autotest)
 {
 	int ret = 0;
 	char test_item = 0;
@@ -152,7 +152,7 @@ exit:
 extern struct test_item_container pwmt_main_container;
 
 extern int
-socle_pwm_test(int autotest)
+sq_pwm_test(int autotest)
 {
 	int ret = 0;
 
@@ -165,7 +165,7 @@ socle_pwm_test(int autotest)
 extern struct test_item_container pwmt_test_container;
 
 extern int
-socle_pwmt_timer_mode(int autotest)
+sq_pwmt_timer_mode(int autotest)
 {
 	int ret = 0;
 
@@ -178,11 +178,11 @@ socle_pwmt_timer_mode(int autotest)
 extern struct test_item_container pwmt_counter_mode_container;
 
 extern int
-socle_pwmt_timer_0(int autotest)
+sq_pwmt_timer_0(int autotest)
 {
 	int ret = 0;
 
-	p_pwmt = get_socle_pwmt_structure(0);
+	p_pwmt = get_sq_pwmt_structure(0);
 	if (NULL == p_pwmt) {
 		printf("ADC can't get PWMT structure!!\n");
 		return -1;
@@ -190,17 +190,17 @@ socle_pwmt_timer_0(int autotest)
 
 	ret = test_item_ctrl(&pwmt_counter_mode_container, autotest);
 
-	release_socle_pwmt_structure(0);
+	release_sq_pwmt_structure(0);
 
 	return ret;
 }
 
 extern int
-socle_pwmt_timer_1(int autotest)
+sq_pwmt_timer_1(int autotest)
 {
 	int ret = 0;
 
-	p_pwmt = get_socle_pwmt_structure(1);
+	p_pwmt = get_sq_pwmt_structure(1);
 	if (NULL == p_pwmt) {
 		printf("ADC can't get PWMT structure!!\n");
 		return -1;
@@ -208,17 +208,17 @@ socle_pwmt_timer_1(int autotest)
 
 	ret = test_item_ctrl(&pwmt_counter_mode_container, autotest);
 
-	release_socle_pwmt_structure(1);
+	release_sq_pwmt_structure(1);
 
 	return ret;
 }
 
 extern int
-socle_pwmt_timer_2(int autotest)
+sq_pwmt_timer_2(int autotest)
 {
 	int ret = 0;
 
-	p_pwmt = get_socle_pwmt_structure(2);
+	p_pwmt = get_sq_pwmt_structure(2);
 	if (NULL == p_pwmt) {
 		printf("ADC can't get PWMT structure!!\n");
 		return -1;
@@ -226,17 +226,17 @@ socle_pwmt_timer_2(int autotest)
 
 	ret = test_item_ctrl(&pwmt_counter_mode_container, autotest);
 
-	release_socle_pwmt_structure(2);
+	release_sq_pwmt_structure(2);
 
 	return ret;
 }
 
 extern int
-socle_pwmt_timer_3(int autotest)
+sq_pwmt_timer_3(int autotest)
 {
 	int ret = 0;
 
-	p_pwmt = get_socle_pwmt_structure(3);
+	p_pwmt = get_sq_pwmt_structure(3);
 	if (NULL == p_pwmt) {
 		printf("ADC can't get PWMT structure!!\n");
 		return -1;
@@ -244,24 +244,24 @@ socle_pwmt_timer_3(int autotest)
 
 	ret = test_item_ctrl(&pwmt_counter_mode_container, autotest);
 
-	release_socle_pwmt_structure(3);
+	release_sq_pwmt_structure(3);
 
 	return ret;
 }
 
 static void
-socle_pwm_timer_isr(void *pparam)
+sq_pwm_timer_isr(void *pparam)
 {
-	struct socle_pwmt_driver *pwmt_drv = p_pwmt->drv;
+	struct sq_pwmt_driver *pwmt_drv = p_pwmt->drv;
 
 	pwmt_drv->claim_pwm_lock();
 
-	socle_pwmt_isr_flag = 1;
-	socle_pwmt_count++;
-	printf("pwm timer irs [%d]\n", socle_pwmt_count);
+	sq_pwmt_isr_flag = 1;
+	sq_pwmt_count++;
+	printf("pwm timer irs [%d]\n", sq_pwmt_count);
 
 	// let single counter mode to exit
-	if (socle_pwmt_count >= 5)
+	if (sq_pwmt_count >= 5)
 		pwmt_drv->set_counter(p_pwmt, sq_scu_apb_clock_get()+1);
 
 	// clear isr
@@ -271,16 +271,16 @@ socle_pwm_timer_isr(void *pparam)
 }
 
 static void
-socle_pwmt_timer_mode_test_init(int single_mode)
+sq_pwmt_timer_mode_test_init(int single_mode)
 {
-	struct socle_pwmt_driver *pwmt_drv = p_pwmt->drv;
+	struct sq_pwmt_driver *pwmt_drv = p_pwmt->drv;
 
-	socle_pwmt_isr_flag = 0;
-	socle_pwmt_count = 0;
+	sq_pwmt_isr_flag = 0;
+	sq_pwmt_count = 0;
 
 	pwmt_drv->claim_pwm_lock();
 
-	request_irq(p_pwmt->irq, socle_pwm_timer_isr, NULL);
+	request_irq(p_pwmt->irq, sq_pwm_timer_isr, NULL);
 	
 	pwmt_drv->reset(p_pwmt);
 	pwmt_drv->write_prescale_factor(p_pwmt, DEFAULT_PRE_SCL);
@@ -295,9 +295,9 @@ socle_pwmt_timer_mode_test_init(int single_mode)
 }
 
 static void
-socle_pwmt_timer_mode_test_release(void)
+sq_pwmt_timer_mode_test_release(void)
 {
-	struct socle_pwmt_driver *pwmt_drv = p_pwmt->drv;
+	struct sq_pwmt_driver *pwmt_drv = p_pwmt->drv;
 
 	pwmt_drv->claim_pwm_lock();
 
@@ -308,54 +308,54 @@ socle_pwmt_timer_mode_test_release(void)
 }
 
 extern int
-socle_pwmt_periodical_counter_mode_test(int autotest)
+sq_pwmt_periodical_counter_mode_test(int autotest)
 {
 	int ret = 0;
 
 	printf("PWM Timer will interrupt 2 times.\n");
 
-	socle_pwmt_timer_mode_test_init(0);
+	sq_pwmt_timer_mode_test_init(0);
 
-	if (sq_wait_for_int(&socle_pwmt_isr_flag, 3)) {
+	if (sq_wait_for_int(&sq_pwmt_isr_flag, 3)) {
 		printf("Timeout!\n");
 		ret = -1;
 	} else {
-		if (sq_wait_for_int(&socle_pwmt_isr_flag, 3)) {
+		if (sq_wait_for_int(&sq_pwmt_isr_flag, 3)) {
 			printf("Timeout!\n");
 			ret = -1;
 		} else {
-			if (2 != socle_pwmt_count) {
+			if (2 != sq_pwmt_count) {
 				printf("Error! ISR is not 2 times!\n");
 				ret = -1;
 			}
 		}
 	}
 
-	socle_pwmt_timer_mode_test_release();
+	sq_pwmt_timer_mode_test_release();
 
 	return ret;
 }
 
 extern int
-socle_pwmt_single_counter_mode_test(int autotest)
+sq_pwmt_single_counter_mode_test(int autotest)
 {
 	int ret = 0;
 
 	printf("PWM Timer will interrupt 5 times.\n");
 
-	socle_pwmt_timer_mode_test_init(1);
+	sq_pwmt_timer_mode_test_init(1);
 
-	if (sq_wait_for_int(&socle_pwmt_isr_flag, 3)) {
+	if (sq_wait_for_int(&sq_pwmt_isr_flag, 3)) {
 		printf("Timeout!\n");
 		ret = -1;
 	}
 
-	if (socle_pwmt_count < 5) {
-		printf("socle_pwmt_count = %d does not equal and greater than 5\n", socle_pwmt_count);
+	if (sq_pwmt_count < 5) {
+		printf("sq_pwmt_count = %d does not equal and greater than 5\n", sq_pwmt_count);
 		ret = -1;
 	}
 
-	socle_pwmt_timer_mode_test_release();
+	sq_pwmt_timer_mode_test_release();
 
 	return ret;
 }
@@ -366,7 +366,7 @@ socle_pwmt_single_counter_mode_test(int autotest)
 extern struct test_item_container pwmt_capture_mode_container;
 
 extern int
-socle_pwmt_capture_mode(int autotest)
+sq_pwmt_capture_mode(int autotest)
 {
 	int ret = 0;
 
@@ -377,9 +377,9 @@ socle_pwmt_capture_mode(int autotest)
 
 
 static void
-socle_pwmt_capture_mode_init(struct socle_pwmt *p_pwmt, int enable, int hrc, int lrc, int irq)
+sq_pwmt_capture_mode_init(struct sq_pwmt *p_pwmt, int enable, int hrc, int lrc, int irq)
 {
-	struct socle_pwmt_driver *pwmt_drv = p_pwmt->drv;
+	struct sq_pwmt_driver *pwmt_drv = p_pwmt->drv;
 	
 	pwmt_drv->claim_pwm_lock();
 
@@ -411,7 +411,7 @@ int mode_irq;
 extern struct test_item_container pwmt_capture_mode_item_container;
 
 extern int
-socle_pwmt_capture_mode_irq(int autotest)
+sq_pwmt_capture_mode_irq(int autotest)
 {
 	int ret = 0;
 
@@ -422,7 +422,7 @@ socle_pwmt_capture_mode_irq(int autotest)
 }
 
 extern int
-socle_pwmt_capture_mode_pull(int autotest)
+sq_pwmt_capture_mode_pull(int autotest)
 {
 	int ret = 0;
 
@@ -436,7 +436,7 @@ socle_pwmt_capture_mode_pull(int autotest)
 extern struct test_item_container pwmt_capture_mode_loop_container;
 
 extern int
-socle_pwmt_capture_mode_loopback (int autotest)
+sq_pwmt_capture_mode_loopback (int autotest)
 {
 	int ret = 0;
 
@@ -446,13 +446,13 @@ socle_pwmt_capture_mode_loopback (int autotest)
 }
 
 
-extern int socle_pwm_capture_duty_pull (void);
+extern int sq_pwm_capture_duty_pull (void);
 int current_sense_calc(int *hrc, int *lrc, int count);
 int current_duty_conver_table(int duty);
 
-static int socle_pwmt_capture_mode_test(int pwmt_num_tx, int pwmt_num_rx);
+static int sq_pwmt_capture_mode_test(int pwmt_num_tx, int pwmt_num_rx);
 
-struct socle_pwmt *p_pwmt_cur;
+struct sq_pwmt *p_pwmt_cur;
 int cur_init=0;
 
 
@@ -468,13 +468,13 @@ u32 hrc_rx, lrc_rx;
 int duty;
 
 extern int
-socle_pwmt_capture_mode_current_sense (int autotest)
+sq_pwmt_capture_mode_current_sense (int autotest)
 {
-	struct socle_pwmt *p_pwmt_rx;
+	struct sq_pwmt *p_pwmt_rx;
 	int duty, ma;
 	char tmp;
 	
-	p_pwmt_rx = get_socle_pwmt_structure(USE_PWM_NUM_1);
+	p_pwmt_rx = get_sq_pwmt_structure(USE_PWM_NUM_1);
 	
 	if (NULL == p_pwmt_rx) {
 		printf("ADC can't get PWMT structure!!\n");
@@ -485,15 +485,15 @@ socle_pwmt_capture_mode_current_sense (int autotest)
 
 	while(1){
 	//if(mode_irq == 1)
-	//	duty = socle_pwm_capture_duty_irq();
+	//	duty = sq_pwm_capture_duty_irq();
 	//else
-		duty = socle_pwm_capture_duty_pull();
+		duty = sq_pwm_capture_duty_pull();
 	
 		cur_init=1;
 	
 		if(duty < 0){
 			printf("sense duty error\n");
-			release_socle_pwmt_structure(USE_PWM_NUM_1);
+			release_sq_pwmt_structure(USE_PWM_NUM_1);
 			cur_init=0;
 			return -1;
 		}else
@@ -502,7 +502,7 @@ socle_pwmt_capture_mode_current_sense (int autotest)
 		ma = current_duty_conver_table(duty);
 		if(ma > 1000){
 			printf("convert duty error\n");
-			release_socle_pwmt_structure(USE_PWM_NUM_1);
+			release_sq_pwmt_structure(USE_PWM_NUM_1);
 			cur_init=0;
 			return -1;
 		}else
@@ -514,7 +514,7 @@ socle_pwmt_capture_mode_current_sense (int autotest)
 			break;
 	}
 
-	release_socle_pwmt_structure(USE_PWM_NUM_1);
+	release_sq_pwmt_structure(USE_PWM_NUM_1);
 	cur_init=0;
 
 	return 0;
@@ -523,27 +523,27 @@ socle_pwmt_capture_mode_current_sense (int autotest)
 
 #if 0	
 extern int
-socle_pwm_capture_duty_irq (void)
+sq_pwm_capture_duty_irq (void)
 {
 	int duty;
 	int tmp;
 
-	printf("socle_current_sense_enable_irq\n");
+	printf("sq_current_sense_enable_irq\n");
 
 	cur_cnt = 0;
 	hrc_val[0]=0;
 	lrc_val[0]=0;
 	sen_cnt = 0;
-	socle_pwmt_isr_flag=0;
+	sq_pwmt_isr_flag=0;
 	
-	request_irq(p_pwmt_cur->irq, socle_pwm_capture_isr, NULL);
+	request_irq(p_pwmt_cur->irq, sq_pwm_capture_isr, NULL);
 	
 	// rx
-	socle_pwmt_capture_mode_init(p_pwmt_cur, 1, 0, 0, 1);
+	sq_pwmt_capture_mode_init(p_pwmt_cur, 1, 0, 0, 1);
 
 	while(1){	
-		if(socle_pwmt_isr_flag){
-			socle_pwmt_isr_flag = 0;
+		if(sq_pwmt_isr_flag){
+			sq_pwmt_isr_flag = 0;
 			//printf(" hrc_val[cur_cnt] = %x, lrc_val[cur_cnt] = %x, cur_cnt = %d\n",
 			//		hrc_val[cur_cnt], lrc_val[cur_cnt], cur_cnt);
 			duty = current_sense_calc(hrc_val, lrc_val, sen_cnt);
@@ -574,7 +574,7 @@ socle_pwm_capture_duty_irq (void)
 }
 
 static void
-socle_pwm_capture_isr(void *pparam)
+sq_pwm_capture_isr(void *pparam)
 {
         p_pwmt_cur->drv->clear_interrupt (p_pwmt_cur);
 
@@ -589,7 +589,7 @@ socle_pwm_capture_isr(void *pparam)
                         p_pwmt_cur->drv->enable_interrupt (p_pwmt_cur, 0);
                         //printk(" cur_cnt = %d\n", cur_cnt);
                         cur_cnt++;
-                        socle_pwmt_isr_flag = 1;
+                        sq_pwmt_isr_flag = 1;
                         return ;
                 }
         }
@@ -603,16 +603,16 @@ socle_pwm_capture_isr(void *pparam)
 #endif
 
 extern int
-socle_pwm_capture_duty_pull(void)
+sq_pwm_capture_duty_pull(void)
 {
 	int duty;
 	int t=0;	
 
-	//printf("socle_current_sense_enable_pull\n");	
+	//printf("sq_current_sense_enable_pull\n");	
 
 	if(cur_init==0)
 		// rx
-		socle_pwmt_capture_mode_init(p_pwmt_cur, 1, 0, 0, 0);
+		sq_pwmt_capture_mode_init(p_pwmt_cur, 1, 0, 0, 0);
 	
 	//p_pwmt_cur->drv->set_counter (p_pwmt_cur, 0);
 	cur_cnt = 0;
@@ -723,7 +723,7 @@ current_duty_conver_table(int duty)
 extern struct test_item_container pwmt_capture_mode_loop_duty_container;
 
 extern int 
-socle_pwmt_capture_mode_loop_duty_75(int autotest)
+sq_pwmt_capture_mode_loop_duty_75(int autotest)
 {
 	int ret;
 
@@ -737,7 +737,7 @@ socle_pwmt_capture_mode_loop_duty_75(int autotest)
 }
 
 extern int 
-socle_pwmt_capture_mode_loop_duty_50(int autotest)
+sq_pwmt_capture_mode_loop_duty_50(int autotest)
 {
 	int ret;
 
@@ -751,7 +751,7 @@ socle_pwmt_capture_mode_loop_duty_50(int autotest)
 }
 
 extern int 
-socle_pwmt_capture_mode_loop_duty_25(int autotest)
+sq_pwmt_capture_mode_loop_duty_25(int autotest)
 {
 	int ret;
 
@@ -765,31 +765,31 @@ socle_pwmt_capture_mode_loop_duty_25(int autotest)
 }
 
 extern int
-socle_pwmt_capture_mode_from_0_to_1(int autotest)
+sq_pwmt_capture_mode_from_0_to_1(int autotest)
 {
 	int ret = 0;
 
-	ret = socle_pwmt_capture_mode_test(USE_PWM_NUM_0, USE_PWM_NUM_1);
+	ret = sq_pwmt_capture_mode_test(USE_PWM_NUM_0, USE_PWM_NUM_1);
 
 	return ret;
 }
 
 extern int
-socle_pwmt_capture_mode_from_1_to_0(int autotest)
+sq_pwmt_capture_mode_from_1_to_0(int autotest)
 {
 	int ret = 0;
 
-	ret = socle_pwmt_capture_mode_test(USE_PWM_NUM_1, USE_PWM_NUM_0);
+	ret = sq_pwmt_capture_mode_test(USE_PWM_NUM_1, USE_PWM_NUM_0);
 
 	return ret;
 }
 
 
 static int
-socle_pwmt_capture_mode_test(int pwmt_num_tx, int pwmt_num_rx)
+sq_pwmt_capture_mode_test(int pwmt_num_tx, int pwmt_num_rx)
 {
 	int ret = 0;
-	struct socle_pwmt *p_pwmt_tx, *p_pwmt_rx;
+	struct sq_pwmt *p_pwmt_tx, *p_pwmt_rx;
 	int duty_loop;
 	
 	#if 0
@@ -799,13 +799,13 @@ socle_pwmt_capture_mode_test(int pwmt_num_tx, int pwmt_num_rx)
 	mode_irq=0;
 	#endif
 	
-	p_pwmt_tx = get_socle_pwmt_structure(pwmt_num_tx);
+	p_pwmt_tx = get_sq_pwmt_structure(pwmt_num_tx);
 	if (NULL == p_pwmt_tx) {
 		printf("ADC can't get PWMT structure!!\n");
 		return -1;
 	}
 
-	p_pwmt_rx = get_socle_pwmt_structure(pwmt_num_rx);
+	p_pwmt_rx = get_sq_pwmt_structure(pwmt_num_rx);
 	if (NULL == p_pwmt_rx) {
 		printf("ADC can't get PWMT structure!!\n");
 		return -1;
@@ -814,16 +814,16 @@ socle_pwmt_capture_mode_test(int pwmt_num_tx, int pwmt_num_rx)
 	p_pwmt_cur = p_pwmt_rx;
 
 	// tx
-	socle_pwmt_capture_mode_init(p_pwmt_tx, 0, hrc_tx, lrc_tx, 0);
+	sq_pwmt_capture_mode_init(p_pwmt_tx, 0, hrc_tx, lrc_tx, 0);
 	
 	
 
 	//if(mode_irq == 1){
 		// rx
-	//	duty_loop = socle_pwm_capture_duty_irq()/100;
+	//	duty_loop = sq_pwm_capture_duty_irq()/100;
 	//}else{
 		// rx
-		duty_loop = socle_pwm_capture_duty_pull()/100;
+		duty_loop = sq_pwm_capture_duty_pull()/100;
 	//}
 
 	printf("duty sense = %d\n", duty_loop);
@@ -837,8 +837,8 @@ socle_pwmt_capture_mode_test(int pwmt_num_tx, int pwmt_num_rx)
 	}
 
 	
-	release_socle_pwmt_structure(pwmt_num_tx);
-	release_socle_pwmt_structure(pwmt_num_rx);
+	release_sq_pwmt_structure(pwmt_num_tx);
+	release_sq_pwmt_structure(pwmt_num_rx);
 
 	return ret;
 }

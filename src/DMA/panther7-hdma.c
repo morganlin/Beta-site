@@ -132,16 +132,16 @@ panther7_hdma_enable(u32 ch, struct socle_dma *dma)
 		PANTHER7_HDMA_SWDMA_OP_NO |
 		PANTHER7_HDMA_HWDMA_TRIGGER_DIS;
 
-	if (SOCLE_DMA_MODE_SLICE == dma->mode)
+	if (SQ_DMA_MODE_SLICE == dma->mode)
 		conf |= PANTHER7_HDMA_SLICE_MODE_EN;
 	switch (dma->burst_type) {
-	case SOCLE_DMA_BURST_SINGLE:
+	case SQ_DMA_BURST_SINGLE:
 		conf |= PANTHER7_HDMA_BURST_SINGLE;
 		break;
-	case SOCLE_DMA_BURST_INCR4:
+	case SQ_DMA_BURST_INCR4:
 		conf |= PANTHER7_HDMA_BURST_INCR4;
 		break;
-	case SOCLE_DMA_BURST_INCR8:
+	case SQ_DMA_BURST_INCR8:
 		conf |= PANTHER7_HDMA_BURST_INCR8;
 		break;
 	case SOCLE_DMA_BURST_INCR16:
@@ -149,16 +149,16 @@ panther7_hdma_enable(u32 ch, struct socle_dma *dma)
 		break;
 	}
 	conf |= PANTHER7_HDMA_EXT_HDREQ_SEL(dma->ext_hdreq);
-	if (SOCLE_DMA_DIR_FIXED == dma->src_dir)
+	if (SQ_DMA_DIR_FIXED == dma->src_dir)
 		conf |= PANTHER7_HDMA_DIR_SRC_FIXED;
-	if (SOCLE_DMA_DIR_FIXED == dma->dst_dir)
+	if (SQ_DMA_DIR_FIXED == dma->dst_dir)
 		conf |= PANTHER7_HDMA_DIR_DST_FIXED;
 	switch (dma->data_size) {
-	case SOCLE_DMA_DATA_BYTE:
+	case SQ_DMA_DATA_BYTE:
 		data_size = 1;
 		conf |= PANTHER7_HDMA_DATA_BYTE;
 		break;
-	case SOCLE_DMA_DATA_HALFWORD:
+	case SQ_DMA_DATA_HALFWORD:
 		data_size = 2;
 		conf |= PANTHER7_HDMA_DATA_HALFWORD;
 		break;
@@ -167,7 +167,7 @@ panther7_hdma_enable(u32 ch, struct socle_dma *dma)
 		conf |= PANTHER7_HDMA_DATA_WORD;
 		break;
 	}
-	if ((SOCLE_DMA_MODE_SLICE == dma->mode) ||
+	if ((SQ_DMA_MODE_SLICE == dma->mode) ||
 	    (SOCLE_DMA_MODE_HW == dma->mode))
 		conf |= PANTHER7_HDMA_HWDMA_TRIGGER_EN;
 	else
@@ -183,7 +183,7 @@ panther7_hdma_enable(u32 ch, struct socle_dma *dma)
 		socle_reg_write(PANTHER7_HDMA_ISRC0, dma->src_addr , dma->base_addr);
 		socle_reg_write(PANTHER7_HDMA_IDST0, dma->dst_addr , dma->base_addr);
 		panther7_hdma_set_count(dma);
-		if (SOCLE_DMA_MODE_SLICE == dma->mode) {
+		if (SQ_DMA_MODE_SLICE == dma->mode) {
 			socle_reg_write(PANTHER7_HDMA_ISCNT0, dma->slice_cnt-1, dma->base_addr);
 			socle_reg_write(PANTHER7_HDMA_IADDR_BS0, dma->buf_size-data_size, dma->base_addr);
 		}
@@ -199,7 +199,7 @@ panther7_hdma_enable(u32 ch, struct socle_dma *dma)
 		socle_reg_write(PANTHER7_HDMA_ISRC1, dma->src_addr , dma->base_addr);
 		socle_reg_write(PANTHER7_HDMA_IDST1, dma->dst_addr , dma->base_addr);
 		panther7_hdma_set_count(dma);
-		if (SOCLE_DMA_MODE_SLICE == dma->mode) {
+		if (SQ_DMA_MODE_SLICE == dma->mode) {
 			socle_reg_write(PANTHER7_HDMA_ISCNT1, dma->slice_cnt-1, dma->base_addr);
 			socle_reg_write(PANTHER7_HDMA_IADDR_BS1, dma->buf_size-data_size, dma->base_addr);
 		}
@@ -238,7 +238,7 @@ panther7_hdma_disable(u32 ch, struct socle_dma *dma)
 		socle_reg_write(PANTHER7_HDMA_ISRC0, 0, dma->base_addr);
 		socle_reg_write(PANTHER7_HDMA_IDST0, 0, dma->base_addr);
 		socle_reg_write(PANTHER7_HDMA_ICNT0, 0, dma->base_addr);
-		if (SOCLE_DMA_MODE_SLICE == dma->mode) {
+		if (SQ_DMA_MODE_SLICE == dma->mode) {
 			socle_reg_write(PANTHER7_HDMA_ISCNT0, 0, dma->base_addr);
 			socle_reg_write(PANTHER7_HDMA_IPNCNT0, 0, dma->base_addr);
 			socle_reg_write(PANTHER7_HDMA_IADDR_BS0, 0, dma->base_addr);
@@ -267,7 +267,7 @@ panther7_hdma_disable(u32 ch, struct socle_dma *dma)
 		socle_reg_write(PANTHER7_HDMA_ISRC1, 0, dma->base_addr);
 		socle_reg_write(PANTHER7_HDMA_IDST1, 0, dma->base_addr);
 		socle_reg_write(PANTHER7_HDMA_ICNT1, 0, dma->base_addr);
-		if (SOCLE_DMA_MODE_SLICE == dma->mode) {
+		if (SQ_DMA_MODE_SLICE == dma->mode) {
 			socle_reg_write(PANTHER7_HDMA_ISCNT1, 0, dma->base_addr);
 			socle_reg_write(PANTHER7_HDMA_IPNCNT1, 0, dma->base_addr);
 			socle_reg_write(PANTHER7_HDMA_IADDR_BS1, 0, dma->base_addr);
@@ -365,13 +365,13 @@ panther7_hdma_set_count(struct socle_dma *dma)
 	u32 inter_ch = *((u32 *)dma->private_data);
 
 	switch(dma->burst_type) {
-	case SOCLE_DMA_BURST_SINGLE:
+	case SQ_DMA_BURST_SINGLE:
 		burst_val = 1;
 		break;
-	case SOCLE_DMA_BURST_INCR4:
+	case SQ_DMA_BURST_INCR4:
 		burst_val = 4;
 		break;
-	case SOCLE_DMA_BURST_INCR8:
+	case SQ_DMA_BURST_INCR8:
 		burst_val = 8;
 		break;
 	case SOCLE_DMA_BURST_INCR16:
@@ -382,10 +382,10 @@ panther7_hdma_set_count(struct socle_dma *dma)
 		return;
 	}
 	switch (dma->data_size) {
-	case SOCLE_DMA_DATA_BYTE:
+	case SQ_DMA_DATA_BYTE:
 		data_size_val = 1;
 		break;
-	case SOCLE_DMA_DATA_HALFWORD:
+	case SQ_DMA_DATA_HALFWORD:
 		data_size_val = 2;
 		break;
 	case SOCLE_DMA_DATA_WORD:

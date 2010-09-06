@@ -3,7 +3,7 @@
 
 #if defined(CONFIG_PC9223)
 #define FIFO_DEPTH 8
-#define PCM_BURST_TYPE SOCLE_DMA_BURST_INCR4
+#define PCM_BURST_TYPE SQ_DMA_BURST_INCR4
 #endif
 
 

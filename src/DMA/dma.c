@@ -8,7 +8,7 @@ static struct socle_dma *socle_dma_channel[SOCLE_MAX_DMA_CHANNELS];
  *  We have to allocate an interrupt as well...
  *  */
 extern int
-socle_request_dma(u32 ch, struct socle_dma_notifier *notifier)
+sq_request_dma(u32 ch, struct sq_dma_notifier *notifier)
 {
 	struct socle_dma *dma = socle_dma_channel[ch];
 	int ret;
@@ -36,7 +36,7 @@ busy:
  *  We have to free interrupt as well
  *  */
 extern void
-socle_free_dma(u32 ch)
+sq_free_dma(u32 ch)
 {
 	struct socle_dma *dma = socle_dma_channel[ch];
 
@@ -63,7 +63,7 @@ bad_dma:
  *  Enable DMA channel
  *  */
 extern void 
-socle_enable_dma(u32 ch)
+sq_enable_dma(u32 ch)
 {
 	struct socle_dma *dma = socle_dma_channel[ch];
 
@@ -82,7 +82,7 @@ free_dma:
  *  Disable DMA channel
  *  */
 extern void
-socle_disable_dma(u32 ch)
+sq_disable_dma(u32 ch)
 {
 	struct socle_dma *dma = socle_dma_channel[ch];
 
@@ -107,55 +107,55 @@ socle_dma_channel_active(u32 ch)
 }
 
 extern void
-socle_set_dma_transfer_count(u32 ch, u32 cnt)
+sq_set_dma_transfer_count(u32 ch, u32 cnt)
 {
 	socle_dma_channel[ch]->tx_cnt = cnt;
 }
 
 extern void
-socle_set_dma_source_address(u32 ch, u32 addr)
+sq_set_dma_source_address(u32 ch, u32 addr)
 {
 	socle_dma_channel[ch]->src_addr = addr;
 }
 
 extern void
-socle_set_dma_destination_address(u32 ch, u32 addr)
+sq_set_dma_destination_address(u32 ch, u32 addr)
 {
 	socle_dma_channel[ch]->dst_addr = addr;
 }
 
 extern void
-socle_set_dma_source_direction(u32 ch, int dir)
+sq_set_dma_source_direction(u32 ch, int dir)
 {
 	socle_dma_channel[ch]->src_dir = dir;
 }
 
 extern void
-socle_set_dma_destination_direction(u32 ch, int dir)
+sq_set_dma_destination_direction(u32 ch, int dir)
 {
 	socle_dma_channel[ch]->dst_dir = dir;
 }
 
 extern void
-socle_set_dma_burst_type(u32 ch, int burst)
+sq_set_dma_burst_type(u32 ch, int burst)
 {
 	socle_dma_channel[ch]->burst_type = burst;
 }
 
 extern void
-socle_set_dma_data_size(u32 ch, int size)
+sq_set_dma_data_size(u32 ch, int size)
 {
 	socle_dma_channel[ch]->data_size = size;
 }
 
 extern void
-socle_set_dma_mode(u32 ch, int mode)
+sq_set_dma_mode(u32 ch, int mode)
 {
 	socle_dma_channel[ch]->mode = mode;
 }
 
 extern void 
-socle_set_dma_ext_hdreq_number(u32 ch, u32 num)
+sq_set_dma_ext_hdreq_number(u32 ch, u32 num)
 {
 	socle_dma_channel[ch]->ext_hdreq = num;
 }
@@ -167,13 +167,13 @@ socle_set_dma_fly_operation(u32 ch, u32 fly_op)
 }
 
 extern void
-socle_set_dma_slice_count(u32 ch, u32 cnt)
+sq_set_dma_slice_count(u32 ch, u32 cnt)
 {
 	socle_dma_channel[ch]->slice_cnt = cnt;
 }
 
 extern void
-socle_set_dma_page_number(u32 ch, u32 num)
+sq_set_dma_page_number(u32 ch, u32 num)
 {
 	struct socle_dma *dma = socle_dma_channel[ch];
 
@@ -186,7 +186,7 @@ free_dma:
 }
 
 extern void
-socle_set_dma_buffer_size(u32 ch, u32 size)
+sq_set_dma_buffer_size(u32 ch, u32 size)
 {
 	socle_dma_channel[ch]->buf_size = size;
 }
